@@ -81,9 +81,9 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         contenedorFormulario.add(laboratorio, 2);
 
         if (famFMMprimas == null || famFMMprimas.getCod_inte() == null) {
-            cod_inte.setEnabled(false);
-        } else {
             cod_inte.setEnabled(true);
+        } else {
+            cod_inte.setEnabled(false);
         }
 
         cod_inte.addBlurListener(e -> {

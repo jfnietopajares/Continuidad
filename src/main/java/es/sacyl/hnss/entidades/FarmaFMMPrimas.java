@@ -34,6 +34,7 @@ public class FarmaFMMPrimas {
     public static final String labelFrom = "Materias primas ";
 
     public FarmaFMMPrimas() {
+        /*
         cod_inte = 0;
         producto = "";
         cod_labo = "";
@@ -51,6 +52,7 @@ public class FarmaFMMPrimas {
         descripcion = "";
         requisitcos = "";
         conservacion = "";
+         */
     }
 
     public static String getLabelFrom() {

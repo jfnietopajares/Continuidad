@@ -7,9 +7,11 @@ package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,7 +35,11 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         try {
             DateTimeFormatter dateTimeFormatterParser = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-            LocalDate localDate = LocalDate.parse(rs.getString("ulti_revi"), dateTimeFormatterParser);
+            LocalDate localDate = null;
+
+            if (rs.getString("ulti_revi") != null) {
+                LocalDate.parse(rs.getString("ulti_revi"), dateTimeFormatterParser);
+            }
 
             farmaFMMPrimas.setCod_inte(rs.getInt("codigo"));
             farmaFMMPrimas.setProducto(rs.getString("producto"));
@@ -52,6 +58,8 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             farmaFMMPrimas.setRequisitcos(rs.getString("requisitcos"));
             farmaFMMPrimas.setConservacion(rs.getString("conservacion"));
         } catch (SQLException e) {
+            LOGGER.error(e);
+        } catch (Exception e) {
             LOGGER.error(e);
         }
 
@@ -99,15 +107,87 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = "INSERT INTO  farm_fm_mprimas (producto,cod_labo,laboratorio,homologado,stock_min,observaciones,"
+            /*
+          String  sqlLog = "INSERT INTO  farm_fm_mprimas (producto,cod_labo,laboratorio,homologado,stock_min,observaciones,"
                     + " ulti_revi,farmaceutico,existencias,nlaboratorio,presentacion,descripcion,requisitos,conservacion) "
-                    + "values('" + farmaFMMPrimas.getProducto() + "','" + farmaFMMPrimas.getCod_labo() + "','" + farmaFMMPrimas.getLaboratorio() + "','" + farmaFMMPrimas.getHomologado() + "'," + farmaFMMPrimas.getStock_min() + ",'" + farmaFMMPrimas.getObservaciones() + "', "
+                    + "values('" + farmaFMMPrimas.getProducto().toString() + "','" + farmaFMMPrimas.getCod_labo().toString() + "','" + farmaFMMPrimas.getLaboratorio() + "','" + farmaFMMPrimas.getHomologado() + "'," + farmaFMMPrimas.getStock_min() + ",'" + farmaFMMPrimas.getObservaciones() + "', "
                     + farmaFMMPrimas.getUlti_revi().format(DateTimeFormatter.ofPattern("yyyMMdd")) + ",'" + farmaFMMPrimas.getFarmacetuico() + "'," + farmaFMMPrimas.getEspecifica() + ",'" + farmaFMMPrimas.getNlaboratorio() + "','" + farmaFMMPrimas.getPresentacion() + "','" + farmaFMMPrimas.getDescripcion() + "', "
                     + "'" + farmaFMMPrimas.getRequisitcos() + "','" + farmaFMMPrimas.getConservacion() + "')";
-            LOGGER.debug(sql);
-            Statement statement = connection.createStatement();
-            insertadoBoolean = statement.execute(sql);
-            insertadoBoolean = true;
+
+          LOGGER.debug(sqlLog);
+             */
+            sql = "INSERT INTO  farm_fm_mprimas (cod_inte,producto,cod_labo,laboratorio,homologado,stock_min,observaciones,"
+                    + " ulti_revi,farmaceutico,existencias,nlaboratorio,presentacion,descripcion,requisitos,conservacion) "
+                    + "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, farmaFMMPrimas.getCod_inte());
+            statement.setString(2, farmaFMMPrimas.getProducto());
+            if (farmaFMMPrimas.getCod_labo() == null) {
+                statement.setNull(3, Types.VARCHAR);
+            } else {
+                statement.setString(3, farmaFMMPrimas.getCod_labo());
+            }
+            if (farmaFMMPrimas.getLaboratorio() == null) {
+                statement.setNull(4, Types.VARCHAR);
+            } else {
+                statement.setString(4, farmaFMMPrimas.getLaboratorio());
+            }
+            if (farmaFMMPrimas.getHomologado() == null) {
+                statement.setNull(5, Types.VARCHAR);
+            } else {
+                statement.setString(5, farmaFMMPrimas.getHomologado());
+            }
+            if (farmaFMMPrimas.getStock_min() == null) {
+                statement.setNull(6, Types.INTEGER);
+            } else {
+                statement.setInt(6, farmaFMMPrimas.getStock_min());
+            }
+            if (farmaFMMPrimas.getObservaciones() == null) {
+                statement.setNull(7, Types.VARCHAR);
+            } else {
+                statement.setString(7, farmaFMMPrimas.getObservaciones());
+            }
+            if (farmaFMMPrimas.getUlti_revi() == null) {
+                statement.setNull(8, Types.INTEGER);
+            } else {
+                statement.setInt(8, Integer.parseInt(farmaFMMPrimas.getUlti_revi().format(DateTimeFormatter.ofPattern("yyyMMdd"))));
+            }
+            if (farmaFMMPrimas.getFarmacetuico() == null) {
+                statement.setNull(9, Types.VARCHAR);
+            } else {
+                statement.setString(9, farmaFMMPrimas.getFarmacetuico());
+            }
+            if (farmaFMMPrimas.getExistencias() == null) {
+                statement.setNull(10, Types.INTEGER);
+            } else {
+                statement.setInt(10, farmaFMMPrimas.getExistencias());
+            }
+            if (farmaFMMPrimas.getNlaboratorio() == null) {
+                statement.setNull(11, Types.VARCHAR);
+            } else {
+                statement.setString(11, farmaFMMPrimas.getNlaboratorio());
+            }
+            if (farmaFMMPrimas.getPresentacion() == null) {
+                statement.setNull(12, Types.VARCHAR);
+            } else {
+                statement.setString(12, farmaFMMPrimas.getPresentacion());
+            }
+            if (farmaFMMPrimas.getDescripcion() == null) {
+                statement.setNull(13, Types.VARCHAR);
+            } else {
+                statement.setString(13, farmaFMMPrimas.getDescripcion());
+            }
+            if (farmaFMMPrimas.getRequisitcos() == null) {
+                statement.setNull(14, Types.VARCHAR);
+            } else {
+                statement.setString(14, farmaFMMPrimas.getRequisitcos());
+            }
+            if (farmaFMMPrimas.getRequisitcos() == null) {
+                statement.setNull(15, Types.VARCHAR);
+            } else {
+                statement.setString(15, farmaFMMPrimas.getConservacion());
+            }
+            insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
         } catch (SQLException e) {
             LOGGER.error(sql, e);
@@ -135,11 +215,81 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                     + ",descripcion='" + farmaFMMPrimas.getDescripcion() + "',requisitos='" + farmaFMMPrimas.getRequisitcos() + "',conservacion='" + farmaFMMPrimas.getConservacion() + "'"
                     + "WHERE cod_inte=" + farmaFMMPrimas.getCod_inte();
 
-            Statement statement = connection.createStatement();
-            insertadoBoolean = statement.execute(sql);
-            insertadoBoolean = true;
+            sql = sql = "UPDATE   farm_fm_mprimas  SET producto=?,cod_labo=? ,laboratorio=? ,homologado=?,stock_min=?,"
+                    + " ,observaciones=? , ulti_revi=?,farmaceutico='?,existencias=?,nlaboratorio=?,presentacion=?,descripcion=?,requisitos=?,conservacion=?"
+                    + "WHERE cod_inte=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, farmaFMMPrimas.getProducto());
+            if (farmaFMMPrimas.getCod_labo() == null) {
+                statement.setNull(2, Types.VARCHAR);
+            } else {
+                statement.setString(2, farmaFMMPrimas.getCod_labo());
+            }
+            if (farmaFMMPrimas.getLaboratorio() == null) {
+                statement.setNull(3, Types.VARCHAR);
+            } else {
+                statement.setString(3, farmaFMMPrimas.getLaboratorio());
+            }
+            if (farmaFMMPrimas.getHomologado() == null) {
+                statement.setNull(4, Types.VARCHAR);
+            } else {
+                statement.setString(4, farmaFMMPrimas.getHomologado());
+            }
+            if (farmaFMMPrimas.getStock_min() == null) {
+                statement.setNull(5, Types.INTEGER);
+            } else {
+                statement.setInt(5, farmaFMMPrimas.getStock_min());
+            }
+            if (farmaFMMPrimas.getObservaciones() == null) {
+                statement.setNull(6, Types.VARCHAR);
+            } else {
+                statement.setString(6, farmaFMMPrimas.getObservaciones());
+            }
+            if (farmaFMMPrimas.getUlti_revi() == null) {
+                statement.setNull(7, Types.INTEGER);
+            } else {
+                statement.setInt(7, Integer.parseInt(farmaFMMPrimas.getUlti_revi().format(DateTimeFormatter.ofPattern("yyyMMdd"))));
+            }
+            if (farmaFMMPrimas.getFarmacetuico() == null) {
+                statement.setNull(8, Types.VARCHAR);
+            } else {
+                statement.setString(8, farmaFMMPrimas.getFarmacetuico());
+            }
+            if (farmaFMMPrimas.getExistencias() == null) {
+                statement.setNull(9, Types.INTEGER);
+            } else {
+                statement.setInt(9, farmaFMMPrimas.getExistencias());
+            }
+            if (farmaFMMPrimas.getNlaboratorio() == null) {
+                statement.setNull(10, Types.VARCHAR);
+            } else {
+                statement.setString(10, farmaFMMPrimas.getNlaboratorio());
+            }
+            if (farmaFMMPrimas.getPresentacion() == null) {
+                statement.setNull(11, Types.VARCHAR);
+            } else {
+                statement.setString(11, farmaFMMPrimas.getPresentacion());
+            }
+            if (farmaFMMPrimas.getDescripcion() == null) {
+                statement.setNull(12, Types.VARCHAR);
+            } else {
+                statement.setString(12, farmaFMMPrimas.getDescripcion());
+            }
+            if (farmaFMMPrimas.getRequisitcos() == null) {
+                statement.setNull(13, Types.VARCHAR);
+            } else {
+                statement.setString(13, farmaFMMPrimas.getRequisitcos());
+            }
+            if (farmaFMMPrimas.getRequisitcos() == null) {
+                statement.setNull(14, Types.VARCHAR);
+            } else {
+                statement.setString(14, farmaFMMPrimas.getConservacion());
+            }
+            statement.setLong(15, farmaFMMPrimas.getCod_inte());
+            insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
-            LOGGER.debug(sql);
+
         } catch (SQLException e) {
             LOGGER.error(sql, e);
 
@@ -188,7 +338,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             if (texto != null && !texto.isEmpty()) {
                 sql = sql.concat(" AND (producto like'%" + texto + "%'  OR presentacion like'%" + texto + "%')");
             }
-            sql = sql.concat("ORDER BY producto");
+            sql = sql.concat(" ORDER BY producto");
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
