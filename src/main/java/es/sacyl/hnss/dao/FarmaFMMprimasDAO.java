@@ -41,11 +41,11 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                 LocalDate.parse(rs.getString("ulti_revi"), dateTimeFormatterParser);
             }
 
-            farmaFMMPrimas.setCod_inte(rs.getInt("codigo"));
+            farmaFMMPrimas.setCod_inte(rs.getInt("cod_inte"));
             farmaFMMPrimas.setProducto(rs.getString("producto"));
             farmaFMMPrimas.setCod_labo(rs.getString("cod_labo"));
             farmaFMMPrimas.setLaboratorio(rs.getString("laboratorio"));
-            farmaFMMPrimas.setHomologado(rs.getString("homologado"));
+            farmaFMMPrimas.setHomologado(rs.getBoolean("homologado"));
             farmaFMMPrimas.setN_labo(rs.getInt("n_labo"));
             farmaFMMPrimas.setStock_min(rs.getInt("stock_min"));
             farmaFMMPrimas.setObservaciones(rs.getString("observaciones"));
@@ -55,7 +55,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             farmaFMMPrimas.setNlaboratorio(rs.getString("nlaboratorio"));
             farmaFMMPrimas.setPresentacion(rs.getString("presentacion"));
             farmaFMMPrimas.setDescripcion(rs.getString("descripcion"));
-            farmaFMMPrimas.setRequisitcos(rs.getString("requisitcos"));
+            farmaFMMPrimas.setRequisitos(rs.getString("requisitos"));
             farmaFMMPrimas.setConservacion(rs.getString("conservacion"));
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -66,12 +66,12 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         return farmaFMMPrimas;
     }
 
-    public FarmaFMMPrimas getPorCodigo(Integer codigo) {
+    public FarmaFMMPrimas getPorCodigo(Integer cod_inte) {
         Connection connection = null;
         FarmaFMMPrimas farmaFMMPrimas = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_mprimas WHERE   cod_inte=" + codigo;
+            sql = " SELECT * FROM farm_fm_mprimas WHERE   cod_inte=" + cod_inte;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
@@ -133,9 +133,9 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                 statement.setString(4, farmaFMMPrimas.getLaboratorio());
             }
             if (farmaFMMPrimas.getHomologado() == null) {
-                statement.setNull(5, Types.VARCHAR);
+                statement.setNull(5, Types.BOOLEAN);
             } else {
-                statement.setString(5, farmaFMMPrimas.getHomologado());
+                statement.setBoolean(5, farmaFMMPrimas.getHomologado());
             }
             if (farmaFMMPrimas.getStock_min() == null) {
                 statement.setNull(6, Types.INTEGER);
@@ -177,12 +177,12 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             } else {
                 statement.setString(13, farmaFMMPrimas.getDescripcion());
             }
-            if (farmaFMMPrimas.getRequisitcos() == null) {
+            if (farmaFMMPrimas.getRequisitos() == null) {
                 statement.setNull(14, Types.VARCHAR);
             } else {
-                statement.setString(14, farmaFMMPrimas.getRequisitcos());
+                statement.setString(14, farmaFMMPrimas.getRequisitos());
             }
-            if (farmaFMMPrimas.getRequisitcos() == null) {
+            if (farmaFMMPrimas.getRequisitos() == null) {
                 statement.setNull(15, Types.VARCHAR);
             } else {
                 statement.setString(15, farmaFMMPrimas.getConservacion());
@@ -212,15 +212,17 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                     + ",observaciones='" + farmaFMMPrimas.getObservaciones() + "', ulti_revi='" + farmaFMMPrimas.getUlti_revi()
                     + "',farmaceutico='" + farmaFMMPrimas.getFarmacetuico() + "  '"
                     + ",existencias=" + farmaFMMPrimas.getExistencias() + ",nlaboratorio='" + farmaFMMPrimas.getNlaboratorio() + "',presentacion='" + farmaFMMPrimas.getPresentacion() + "'"
-                    + ",descripcion='" + farmaFMMPrimas.getDescripcion() + "',requisitos='" + farmaFMMPrimas.getRequisitcos() + "',conservacion='" + farmaFMMPrimas.getConservacion() + "'"
+                    + ",descripcion='" + farmaFMMPrimas.getDescripcion() + "',requisitos='" + farmaFMMPrimas.getRequisitos() + "',conservacion='" + farmaFMMPrimas.getConservacion() + "'"
                     + "WHERE cod_inte=" + farmaFMMPrimas.getCod_inte();
 
-            sql = sql = "UPDATE   farm_fm_mprimas  SET producto=?,cod_labo=? ,laboratorio=? ,homologado=?,stock_min=?,"
-                    + " ,observaciones=? , ulti_revi=?,farmaceutico='?,existencias=?,nlaboratorio=?,presentacion=?,descripcion=?,requisitos=?,conservacion=?"
-                    + "WHERE cod_inte=?";
+            sql = sql = "UPDATE   farm_fm_mprimas  SET producto=?,cod_labo=? ,laboratorio=? ,homologado=?,stock_min=?"
+                    + " ,observaciones=? , ulti_revi=?,farmaceutico=?,existencias=?,nlaboratorio=?,presentacion=?"
+                    + ",descripcion=?,requisitos=?,conservacion=?"
+                    + " WHERE cod_inte=?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, farmaFMMPrimas.getProducto());
+
             if (farmaFMMPrimas.getCod_labo() == null) {
                 statement.setNull(2, Types.VARCHAR);
             } else {
@@ -232,9 +234,9 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                 statement.setString(3, farmaFMMPrimas.getLaboratorio());
             }
             if (farmaFMMPrimas.getHomologado() == null) {
-                statement.setNull(4, Types.VARCHAR);
+                statement.setNull(4, Types.BOOLEAN);
             } else {
-                statement.setString(4, farmaFMMPrimas.getHomologado());
+                statement.setBoolean(4, farmaFMMPrimas.getHomologado());
             }
             if (farmaFMMPrimas.getStock_min() == null) {
                 statement.setNull(5, Types.INTEGER);
@@ -276,12 +278,12 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             } else {
                 statement.setString(12, farmaFMMPrimas.getDescripcion());
             }
-            if (farmaFMMPrimas.getRequisitcos() == null) {
+            if (farmaFMMPrimas.getRequisitos() == null) {
                 statement.setNull(13, Types.VARCHAR);
             } else {
-                statement.setString(13, farmaFMMPrimas.getRequisitcos());
+                statement.setString(13, farmaFMMPrimas.getRequisitos());
             }
-            if (farmaFMMPrimas.getRequisitcos() == null) {
+            if (farmaFMMPrimas.getRequisitos() == null) {
                 statement.setNull(14, Types.VARCHAR);
             } else {
                 statement.setString(14, farmaFMMPrimas.getConservacion());

@@ -53,7 +53,7 @@ public class PantallaFarmaFMMprimas extends PantallaMaster {
         grid.addItemClickListener(event -> {
             frmFarmaFMMPrimas = new FrmFarmaFMMprimas(event.getItem());
             doVentanaModal(frmFarmaFMMPrimas);
-            doActualizaGrid();
+            //   doActualizaGrid();
         }
         );
 

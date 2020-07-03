@@ -17,7 +17,7 @@ public class FarmaFMMPrimas {
     private String producto;
     private String cod_labo;
     private String laboratorio;
-    private String homologado;
+    private Boolean homologado;
     private Integer n_labo;
     private Integer stock_min;
     private String observaciones;
@@ -28,7 +28,7 @@ public class FarmaFMMPrimas {
     private String nlaboratorio;
     private String presentacion;
     private String descripcion;
-    private String requisitcos;
+    private String requisitos;
     private String conservacion;
 
     public static final String labelFrom = "Materias primas ";
@@ -91,11 +91,11 @@ public class FarmaFMMPrimas {
         this.laboratorio = laboratorio;
     }
 
-    public String getHomologado() {
+    public Boolean getHomologado() {
         return homologado;
     }
 
-    public void setHomologado(String homologado) {
+    public void setHomologado(Boolean homologado) {
         this.homologado = homologado;
     }
 
@@ -179,12 +179,12 @@ public class FarmaFMMPrimas {
         this.descripcion = descripcion;
     }
 
-    public String getRequisitcos() {
-        return requisitcos;
+    public String getRequisitos() {
+        return requisitos;
     }
 
-    public void setRequisitcos(String requisitcos) {
-        this.requisitcos = requisitcos;
+    public void setRequisitos(String requisitos) {
+        this.requisitos = requisitos;
     }
 
     public String getConservacion() {

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import java.time.LocalDate;
 
@@ -50,11 +51,34 @@ public class ObjetosComunes {
         if (maxLength != null) {
             textField.setMaxLength(maxLength);
         }
+
         if (width != null) {
             textField.setWidth(width);
         }
         textField.getEmptyValue();
         return textField;
+    }
+
+    public static TextArea getTextArea(String text, String Placeholder, Integer maxLength, String width, String height) {
+        TextArea textArea = new TextArea();
+        if (text != null) {
+            textArea.setLabel(text);
+        }
+        if (Placeholder != null) {
+            textArea.setPlaceholder(Placeholder);
+        }
+        if (maxLength != null) {
+            textArea.setMaxLength(maxLength);
+        }
+
+        if (width != null) {
+            textArea.setWidth(width);
+        }
+        if (height != null) {
+            textArea.setHeight(height);
+        }
+        textArea.getEmptyValue();
+        return textArea;
     }
 
     public static DatePicker getDatePicker(String label, String placeholder, LocalDate date) {

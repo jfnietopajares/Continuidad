@@ -66,7 +66,7 @@ public class PantallaFarmaFMInstumentos extends PantallaMaster {
         grid.addItemClickListener(event -> {
             frmFarmaFMInstrumentos = new FrmFarmaFMInstrumentos(event.getItem());
             doVentanaModal(frmFarmaFMInstrumentos);
-            doActualizaGrid();
+            // doActualizaGrid();
         }
         );
         doActualizaGrid();

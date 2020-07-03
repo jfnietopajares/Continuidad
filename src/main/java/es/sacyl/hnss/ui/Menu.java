@@ -31,7 +31,7 @@ public class Menu extends MenuBar {
     public Menu(HorizontalLayout contenedor) {
         //MenuBar menuBar = new MenuBar();
 
-        MenuItem formulas = this.addItem("Fórumas");
+        MenuItem formulas = this.addItem("Fórmulas");
         MenuItem equivalentes = this.addItem("Equivalenes");
         MenuItem oncologia = this.addItem("Oncología");
         this.addItem("Salir", e -> {

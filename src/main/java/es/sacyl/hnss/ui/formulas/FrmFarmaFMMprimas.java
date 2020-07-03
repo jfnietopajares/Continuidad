@@ -1,9 +1,11 @@
 package es.sacyl.hnss.ui.formulas;
 
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
@@ -25,30 +27,30 @@ import java.util.stream.Collectors;
 public class FrmFarmaFMMprimas extends FrmMaster {
 
     private IntegerField cod_inte = new IntegerField("Códgio");
-    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "descripción", 50, "150px");
-    private TextField cod_labo = ObjetosComunes.getTextField("Cod.Labor", "códgio labora", 15, "150px");
-    private TextField laboratorio = ObjetosComunes.getTextField("Laboratorio", "laboratorio", 50, "150px");
-    private TextField homologado = ObjetosComunes.getTextField("Homologado", "homologado", 1, "150px");
+    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "descripción", 50, "100px");
+    private TextField cod_labo = ObjetosComunes.getTextField("Cod.Labor", "código laboratorio   ", 15, "100px");
+    private TextField laboratorio = ObjetosComunes.getTextField("Laboratorio", "laboratorio", 50, "100px");
+    private Checkbox homologado = new Checkbox("Homologado");
     private IntegerField n_labo = new IntegerField("n_labo");
     private IntegerField stock_min = new IntegerField("stock_min");
 
-    private TextField observaciones = ObjetosComunes.getTextField("Observaciones", "observaciones", 255, "150px");
+    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 255, "100px", "90px");
 
-    private TextField especifica = ObjetosComunes.getTextField("especifica", "especifica", 255, "150px");
+    private TextField especifica = ObjetosComunes.getTextField("especifica", "especifica", 255, "100px");
 
     private DatePicker ulti_revi = ObjetosComunes.getDatePicker("Ultima Rev", null, LocalDate.now());
 
-    private TextField farmacetuico = ObjetosComunes.getTextField("farmacetuico", "farmacetuico", 25, "150px");
+    private TextField farmacetuico = ObjetosComunes.getTextField("farmacetuico", "farmacetuico", 25, "100px");
 
     private IntegerField existencias = new IntegerField("existencias");
 
-    private TextField nlaboratorio = ObjetosComunes.getTextField("nlaboratorio", "nlaboratorio", 10, "150px");
+    private TextField nlaboratorio = ObjetosComunes.getTextField("nlaboratorio", "nlaboratorio", 10, "100px");
 
-    private TextField presentacion = ObjetosComunes.getTextField("presentacion", "presentacion", 25, "150px");
+    private TextField presentacion = ObjetosComunes.getTextField("presentacion", "presentacion", 25, "100px");
 
-    private TextField descripcion = ObjetosComunes.getTextField("descripcion", "descripcion", 255, "150px");
-    private TextField requisitcos = ObjetosComunes.getTextField("requisitcos", "requisitcos", 255, "150px");
-    private TextField conservacion = ObjetosComunes.getTextField("conservacion", "conservacion", 255, "150px");
+    private TextField descripcion = ObjetosComunes.getTextField("descripcion", "descripcion", 255, "100px");
+    private TextField requisitcos = ObjetosComunes.getTextField("requisitcos", "requisitcos", 255, "100px");
+    private TextField conservacion = ObjetosComunes.getTextField("conservacion", "conservacion", 255, "100px");
 
     private FarmaFMMPrimas famFMMprimas = new FarmaFMMPrimas();
 
@@ -70,22 +72,36 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         titulo.setText(famFMMprimas.getLabelFrom());
 
         contenedorFormulario.setResponsiveSteps(
-                new ResponsiveStep("0", 1),
-                new ResponsiveStep("21em", 2),
-                new ResponsiveStep("22em", 3));
+                new ResponsiveStep("5px", 1),
+                new ResponsiveStep("100px", 2),
+                new ResponsiveStep("100px", 3));
 
-        contenedorFormulario.add(cod_inte);
-        contenedorFormulario.add(producto, 2);
+        // contenedorFormulario.setWidth("250px");
+        contenedorFormulario.setMaxWidth("600px");
+        // fila 1
+        contenedorFormulario.add(cod_inte, producto);
+        contenedorFormulario.setColspan(producto, 2);
+        //   columnLayout.setColspan(website, 2);
+        // Or just set it as you add them.
+        //columnLayout.add(description, 3);
 
-        contenedorFormulario.add(cod_labo);
-        contenedorFormulario.add(laboratorio, 2);
+        contenedorFormulario.add(cod_labo, laboratorio, homologado);
+
+        contenedorFormulario.add(presentacion, conservacion);
+        contenedorFormulario.setColspan(conservacion, 2);
+
+        contenedorFormulario.add(descripcion, 3);
+        contenedorFormulario.add(requisitcos, 3);
+        contenedorFormulario.add(observaciones, 3);
+        contenedorFormulario.add(existencias, stock_min, ulti_revi);
+        contenedorFormulario.add(farmacetuico, 3);
 
         if (famFMMprimas == null || famFMMprimas.getCod_inte() == null) {
             cod_inte.setEnabled(true);
         } else {
             cod_inte.setEnabled(false);
         }
-
+        cod_inte.setWidth("25px");
         cod_inte.addBlurListener(e -> {
             FarmaFMMPrimas famFMMprimasExiste = new FarmaFMMprimasDAO().getPorCodigo(cod_inte.getValue());
             if (famFMMprimasExiste != null) {
@@ -103,7 +119,7 @@ public class FrmFarmaFMMprimas extends FrmMaster {
                 .withValidator(new StringLengthValidator(
                         FrmMaster.AVISODATOABLIGATORIO, 1, 50))
                 .bind(FarmaFMMPrimas::getProducto, FarmaFMMPrimas::setProducto);
-
+        cod_labo.setWidth("25px");
         binder.forField(cod_labo)
                 .asRequired()
                 .bind(FarmaFMMPrimas::getCod_labo, FarmaFMMPrimas::setCod_labo);
@@ -111,6 +127,43 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         binder.forField(laboratorio)
                 .asRequired()
                 .bind(FarmaFMMPrimas::getLaboratorio, FarmaFMMPrimas::setLaboratorio);
+
+        binder.forField(homologado)
+                .bind(FarmaFMMPrimas::getHomologado, FarmaFMMPrimas::setHomologado);
+
+        binder.forField(presentacion)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getPresentacion, FarmaFMMPrimas::setPresentacion);
+
+        binder.forField(conservacion)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getConservacion, FarmaFMMPrimas::setConservacion);
+
+        binder.forField(descripcion)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getDescripcion, FarmaFMMPrimas::setDescripcion);
+
+        binder.forField(descripcion)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getDescripcion, FarmaFMMPrimas::setDescripcion);
+
+        binder.forField(observaciones)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getObservaciones, FarmaFMMPrimas::setObservaciones);
+
+        binder.forField(existencias)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getExistencias, FarmaFMMPrimas::setExistencias);
+        binder.forField(stock_min)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getStock_min, FarmaFMMPrimas::setStock_min);
+        binder.forField(ulti_revi)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getUlti_revi, FarmaFMMPrimas::setUlti_revi);
+
+        binder.forField(farmacetuico)
+                .asRequired()
+                .bind(FarmaFMMPrimas::getFarmacetuico, FarmaFMMPrimas::setFarmacetuico);
 
         binder.readBean(famFMMprimas);
 
