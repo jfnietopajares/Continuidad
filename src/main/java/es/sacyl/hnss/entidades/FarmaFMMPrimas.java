@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.sacyl.hnss.entidades;
 
 import java.time.LocalDate;
@@ -34,25 +29,6 @@ public class FarmaFMMPrimas {
     public static final String labelFrom = "Materias primas ";
 
     public FarmaFMMPrimas() {
-        /*
-        cod_inte = 0;
-        producto = "";
-        cod_labo = "";
-        laboratorio = "";
-        homologado = "";
-        n_labo = 0;
-        stock_min = 0;
-        observaciones = "";
-        especifica = "";
-        //private LocalDate ulti_revi;
-        farmacetuico = "";
-        existencias = 0;
-        nlaboratorio = "";
-        presentacion = "";
-        descripcion = "";
-        requisitcos = "";
-        conservacion = "";
-         */
     }
 
     public static String getLabelFrom() {
@@ -193,6 +169,11 @@ public class FarmaFMMPrimas {
 
     public void setConservacion(String conservacion) {
         this.conservacion = conservacion;
+    }
+
+    @Override
+    public String toString() {
+        return "FarmaFMMPrimas{" + "cod_inte=" + cod_inte + ", producto=" + producto + ", cod_labo=" + cod_labo + ", laboratorio=" + laboratorio + ", homologado=" + homologado + ", n_labo=" + n_labo + ", stock_min=" + stock_min + ", observaciones=" + observaciones + ", especifica=" + especifica + ", ulti_revi=" + ulti_revi + ", farmacetuico=" + farmacetuico + ", existencias=" + existencias + ", nlaboratorio=" + nlaboratorio + ", presentacion=" + presentacion + ", descripcion=" + descripcion + ", requisitos=" + requisitos + ", conservacion=" + conservacion + '}';
     }
 
 }

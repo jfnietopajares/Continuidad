@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
  */
 public class FrmFarmaFMMprimas extends FrmMaster {
 
-    private IntegerField cod_inte = new IntegerField("Códgio");
-    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "descripción", 50, "100px");
-    private TextField cod_labo = ObjetosComunes.getTextField("Cod.Labor", "código laboratorio   ", 15, "100px");
+    private IntegerField cod_inte = new IntegerField("Código");
+    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
+    private TextField cod_labo = ObjetosComunes.getTextField("Cod.Laboratorio", "código laboratorio   ", 15, "100px");
     private TextField laboratorio = ObjetosComunes.getTextField("Laboratorio", "laboratorio", 50, "100px");
     private Checkbox homologado = new Checkbox("Homologado");
     private IntegerField n_labo = new IntegerField("n_labo");
@@ -36,21 +36,21 @@ public class FrmFarmaFMMprimas extends FrmMaster {
 
     private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 255, "100px", "90px");
 
-    private TextField especifica = ObjetosComunes.getTextField("especifica", "especifica", 255, "100px");
+    private TextField especifica = ObjetosComunes.getTextField("Especificaciones", "especifica", 255, "100px");
 
-    private DatePicker ulti_revi = ObjetosComunes.getDatePicker("Ultima Rev", null, LocalDate.now());
+    private DatePicker ulti_revi = ObjetosComunes.getDatePicker("Última Revision", null, LocalDate.now());
 
-    private TextField farmacetuico = ObjetosComunes.getTextField("farmacetuico", "farmacetuico", 25, "100px");
+    private TextField farmacetuico = ObjetosComunes.getTextField("Farmacétuico", "farmacetuico", 25, "100px");
 
-    private IntegerField existencias = new IntegerField("existencias");
+    private IntegerField existencias = new IntegerField("Existencias");
 
-    private TextField nlaboratorio = ObjetosComunes.getTextField("nlaboratorio", "nlaboratorio", 10, "100px");
+    private TextField nlaboratorio = ObjetosComunes.getTextField("N Laboratorio", "nlaboratorio", 10, "100px");
 
-    private TextField presentacion = ObjetosComunes.getTextField("presentacion", "presentacion", 25, "100px");
+    private TextField presentacion = ObjetosComunes.getTextField("Presentación", "presentación", 25, "100px");
 
-    private TextField descripcion = ObjetosComunes.getTextField("descripcion", "descripcion", 255, "100px");
-    private TextField requisitcos = ObjetosComunes.getTextField("requisitcos", "requisitcos", 255, "100px");
-    private TextField conservacion = ObjetosComunes.getTextField("conservacion", "conservacion", 255, "100px");
+    private TextField descripcion = ObjetosComunes.getTextField("Descripción", "descripción", 255, "100px");
+    private TextField requisitos = ObjetosComunes.getTextField("Requisitos", "requisitos", 255, "100px");
+    private TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 255, "100px");
 
     private FarmaFMMPrimas famFMMprimas = new FarmaFMMPrimas();
 
@@ -61,7 +61,7 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         doHazFormulario();
     }
 
-    public FrmFarmaFMMprimas(FarmaFMMPrimas farmaFMMprimas) {
+    public FrmFarmaFMMprimas(FarmaFMMPrimas famFMMprimas) {
         super();
         this.famFMMprimas = famFMMprimas;
         doHazFormulario();
@@ -76,14 +76,9 @@ public class FrmFarmaFMMprimas extends FrmMaster {
                 new ResponsiveStep("100px", 2),
                 new ResponsiveStep("100px", 3));
 
-        // contenedorFormulario.setWidth("250px");
         contenedorFormulario.setMaxWidth("600px");
-        // fila 1
         contenedorFormulario.add(cod_inte, producto);
         contenedorFormulario.setColspan(producto, 2);
-        //   columnLayout.setColspan(website, 2);
-        // Or just set it as you add them.
-        //columnLayout.add(description, 3);
 
         contenedorFormulario.add(cod_labo, laboratorio, homologado);
 
@@ -91,22 +86,25 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         contenedorFormulario.setColspan(conservacion, 2);
 
         contenedorFormulario.add(descripcion, 3);
-        contenedorFormulario.add(requisitcos, 3);
+        contenedorFormulario.add(requisitos, 3);
         contenedorFormulario.add(observaciones, 3);
         contenedorFormulario.add(existencias, stock_min, ulti_revi);
         contenedorFormulario.add(farmacetuico, 3);
 
         if (famFMMprimas == null || famFMMprimas.getCod_inte() == null) {
             cod_inte.setEnabled(true);
+            cod_inte.focus();
         } else {
             cod_inte.setEnabled(false);
+            producto.focus();
         }
         cod_inte.setWidth("25px");
         cod_inte.addBlurListener(e -> {
             FarmaFMMPrimas famFMMprimasExiste = new FarmaFMMprimasDAO().getPorCodigo(cod_inte.getValue());
             if (famFMMprimasExiste != null) {
+                famFMMprimas = famFMMprimasExiste;
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(famFMMprimasExiste);
+                binder.readBean(famFMMprimas);
             }
         });
 
@@ -143,9 +141,9 @@ public class FrmFarmaFMMprimas extends FrmMaster {
                 .asRequired()
                 .bind(FarmaFMMPrimas::getDescripcion, FarmaFMMPrimas::setDescripcion);
 
-        binder.forField(descripcion)
+        binder.forField(requisitos)
                 .asRequired()
-                .bind(FarmaFMMPrimas::getDescripcion, FarmaFMMPrimas::setDescripcion);
+                .bind(FarmaFMMPrimas::getRequisitos, FarmaFMMPrimas::setRequisitos);
 
         binder.forField(observaciones)
                 .asRequired()
@@ -154,9 +152,11 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         binder.forField(existencias)
                 .asRequired()
                 .bind(FarmaFMMPrimas::getExistencias, FarmaFMMPrimas::setExistencias);
+
         binder.forField(stock_min)
                 .asRequired()
                 .bind(FarmaFMMPrimas::getStock_min, FarmaFMMPrimas::setStock_min);
+
         binder.forField(ulti_revi)
                 .asRequired()
                 .bind(FarmaFMMPrimas::getUlti_revi, FarmaFMMPrimas::setUlti_revi);
@@ -179,57 +179,6 @@ public class FrmFarmaFMMprimas extends FrmMaster {
         }
 
         if (binder.writeBeanIfValid(famFMMprimas)) {
-            /*
-            if (cod_labo.getValue() == null) {
-                cod_labo.setValue(cod_labo.getEmptyValue());
-            }
-            if (laboratorio.getValue() == null) {
-                laboratorio.setValue(laboratorio.getEmptyValue());
-            }
-            if (homologado.getValue() == null) {
-                homologado.setValue(homologado.getEmptyValue());
-            }
-            if (n_labo.getValue() == null) {
-                n_labo.setValue(n_labo.getEmptyValue());
-            }
-
-            if (stock_min.getValue() == null) {
-                stock_min.setValue(stock_min.getEmptyValue());
-            }
-
-            if (observaciones.getValue() == null) {
-                observaciones.setValue(observaciones.getEmptyValue());
-            }
-            if (especifica.getValue() == null) {
-                especifica.setValue(especifica.getEmptyValue());
-            }
-//    private LocalDate ulti_revi;
-            if (farmacetuico.getValue() == null) {
-                farmacetuico.setValue(farmacetuico.getEmptyValue());
-            }
-
-            if (existencias.getValue() == null) {
-                existencias.setValue(existencias.getEmptyValue());
-            }
-
-            if (nlaboratorio.getValue() == null) {
-                nlaboratorio.setValue(nlaboratorio.getEmptyValue());
-            }
-
-            if (presentacion.getValue() == null) {
-                presentacion.setValue(presentacion.getEmptyValue());
-            }
-
-            if (descripcion.getValue() == null) {
-                descripcion.setValue(descripcion.getEmptyValue());
-            }
-            if (requisitcos.getValue() == null) {
-                requisitcos.setValue(requisitcos.getEmptyValue());
-            }
-            if (conservacion.getValue() == null) {
-                conservacion.setValue(conservacion.getEmptyValue());
-            }
-             */
             if (new FarmaFMMprimasDAO()
                     .doGrabaDatos(famFMMprimas) == true) {
 

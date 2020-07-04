@@ -37,8 +37,9 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
 
             LocalDate localDate = null;
 
-            if (rs.getString("ulti_revi") != null) {
-                LocalDate.parse(rs.getString("ulti_revi"), dateTimeFormatterParser);
+            if (rs.getInt("ulti_revi") != 0) {
+                String ulti = Integer.toString(rs.getInt("ulti_revi"));
+                localDate = LocalDate.parse(ulti, dateTimeFormatterParser);
             }
 
             farmaFMMPrimas.setCod_inte(rs.getInt("cod_inte"));
@@ -51,6 +52,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             farmaFMMPrimas.setObservaciones(rs.getString("observaciones"));
             farmaFMMPrimas.setEspecifica(rs.getString("especifica"));
             farmaFMMPrimas.setUlti_revi(localDate);
+            farmaFMMPrimas.setFarmacetuico(rs.getString("farmaceutico"));
             farmaFMMPrimas.setExistencias(rs.getInt("existencias"));
             farmaFMMPrimas.setNlaboratorio(rs.getString("nlaboratorio"));
             farmaFMMPrimas.setPresentacion(rs.getString("presentacion"));
@@ -121,7 +123,9 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                     + "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, farmaFMMPrimas.getCod_inte());
+
             statement.setString(2, farmaFMMPrimas.getProducto());
+
             if (farmaFMMPrimas.getCod_labo() == null) {
                 statement.setNull(3, Types.VARCHAR);
             } else {
@@ -182,7 +186,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             } else {
                 statement.setString(14, farmaFMMPrimas.getRequisitos());
             }
-            if (farmaFMMPrimas.getRequisitos() == null) {
+            if (farmaFMMPrimas.getConservacion() == null) {
                 statement.setNull(15, Types.VARCHAR);
             } else {
                 statement.setString(15, farmaFMMPrimas.getConservacion());
@@ -207,6 +211,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
+            /*
             sql = sql = "UPDATE   farm_fm_mprimas  SET producto='" + farmaFMMPrimas.getProducto() + "',cod_labo='" + farmaFMMPrimas.getCod_labo() + "'"
                     + ",laboratorio='" + farmaFMMPrimas.getLaboratorio() + "',homologado='" + farmaFMMPrimas.getHomologado() + "',stock_min='" + farmaFMMPrimas.getStock_min() + "'"
                     + ",observaciones='" + farmaFMMPrimas.getObservaciones() + "', ulti_revi='" + farmaFMMPrimas.getUlti_revi()
@@ -214,7 +219,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                     + ",existencias=" + farmaFMMPrimas.getExistencias() + ",nlaboratorio='" + farmaFMMPrimas.getNlaboratorio() + "',presentacion='" + farmaFMMPrimas.getPresentacion() + "'"
                     + ",descripcion='" + farmaFMMPrimas.getDescripcion() + "',requisitos='" + farmaFMMPrimas.getRequisitos() + "',conservacion='" + farmaFMMPrimas.getConservacion() + "'"
                     + "WHERE cod_inte=" + farmaFMMPrimas.getCod_inte();
-
+             */
             sql = sql = "UPDATE   farm_fm_mprimas  SET producto=?,cod_labo=? ,laboratorio=? ,homologado=?,stock_min=?"
                     + " ,observaciones=? , ulti_revi=?,farmaceutico=?,existencias=?,nlaboratorio=?,presentacion=?"
                     + ",descripcion=?,requisitos=?,conservacion=?"
@@ -283,7 +288,7 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             } else {
                 statement.setString(13, farmaFMMPrimas.getRequisitos());
             }
-            if (farmaFMMPrimas.getRequisitos() == null) {
+            if (farmaFMMPrimas.getConservacion() == null) {
                 statement.setNull(14, Types.VARCHAR);
             } else {
                 statement.setString(14, farmaFMMPrimas.getConservacion());

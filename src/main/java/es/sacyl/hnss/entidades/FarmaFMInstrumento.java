@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.sacyl.hnss.entidades;
 
 /**
@@ -46,6 +41,11 @@ public class FarmaFMInstrumento {
 
     public static String getLabelFrom() {
         return labelFrom;
+    }
+
+    @Override
+    public String toString() {
+        return "FarmaFMInstrumento{" + "codigo=" + codigo + ", nombre=" + nombre + '}';
     }
 
 }

@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.sacyl.hnss.entidades.FarmaFMViasAdm;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMInstumentos;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimas;
+import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimasEntradas;
 
 /**
  *
@@ -50,6 +51,10 @@ public class Menu extends MenuBar {
             contenedor.add((new PantallaFarmaFMMprimas()));
         });
         MenuItem entradas = materiasSubMenu.addItem("Entradas");
+        entradas.addClickListener(e -> {
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMMprimasEntradas(null)));
+        });
         MenuItem salidas = materiasSubMenu.addItem("Salidas");
 
         formulasSubMenu.addItem("Material e instrumental", e -> {

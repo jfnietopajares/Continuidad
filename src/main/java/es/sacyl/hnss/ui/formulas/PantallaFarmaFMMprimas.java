@@ -7,8 +7,12 @@ package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.function.ValueProvider;
 import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
 import es.sacyl.hnss.ui.PantallaMaster;
@@ -50,14 +54,37 @@ public class PantallaFarmaFMMprimas extends PantallaMaster {
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.addItemClickListener(event -> {
+        grid.addItemDoubleClickListener(event -> {
             frmFarmaFMMPrimas = new FrmFarmaFMMprimas(event.getItem());
             doVentanaModal(frmFarmaFMMPrimas);
-            //   doActualizaGrid();
         }
         );
+        grid.addItemClickListener(event -> {
+            frmFarmaFMMPrimas = new FrmFarmaFMMprimas(event.getItem());
+
+        }
+        );
+        grid.addColumn(
+                new NativeButtonRenderer<>("Entradas",
+                        clickedItem -> {
+
+                            doVentanaModalEntradas(new FrmFarmaFMMprimasEntradas(clickedItem));
+                            Notification.show("Si dato seleccionado" + grid.getSelectedItems().size());
+                        }
+                ));
 
         doActualizaGrid();
+    }
+
+    public void doVentanaModalEntradas(FrmFarmaFMMprimasEntradas frmFarmaFMMprimasEntradas) {
+        frmFarmaFMMprimasEntradas.open();
+        frmFarmaFMMprimasEntradas.addDialogCloseActionListener(e -> {
+            doActualizaGrid();
+        }
+        );
+        frmFarmaFMMprimasEntradas.addDetachListener(e -> {
+            doActualizaGrid();
+        });
     }
 
     public void doVentanaModal(FrmFarmaFMMprimas frmFarmaFMMPrimas) {
