@@ -53,7 +53,7 @@ public class Menu extends MenuBar {
         MenuItem entradas = materiasSubMenu.addItem("Entradas");
         entradas.addClickListener(e -> {
             contenedor.removeAll();
-            contenedor.add((new PantallaFarmaFMMprimasEntradas(null)));
+            contenedor.add((new PantallaFarmaFMMprimasEntradas()));
         });
         MenuItem salidas = materiasSubMenu.addItem("Salidas");
 

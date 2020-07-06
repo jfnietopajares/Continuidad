@@ -49,7 +49,7 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             farmaFMMPrimasEntrada.setEnvases(rs.getInt("envases"));
             farmaFMMPrimasEntrada.setLote(rs.getString("lote"));
             farmaFMMPrimasEntrada.setVerificacion(rs.getBoolean("verificacion"));
-            farmaFMMPrimasEntrada.setCtrlAnalitico(rs.getString("ctlL_analitico"));
+            farmaFMMPrimasEntrada.setCtrlAnalitico(rs.getString("ctll_analitico"));
             farmaFMMPrimasEntrada.setCaducidad(rs.getString("caducidad"));
             farmaFMMPrimasEntrada.setNumero(rs.getInt("numero"));
             farmaFMMPrimasEntrada.setMprima(new FarmaFMMprimasDAO().getPorCodigo(rs.getInt("cod_inte")));
@@ -105,7 +105,7 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         try {
             connection = super.getConexionBBDD();
             sql = sql = "UPDATE   farm_fm_primas_ent  SET fecha=?,registro=? ,envases=? ,lote=?,verificacion=?"
-                    + " ,ctrlAnalitico=? , farmaceutico=?,farmaceutico=? "
+                    + " ,ctrl_analitico=? , farmaceutico=?,farmaceutico=? "
                     + ",descripcion=?,requisitos=?,conservacion=?"
                     + " WHERE cod_inte=? AND numero=?";
             /*
@@ -194,9 +194,8 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         try {
             connection = super.getConexionBBDD();
             sql = sql = "INSERT INTO    farm_fm_primas_ent  (cod_inte,numero, fecha,registro ,envases ,lote,verificacion"
-                    + " ,ctrlAnalitico, farmaceutico,farmaceutico"
-                    + ",descripcion,requisitos,conservacion) "
-                    + " VALUES (?,?,?,?,?,?,?,?,?,?, )";
+                    + " ,ctrl_analitico, farmaceutico,caducidad) "
+                    + " VALUES (?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -210,13 +209,11 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             } else {
                 statement.setInt(2, farmaFMMPrimasEntrada.getNumero());
             }
-
             if (farmaFMMPrimasEntrada.getFecha() == null) {
                 statement.setNull(3, Types.INTEGER);
             } else {
                 statement.setString(3, dateTimeFormatterParser.format(farmaFMMPrimasEntrada.getFecha()));
             }
-
             if (farmaFMMPrimasEntrada.getRegistro() == null) {
                 statement.setNull(4, Types.INTEGER);
             } else {
@@ -237,6 +234,7 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             } else {
                 statement.setBoolean(7, farmaFMMPrimasEntrada.getVerificacion());
             }
+
             if (farmaFMMPrimasEntrada.getCtrlAnalitico() == null) {
                 statement.setNull(8, Types.VARCHAR);
             } else {
@@ -308,10 +306,10 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             if (hasta != null) {
                 sql = sql.concat(" AND hasta>=" + dateTimeFormatterParser.format(hasta));
             }
-            if (farmaFMMPrimasEntrada != null) {
+            if (farmaFMMPrimasEntrada != null && farmaFMMPrimasEntrada.getMprima() != null && farmaFMMPrimasEntrada.getMprima().getCod_inte() != null) {
                 sql = sql.concat(" AND cod_inte=" + farmaFMMPrimasEntrada.getMprima().getCod_inte());
             }
-            sql = sql.concat("ORDER BY cod_inte,fecha");
+            sql = sql.concat(" ORDER BY cod_inte,fecha");
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
@@ -330,5 +328,33 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
         return listaEntradas;
+    }
+
+    public Integer getNumeroSiguiente(FarmaFMMPrimas farmaFMMPrimas) {
+        Connection connection = null;
+        FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = null;
+        Integer siguiente = 1;
+        try {
+            connection = super.getConexionBBDD();
+            sql = " SELECT max(numero) as valor FROM farm_fm_primas_ent WHERE    cod_inte=" + farmaFMMPrimas.getCod_inte();
+            Statement statement = connection.createStatement();
+            ResultSet resulSet = statement.executeQuery(sql);
+            if (resulSet.next()) {
+                siguiente = resulSet.getInt("valor") + 1;
+            }
+            statement.close();
+            LOGGER.debug(sql);
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
+        return siguiente;
+
     }
 }

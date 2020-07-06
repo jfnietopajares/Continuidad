@@ -60,10 +60,10 @@ public class ConexionDAO {
                     dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/dataSourceHnss");
 
                     if (dataSource != null) {
-                        //         dataSource.
                         return dataSource.getConnection();
                     } else {
                         LOGGER.error(ConexionDAO.ERROR_BBDD_SIN_CONEXION);
+                        (new Notification("Error sin conexión a la base de datos", 9000, Notification.Position.MIDDLE)).open();
                     }
                 }
             } else {
@@ -71,7 +71,7 @@ public class ConexionDAO {
             }
         } catch (Exception e) {
             LOGGER.error(ConexionDAO.ERROR_BBDD_SIN_CONEXION, e);
-            (new Notification("Error conexion a la base de datos", 3000, Notification.Position.MIDDLE)).open();
+            (new Notification("Error conexion a la base de datos", 9000, Notification.Position.MIDDLE)).open();
         }
         return null;
     }

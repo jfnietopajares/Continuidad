@@ -311,6 +311,39 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
+    public boolean doActualizaExistencias(FarmaFMMPrimas farmaFMMPrimas, Integer valorEntraSale) {
+        Connection connection = null;
+        Boolean insertadoBoolean = false;
+        try {
+            connection = super.getConexionBBDD();
+            sql = sql = "UPDATE   farm_fm_mprimas  SET existencias=?  WHERE cod_inte=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            farmaFMMPrimas.setExistencias(farmaFMMPrimas.getExistencias() + valorEntraSale);
+
+            if (farmaFMMPrimas.getExistencias() == null) {
+                statement.setNull(1, Types.INTEGER);
+            } else {
+                statement.setInt(1, farmaFMMPrimas.getExistencias());
+            }
+            statement.setLong(2, farmaFMMPrimas.getCod_inte());
+            insertadoBoolean = statement.executeUpdate() > 0;
+            statement.close();
+
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
+        return insertadoBoolean;
+    }
+
     public boolean doBorraDatos(FarmaFMMPrimas farmaFMMPrimas) {
         Connection connection = null;
         Boolean insertadoBoolean = false;

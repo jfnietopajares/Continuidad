@@ -33,8 +33,9 @@ public class MainView extends VerticalLayout {
         this.setAlignItems(Alignment.CENTER);
         if (new ConexionDAO().getConexionBBDD() == null) {
             (new Notification("Error BBDD", 3000, Notification.Position.MIDDLE)).open();
+        } else {
+            this.doLogin();
         }
-        this.doLogin();
     }
 
     public void domuestraMenu() {

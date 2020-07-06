@@ -10,12 +10,9 @@ import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import es.sacyl.hnss.dao.FarmaFMMprimasEntraDAO;
-import es.sacyl.hnss.dao.FarmaFMViasAdmDAO;
-import es.sacyl.hnss.entidades.FarmaFMInstrumento;
 import es.sacyl.hnss.entidades.FarmaFMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FarmaFMViasAdm;
 import es.sacyl.hnss.ui.PantallaMaster;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +28,11 @@ public class PantallaFarmaFMMprimasEntradas extends PantallaMaster {
     private Grid<FarmaFMMPrimasEntrada> grid = new Grid<>(FarmaFMMPrimasEntrada.class);
 
     private FrmFarmaFMMprimasEntradas frmFarmaFMMprimasEntradas;
+
+    public PantallaFarmaFMMprimasEntradas() {
+        super();
+        doHazPantalla();
+    }
 
     public PantallaFarmaFMMprimasEntradas(FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
         super();
@@ -49,7 +51,8 @@ public class PantallaFarmaFMMprimasEntradas extends PantallaMaster {
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
-        grid.setColumns("codigo", "nombre");
+        grid.setColumns("numero", "fecha");
+        //    grid.addColumn("")
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
@@ -82,7 +85,8 @@ public class PantallaFarmaFMMprimasEntradas extends PantallaMaster {
 
     @Override
     public void doNuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.doVentanaModal(new FrmFarmaFMMprimasEntradas());
+        doActualizaGrid();
     }
 
     @Override
@@ -99,7 +103,7 @@ public class PantallaFarmaFMMprimasEntradas extends PantallaMaster {
 
         numeroRegistros.setText(":" + Integer.toString(listaEntradas.size()));
 
-        cabeceraGrid.setText(" Lista de " + FarmaFMViasAdm.getLabelFrom() + ". Registros: " + Integer.toString(listaEntradas.size()));
+        cabeceraGrid.setText(" Lista de " + FarmaFMMPrimasEntrada.getLabelFrom() + ". Registros: " + Integer.toString(listaEntradas.size()));
 
     }
 }

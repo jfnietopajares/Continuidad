@@ -43,7 +43,7 @@ public abstract class FrmMaster extends Dialog {
 
     protected HorizontalLayout contenedorBotones = new HorizontalLayout();
 
-    protected HorizontalLayout contenedorTitulo = new HorizontalLayout();
+    protected VerticalLayout contenedorTitulo = new VerticalLayout();
 
     protected FormLayout contenedorFormulario = new FormLayout();
 
@@ -56,6 +56,7 @@ public abstract class FrmMaster extends Dialog {
         //    contenedorBorrado.getStyle().set("background-color", "#098742");
 
         contenedorTitulo.add(titulo);
+
         contenedorBotones.add(botonGrabar, botonBorrar, botonAyuda, botonCancelar);
 
         botonGrabar.addClickListener(e -> {

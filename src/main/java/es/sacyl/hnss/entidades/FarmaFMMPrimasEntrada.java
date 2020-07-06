@@ -105,6 +105,14 @@ public class FarmaFMMPrimasEntrada {
         this.mprima = mprima;
     }
 
+    public String getProducto() {
+        if (this.mprima != null && this.getMprima().getProducto() != null) {
+            return getMprima().getProducto();
+        } else {
+            return "";
+        }
+    }
+
     public static String getLabelFrom() {
         return labelFrom;
     }
