@@ -7,12 +7,17 @@ package es.sacyl.hnss.ui;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
+import es.sacyl.hnss.entidades.FarmaFMMPrimas;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  *
@@ -95,8 +100,27 @@ public class ObjetosComunes {
         if (date != null) {
             datePicker.setValue(date);
         }
+        // datePicker.setLocale(Locale.ITALY);
+        datePicker.setClearButtonVisible(true);
+        //   datePicker.set("dd/MM/yyyy");
+        //    date.format(DateTimeFormatter.ofPattern("dd/mm/yyyy"));
 
         return datePicker;
     }
 
+    public static ComboBox<FarmaFMMPrimas> getComboMPrimas(String label, FarmaFMMPrimas farmaFMMPrimas) {
+        ComboBox<FarmaFMMPrimas> combo = new ComboBox<FarmaFMMPrimas>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        if (farmaFMMPrimas != null) {
+            combo.setValue(farmaFMMPrimas);
+        }
+        combo.setItems(new FarmaFMMprimasDAO().getListaMprimas(null));
+
+        combo.setItemLabelGenerator(FarmaFMMPrimas::getProducto);
+
+        combo.setWidth("300px");
+        return combo;
+    }
 }

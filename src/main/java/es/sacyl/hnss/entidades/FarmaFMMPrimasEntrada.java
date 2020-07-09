@@ -6,7 +6,7 @@ import java.time.LocalDate;
  *
  * @author JuanNieto
  */
-public class FarmaFMMPrimasEntrada {
+public class FarmaFMMPrimasEntrada extends FarmaFMMPrimas {
 
     private LocalDate fecha;
     private Integer registro;
@@ -17,12 +17,11 @@ public class FarmaFMMPrimasEntrada {
     private String farmaceutico;
     private String caducidad;
     private Integer numero;
-    private FarmaFMMPrimas mprima;
 
     public static final String labelFrom = "Entradas de Materias primas ";
 
     public FarmaFMMPrimasEntrada() {
-
+        super();
     }
 
     public LocalDate getFecha() {
@@ -97,29 +96,47 @@ public class FarmaFMMPrimasEntrada {
         this.numero = numero;
     }
 
-    public FarmaFMMPrimas getMprima() {
-        return mprima;
-    }
-
-    public void setMprima(FarmaFMMPrimas mprima) {
-        this.mprima = mprima;
-    }
-
-    public String getProducto() {
-        if (this.mprima != null && this.getMprima().getProducto() != null) {
-            return getMprima().getProducto();
-        } else {
-            return "";
-        }
-    }
-
     public static String getLabelFrom() {
         return labelFrom;
     }
 
+    public String getCodigoNumero() {
+        String cadena = "";
+        if (getCod_inte() != null) {
+            cadena = cadena.concat(getCod_inte() + "/");
+        }
+        if (numero != null) {
+            cadena = cadena.concat(Integer.toString(numero));
+        }
+        return cadena;
+    }
+
+    public Integer getVariacionExistencias(Integer existenciasAnteriores, String accion) {
+        Integer resultado = 0;
+        switch (accion) {
+            case "GRABAR":
+                if (existenciasAnteriores == null) {
+                    // nuevo registro se suman las existencias
+                    resultado = this.getEnvases();
+                } else if (existenciasAnteriores > this.getEnvases()) {
+                    //ha modificado las existencias disnminuyendo el valor de la entrada
+                    resultado = existenciasAnteriores - this.getEnvases();
+                } else {
+                    // no se han modificado las existencias
+                    resultado = 0;
+                }
+                break;
+            case "BORRAR":
+                // se descuentan las existencias de la entrada
+                resultado = this.getEnvases() * (-1);
+                break;
+        }
+        return resultado;
+    }
+
     @Override
     public String toString() {
-        return "FarmaFMMPrimasEntrada{" + "fecha=" + fecha + ", registro=" + registro + ", envases=" + envases + ", lote=" + lote + ", verificacion=" + verificacion + ", ctrlAnalitico=" + ctrlAnalitico + ", farmaceutico=" + farmaceutico + ", caducidad=" + caducidad + ", numero=" + numero + ", cod_inte=" + mprima.toString() + '}';
+        return "FarmaFMMPrimasEntrada{" + super.toString() + "fecha=" + fecha + ", registro=" + registro + ", envases=" + envases + ", lote=" + lote + ", verificacion=" + verificacion + ", ctrlAnalitico=" + ctrlAnalitico + ", farmaceutico=" + farmaceutico + ", caducidad=" + caducidad + ", numero=" + numero + ", cod_inte=" + '}';
     }
 
 }

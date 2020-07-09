@@ -55,7 +55,21 @@ public class Menu extends MenuBar {
             contenedor.removeAll();
             contenedor.add((new PantallaFarmaFMMprimasEntradas()));
         });
-        MenuItem salidas = materiasSubMenu.addItem("Salidas");
+
+        formulasSubMenu.addItem("Materias primas definición", e -> {
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMMprimas()));
+        });
+
+        formulasSubMenu.addItem("Materias primas entradas", e -> {
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMMprimasEntradas()));
+        });
+
+        formulasSubMenu.addItem("Materias primas salidas", e -> {
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMMprimasEntradas()));
+        });
 
         formulasSubMenu.addItem("Material e instrumental", e -> {
             contenedor.removeAll();
@@ -66,6 +80,8 @@ public class Menu extends MenuBar {
             contenedor.add((new PantallaFarmaFMViasAdm()));
 
         });
+
+        MenuItem salidas = materiasSubMenu.addItem("Salidas");
 
     }
 

@@ -5,7 +5,10 @@
  */
 package es.sacyl.hnss.ui.formulas;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
+
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
@@ -23,6 +26,7 @@ import es.sacyl.hnss.dao.FarmaFMMprimasEntraDAO;
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
 import es.sacyl.hnss.entidades.FarmaFMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FarmaFMViasAdm;
+import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.ObjetosComunes;
 import java.time.LocalDate;
@@ -39,39 +43,28 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
 
     private DatePicker fecha = ObjetosComunes.getDatePicker("Fecha entrada", null, LocalDate.now());
-    private IntegerField registro = new IntegerField("registro");
+    private IntegerField registro = new IntegerField("Registro");
     private IntegerField envases = new IntegerField("Nº envases");
 
-    private TextField lote = ObjetosComunes.getTextField("lote", "lote", 50, "100px");
+    private TextField lote = ObjetosComunes.getTextField("Lote", "lote", 50, "100px");
 
-    private Checkbox verificacion = new Checkbox("verificacion");
+    private Checkbox verificacion = new Checkbox("Verificacion");
 
-    private TextField ctrlAnalitico = ObjetosComunes.getTextField("ctrlAnalitico", "ctrlAnalitico", 50, "100px");
-    private TextField farmaceutico = ObjetosComunes.getTextField("farmaceutico", "farmaceutico", 50, "100px");
-    private TextField caducidad = ObjetosComunes.getTextField("caducidad", "caducidad", 50, "100px");
+    private TextField ctrlAnalitico = ObjetosComunes.getTextField("Control analitico", "control analitico", 50, "100px");
+    private TextField farmaceutico = ObjetosComunes.getTextField("Farmaceutico", "farmaceutico", 50, "100px");
+    private TextField caducidad = ObjetosComunes.getTextField("Caducidad", "caducidad", 50, "100px");
 
-    private IntegerField numero = new IntegerField("numero");
+    private IntegerField numero = new IntegerField("Núumero");
 
-    private FarmaFMMPrimas mprima;
+    private FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = null;
 
-    private FarmaFMMPrimasEntrada farmaFMMPrimasEntrada;
+    private FarmaFMMPrimasEntrada farmaFMMPrimasEntradaAnterior = new FarmaFMMPrimasEntrada();
 
-    private FarmaFMMPrimas farmaFMMPrimas;
+    private ComboBox<FarmaFMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas(null, null);
 
+    // private FarmaFMMPrimas farmaFMMPrimas = null;
     private Binder<FarmaFMMPrimasEntrada> binder = new Binder<>();
 
-    /*
-     private LocalDate fecha;
-    private Integer registro;
-    private Integer envases;
-    private String lote;
-    private Boolean verificacion;
-    private String ctrlAnalitico;
-    private String farmaceutico;
-    private String caducidad;
-    private Integer numero;
-
-     */
     public FrmFarmaFMMprimasEntradas() {
         super();
         doHazFormulario();
@@ -80,20 +73,26 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     public FrmFarmaFMMprimasEntradas(FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
         super();
         this.farmaFMMPrimasEntrada = farmaFMMPrimasEntrada;
+
+        this.farmaFMMPrimasEntradaAnterior = farmaFMMPrimasEntrada;
+        cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
+        producto.setValue(farmaFMMPrimasEntrada.getProducto());
         doHazFormulario();
     }
 
     public FrmFarmaFMMprimasEntradas(FarmaFMMPrimas farmaFMMPrimas) {
         super();
-        this.farmaFMMPrimas = farmaFMMPrimas;
         farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
-        farmaFMMPrimasEntrada.setMprima(farmaFMMPrimas);
-        cod_inte.setValue(farmaFMMPrimas.getCod_inte());
-        producto.setValue(farmaFMMPrimas.getProducto());
+        this.farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
+        this.farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
 
-        cod_inte.setReadOnly(true);
-        producto.setReadOnly(true);
+        cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
+        producto.setValue(farmaFMMPrimasEntrada.getProducto());
+        
+        doHazFormulario();
+    }
 
+    public void doFormatoCodigoProducto() {
         cod_inte.getStyle().set("color", "red");
         cod_inte.getStyle().set("fontWeight", "bold");
         cod_inte.getStyle().set("font-weight", "bold");
@@ -103,28 +102,32 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
         producto.getStyle().set("font-weight", "bold");
 
         numero.focus();
-        doHazFormulario();
     }
 
     public void doHazFormulario() {
 
+        if (farmaFMMPrimasEntrada == null) {
+            farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
+            cod_inte.setEnabled(true);
+            cod_inte.focus();
+        } else {
+            cod_inte.setReadOnly(true);
+            producto.setReadOnly(true);
+            doFormatoCodigoProducto();
+        }
+        if (farmaFMMPrimasEntrada != null) {
+            numero.setReadOnly(true);
+        }
+
         titulo.setText(farmaFMMPrimasEntrada.getLabelFrom());
-        /*
-        Label productoEntrada = new Label(farmaFMMPrimas.getCod_labo() + " " + farmaFMMPrimas.getProducto());
-        H4 tituloProducto = new H4(farmaFMMPrimas.getCod_labo() + " " + farmaFMMPrimas.getProducto());
-        tituloProducto.getStyle().set("color", "red");
 
-        tituloProducto.getStyle().set("fontWeight", "bold");
-        tituloProducto.getStyle().set("font-weight", "bold");
-
-        contenedorTitulo.add(tituloProducto);
-         */
         contenedorFormulario.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("5px", 1),
                 new FormLayout.ResponsiveStep("100px", 2),
                 new FormLayout.ResponsiveStep("100px", 3));
 
         contenedorFormulario.setMaxWidth("600px");
+        contenedorFormulario.add(comboMPrimas, 3);
         contenedorFormulario.add(cod_inte, producto);
         contenedorFormulario.setColspan(producto, 2);
         contenedorFormulario.add(numero, fecha, registro);
@@ -133,14 +136,39 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
         contenedorFormulario.add(ctrlAnalitico, 2);
         contenedorFormulario.add(farmaceutico, 3);
 
-        if (farmaFMMPrimasEntrada == null || farmaFMMPrimasEntrada.getMprima().getCod_inte() == null) {
-            cod_inte.setEnabled(true);
-            cod_inte.focus();
-        } else {
-            cod_inte.setEnabled(false);
-            producto.focus();
-        }
+        comboMPrimas.addValueChangeListener(e -> {
+            cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
+            producto.setValue(comboMPrimas.getValue().getProducto());
+            farmaFMMPrimasEntrada.setCod_inte(comboMPrimas.getValue().getCod_inte());
+            farmaFMMPrimasEntrada.setProducto(comboMPrimas.getValue().getProducto());
+            numero.setValue(new FarmaFMMprimasEntraDAO().getNumeroSiguiente(farmaFMMPrimasEntrada));
+            fecha.setValue(LocalDate.now());
+            registro.focus();
+            cod_inte.setReadOnly(true);
+            producto.setReadOnly(true);
+        });
         cod_inte.setWidth("25px");
+        cod_inte.addBlurListener(e -> {
+            if (cod_inte.isEmpty() && comboMPrimas.getValue() == null) {
+                Notification.show("Código obligatorio");
+                comboMPrimas.focus();
+            } else {
+                FarmaFMMPrimas farmaFMMPrimas = new FarmaFMMprimasDAO().getPorCodigo(cod_inte.getValue());
+                if (farmaFMMPrimas == null) {
+                    Notification.show("No existe materia prima para exe código:" + cod_inte.getValue());
+                    producto.clear();
+                    cod_inte.focus();
+                } else {
+                    producto.setValue(farmaFMMPrimas.getProducto());
+                    producto.setReadOnly(true);
+                    farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
+                    farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
+                    numero.setValue(new FarmaFMMprimasEntraDAO().getNumeroSiguiente(farmaFMMPrimasEntrada));
+                    fecha.setValue(LocalDate.now());
+                    registro.focus();
+                }
+            }
+        });
         numero.addBlurListener(e -> {
             FarmaFMMPrimasEntrada farmaFMMPrimasEntradaExiste = new FarmaFMMprimasEntraDAO().getPorMPNumero(cod_inte.getValue(), numero.getValue());
             if (farmaFMMPrimasEntradaExiste != null) {
@@ -175,8 +203,9 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
 
         binder.readBean(farmaFMMPrimasEntrada);
         if (numero.isEmpty()) {
-            numero.setValue(new FarmaFMMprimasEntraDAO().getNumeroSiguiente(farmaFMMPrimas));
-
+            numero.setValue(new FarmaFMMprimasEntraDAO().getNumeroSiguiente(farmaFMMPrimasEntrada));
+            fecha.setValue(LocalDate.now());
+            registro.focus();
         }
 
     }
@@ -185,17 +214,9 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     public void doGrabar() {
 
         if (binder.writeBeanIfValid(farmaFMMPrimasEntrada)) {
-            if (new FarmaFMMprimasEntraDAO()
-                    .doGrabaDatos(farmaFMMPrimasEntrada) == true) {
-
+            if (new FarmaFMMprimasEntraDAO().doGrabaDatos(farmaFMMPrimasEntrada) == true) {
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
-                // actuliza existencias
-                if (new FarmaFMMprimasDAO().doActualizaExistencias(farmaFMMPrimas, farmaFMMPrimasEntrada.getEnvases())) {
-                    Notification.show(FrmMaster.AVISODATOALMACENADO);
-                } else {
-                    (new Notification(FrmMaster.AVISODATOERRORBBDD + " Sin actualizar existenicas", 1000, Notification.Position.MIDDLE)).open();
-                }
-
+                doActualizaExistencias();
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
@@ -212,13 +233,70 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
         }
     }
 
+    public void doActualizaExistencias() {
+        Integer variacionExistencias = farmaFMMPrimasEntrada.getVariacionExistencias(farmaFMMPrimasEntradaAnterior.getEnvases(), "GRABAR");
+
+        // entrada nueva
+        if (farmaFMMPrimasEntradaAnterior.getNumero() == null) {
+            variacionExistencias = farmaFMMPrimasEntrada.getEnvases();
+        } else if (farmaFMMPrimasEntradaAnterior.getEnvases() != farmaFMMPrimasEntrada.getEnvases()) {
+            // edita entrada  cambia envase
+            if (farmaFMMPrimasEntradaAnterior.getEnvases() > farmaFMMPrimasEntrada.getEnvases()) {
+                variacionExistencias = farmaFMMPrimasEntradaAnterior.getEnvases() - farmaFMMPrimasEntrada.getEnvases();
+            } else {
+                variacionExistencias = farmaFMMPrimasEntradaAnterior.getEnvases() + farmaFMMPrimasEntrada.getEnvases();
+            }
+        }
+
+        if (variacionExistencias != 0) {
+            if (new FarmaFMMprimasDAO().doActualizaExistencias(farmaFMMPrimasEntrada, variacionExistencias)) {
+                Notification.show(FrmMaster.AVISODATOALMACENADO);
+            } else {
+                (new Notification(FrmMaster.AVISODATOERRORBBDD + " Sin actualizar existenicas", 1000, Notification.Position.MIDDLE)).open();
+            }
+        }
+    }
+
     @Override
     public void doBorrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ConfirmDialog dialog = new ConfirmDialog("Borrado del registro actual",
+                "Seguro que quires borrar el dato actual. Numero de entrada : " + farmaFMMPrimasEntradaAnterior.getNumero(),
+                "Borrar", this::onDelete);
+
+        dialog.open();
+
+        dialog.addDialogCloseActionListener(e -> {
+            this.close();
+        });
+
+    }
+
+    public void onDelete() {
+        if (new FarmaFMMprimasEntraDAO().doBorraDatos(farmaFMMPrimasEntrada) == true) {
+            Notification.show(FrmMaster.AVISODATOBORRADO);
+            // descuenta existencias
+            if (new FarmaFMMprimasDAO().doActualizaExistencias(farmaFMMPrimasEntrada, farmaFMMPrimasEntrada.getNumero() * (-1)) == true) {
+                Notification.show("Existencias actualizadas");
+            } else {
+                Notification.show("Error actualizando existencias actualizadas");
+            }
+            this.close();
+        } else {
+            Notification.show(FrmMaster.AVISODATOERRORBORRADO);
+        }
+    }
+
+    public void onDiscard() {
+
+    }
+
+    public void onCancel() {
+
     }
 
     @Override
     public void doAyuda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

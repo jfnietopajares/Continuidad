@@ -8,23 +8,23 @@ import java.time.LocalDate;
  */
 public class FarmaFMMPrimas {
 
-    private Integer cod_inte;
-    private String producto;
-    private String cod_labo;
-    private String laboratorio;
-    private Boolean homologado;
-    private Integer n_labo;
-    private Integer stock_min;
-    private String observaciones;
-    private String especifica;
-    private LocalDate ulti_revi;
-    private String farmacetuico;
-    private Integer existencias;
-    private String nlaboratorio;
-    private String presentacion;
-    private String descripcion;
-    private String requisitos;
-    private String conservacion;
+    protected Integer cod_inte;
+    protected String producto;
+    protected String cod_labo;
+    protected String laboratorio;
+    protected Boolean homologado;
+    protected Integer n_labo;
+    protected Integer stock_min;
+    protected String observaciones;
+    protected String especifica;
+    protected LocalDate ulti_revi;
+    protected String farmacetuico;
+    protected Integer existencias;
+    protected String nlaboratorio;
+    protected String presentacion;
+    protected String descripcion;
+    protected String requisitos;
+    protected String conservacion;
 
     public static final String labelFrom = "Materias primas ";
 

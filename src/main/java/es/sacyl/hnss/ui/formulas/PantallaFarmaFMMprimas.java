@@ -15,6 +15,7 @@ import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
+import es.sacyl.hnss.entidades.FarmaFMMPrimasEntrada;
 import es.sacyl.hnss.ui.PantallaMaster;
 import java.util.ArrayList;
 
@@ -67,9 +68,11 @@ public class PantallaFarmaFMMprimas extends PantallaMaster {
         grid.addColumn(
                 new NativeButtonRenderer<>("Entradas",
                         clickedItem -> {
-
-                            doVentanaModalEntradas(new FrmFarmaFMMprimasEntradas(clickedItem));
-                            Notification.show("Si dato seleccionado" + grid.getSelectedItems().size());
+                            FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
+                            farmaFMMPrimasEntrada.setCod_inte(clickedItem.getCod_inte());
+                            farmaFMMPrimasEntrada.setProducto(clickedItem.getProducto());
+                            doVentanaModalEntradas(new FrmFarmaFMMprimasEntradas(farmaFMMPrimasEntrada));
+                            //  Notification.show("Sin dato seleccionado" + grid.getSelectedItems().size());
                         }
                 ));
 

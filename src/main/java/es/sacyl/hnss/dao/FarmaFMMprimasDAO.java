@@ -32,6 +32,18 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
 
     private FarmaFMMPrimas getRegistroResulset(ResultSet rs) {
         FarmaFMMPrimas farmaFMMPrimas = new FarmaFMMPrimas();
+        getgetRegistroResulsetObj(rs, farmaFMMPrimas);
+        return farmaFMMPrimas;
+
+    }
+
+    /**
+     * param rs el recorset de materias primas param farmaFMMPrimas pasdo por
+     * referencia para actualizar objeto. Este parámetro permite hacer set en
+     * objetos tipo FarmaFMMprimas FarmaFMMprimasEntradas
+     * FarmaFMMprimasEntradasSalidas
+     */
+    private void getgetRegistroResulsetObj(ResultSet rs, FarmaFMMPrimas farmaFMMPrimas) {
         try {
             DateTimeFormatter dateTimeFormatterParser = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -41,7 +53,6 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                 String ulti = Integer.toString(rs.getInt("ulti_revi"));
                 localDate = LocalDate.parse(ulti, dateTimeFormatterParser);
             }
-
             farmaFMMPrimas.setCod_inte(rs.getInt("cod_inte"));
             farmaFMMPrimas.setProducto(rs.getString("producto"));
             farmaFMMPrimas.setCod_labo(rs.getString("cod_labo"));
@@ -65,7 +76,6 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             LOGGER.error(e);
         }
 
-        return farmaFMMPrimas;
     }
 
     public FarmaFMMPrimas getPorCodigo(Integer cod_inte) {
@@ -92,6 +102,31 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
         return farmaFMMPrimas;
+    }
+
+    public void getPorCodigo(Integer cod_inte, FarmaFMMPrimas farmaFMMPrimas) {
+        Connection connection = null;
+        //   FarmaFMMPrimas farmaFMMPrimas = null;
+        try {
+            connection = super.getConexionBBDD();
+            sql = " SELECT * FROM farm_fm_mprimas WHERE   cod_inte=" + cod_inte;
+            Statement statement = connection.createStatement();
+            ResultSet resulSet = statement.executeQuery(sql);
+            if (resulSet.next()) {
+                getgetRegistroResulsetObj(resulSet, farmaFMMPrimas);
+            }
+            statement.close();
+            LOGGER.debug(sql);
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
     }
 
     public boolean doGrabaDatos(FarmaFMMPrimas farmaFMMPrimas) {

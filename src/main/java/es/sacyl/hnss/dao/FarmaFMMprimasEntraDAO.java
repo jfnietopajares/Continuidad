@@ -38,8 +38,31 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
         try {
 
+            // esto es una chapu esta parte es el método getRegistroResulset de
+            LocalDate localDateUlti = null;
+            if (rs.getInt("ulti_revi") != 0) {
+                String ulti = Integer.toString(rs.getInt("ulti_revi"));
+                localDateUlti = LocalDate.parse(ulti, dateTimeFormatterParser);
+            }
+            farmaFMMPrimasEntrada.setCod_inte(rs.getInt("cod_inte"));
+            farmaFMMPrimasEntrada.setProducto(rs.getString("producto"));
+            farmaFMMPrimasEntrada.setCod_labo(rs.getString("cod_labo"));
+            farmaFMMPrimasEntrada.setLaboratorio(rs.getString("laboratorio"));
+            farmaFMMPrimasEntrada.setHomologado(rs.getBoolean("homologado"));
+            farmaFMMPrimasEntrada.setN_labo(rs.getInt("n_labo"));
+            farmaFMMPrimasEntrada.setStock_min(rs.getInt("stock_min"));
+            farmaFMMPrimasEntrada.setObservaciones(rs.getString("observaciones"));
+            farmaFMMPrimasEntrada.setEspecifica(rs.getString("especifica"));
+            farmaFMMPrimasEntrada.setUlti_revi(localDateUlti);
+            farmaFMMPrimasEntrada.setFarmacetuico(rs.getString("farmaceutico"));
+            farmaFMMPrimasEntrada.setExistencias(rs.getInt("existencias"));
+            farmaFMMPrimasEntrada.setNlaboratorio(rs.getString("nlaboratorio"));
+            farmaFMMPrimasEntrada.setPresentacion(rs.getString("presentacion"));
+            farmaFMMPrimasEntrada.setDescripcion(rs.getString("descripcion"));
+            farmaFMMPrimasEntrada.setRequisitos(rs.getString("requisitos"));
+            farmaFMMPrimasEntrada.setConservacion(rs.getString("conservacion"));
+// fin de la chapu
             LocalDate localDate = null;
-
             if (rs.getInt("fecha") != 0) {
                 String ulti = Integer.toString(rs.getInt("fecha"));
                 localDate = LocalDate.parse(ulti, dateTimeFormatterParser);
@@ -49,10 +72,9 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             farmaFMMPrimasEntrada.setEnvases(rs.getInt("envases"));
             farmaFMMPrimasEntrada.setLote(rs.getString("lote"));
             farmaFMMPrimasEntrada.setVerificacion(rs.getBoolean("verificacion"));
-            farmaFMMPrimasEntrada.setCtrlAnalitico(rs.getString("ctll_analitico"));
+            farmaFMMPrimasEntrada.setCtrlAnalitico(rs.getString("ctrl_analitico"));
             farmaFMMPrimasEntrada.setCaducidad(rs.getString("caducidad"));
             farmaFMMPrimasEntrada.setNumero(rs.getInt("numero"));
-            farmaFMMPrimasEntrada.setMprima(new FarmaFMMprimasDAO().getPorCodigo(rs.getInt("cod_inte")));
 
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -66,7 +88,10 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_primas_ent WHERE   numero='" + numero + "' AND cod_inte=" + cod_inte;
+            sql = " SELECT * FROM farm_fm_primas_ent,  farm_fm_mprimas  "
+                    + " WHERE  farm_fm_primas_ent.cod_inte= farm_fm_mprimas.cod_inte "
+                    + " AND farm_fm_primas_ent.numero='" + numero + "' "
+                    + " AND farm_fm_primas_ent.cod_inte=" + cod_inte;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
@@ -91,7 +116,7 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
     public boolean doGrabaDatos(FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
         boolean actualizado = false;
 
-        if (this.getPorMPNumero(farmaFMMPrimasEntrada.getMprima().getCod_inte(), farmaFMMPrimasEntrada.getNumero()) == null) {
+        if (this.getPorMPNumero(farmaFMMPrimasEntrada.getCod_inte(), farmaFMMPrimasEntrada.getNumero()) == null) {
             actualizado = this.doInsertaDatos(farmaFMMPrimasEntrada);
         } else {
             actualizado = this.doActualizaDatos(farmaFMMPrimasEntrada);
@@ -105,27 +130,15 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         try {
             connection = super.getConexionBBDD();
             sql = sql = "UPDATE   farm_fm_primas_ent  SET fecha=?,registro=? ,envases=? ,lote=?,verificacion=?"
-                    + " ,ctrl_analitico=? , farmaceutico=?,farmaceutico=? "
-                    + ",descripcion=?,requisitos=?,conservacion=?"
-                    + " WHERE cod_inte=? AND numero=?";
-            /*
-             private LocalDate fecha;
-    private Integer registro;
-    private Integer envases;
-    private String lote;
-    private Boolean verificacion;
-    private String ctrlAnalitico;
-    private String farmaceutico;
-    private String caducidad;
-             */
+                    + " ,ctrl_analitico=? , farmaceutico=? "
+                    + ",caducidad=? "
+                    + "  WHERE cod_inte=? AND numero=?";
             PreparedStatement statement = connection.prepareStatement(sql);
-
             if (farmaFMMPrimasEntrada.getFecha() == null) {
                 statement.setNull(1, Types.INTEGER);
             } else {
                 statement.setString(1, dateTimeFormatterParser.format(farmaFMMPrimasEntrada.getFecha()));
             }
-
             if (farmaFMMPrimasEntrada.getRegistro() == null) {
                 statement.setNull(2, Types.INTEGER);
             } else {
@@ -161,16 +174,17 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
             } else {
                 statement.setString(8, farmaFMMPrimasEntrada.getCaducidad());
             }
-            if (farmaFMMPrimasEntrada.getMprima() == null && farmaFMMPrimasEntrada.getMprima().getCod_inte() != null) {
+            if (farmaFMMPrimasEntrada == null && farmaFMMPrimasEntrada.getCod_inte() != null) {
                 statement.setNull(9, Types.INTEGER);
             } else {
-                statement.setInt(9, farmaFMMPrimasEntrada.getMprima().getCod_inte());
+                statement.setInt(9, farmaFMMPrimasEntrada.getCod_inte());
             }
             if (farmaFMMPrimasEntrada.getNumero() == null) {
                 statement.setNull(10, Types.INTEGER);
             } else {
                 statement.setInt(10, farmaFMMPrimasEntrada.getNumero());
             }
+
             insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
 
@@ -199,10 +213,10 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            if (farmaFMMPrimasEntrada.getMprima() == null && farmaFMMPrimasEntrada.getMprima().getCod_inte() != null) {
+            if (farmaFMMPrimasEntrada == null && farmaFMMPrimasEntrada.getCod_inte() != null) {
                 statement.setNull(1, Types.INTEGER);
             } else {
-                statement.setInt(1, farmaFMMPrimasEntrada.getMprima().getCod_inte());
+                statement.setInt(1, farmaFMMPrimasEntrada.getCod_inte());
             }
             if (farmaFMMPrimasEntrada.getNumero() == null) {
                 statement.setNull(2, Types.INTEGER);
@@ -273,7 +287,7 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = " DELETE FROM  farm_fm_primas_ent WHERE cod_inte='" + farmaFMMPrimasEntrada.getMprima().getCod_inte() + "' "
+            sql = " DELETE FROM  farm_fm_primas_ent WHERE cod_inte='" + farmaFMMPrimasEntrada.getCod_inte() + "' "
                     + " AND numero=" + farmaFMMPrimasEntrada.getNumero();
             Statement statement = connection.createStatement();
             insertadoBoolean = statement.execute(sql);
@@ -294,22 +308,23 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public ArrayList<FarmaFMMPrimasEntrada> getListaEntradasMP(LocalDate desde, LocalDate hasta, FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
+    public ArrayList<FarmaFMMPrimasEntrada> getListaEntradasMP(LocalDate desde, LocalDate hasta, FarmaFMMPrimas farmaFMMPrimas) {
         Connection connection = null;
         ArrayList<FarmaFMMPrimasEntrada> listaEntradas = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_primas_ent WHERE  1=1 ";
+            sql = " SELECT * FROM farm_fm_primas_ent, farm_fm_mprimas WHERE  "
+                    + " farm_fm_primas_ent.cod_inte= farm_fm_mprimas.cod_inte ";
             if (desde != null) {
                 sql = sql.concat(" AND fecha>=" + dateTimeFormatterParser.format(desde));
             }
             if (hasta != null) {
                 sql = sql.concat(" AND hasta>=" + dateTimeFormatterParser.format(hasta));
             }
-            if (farmaFMMPrimasEntrada != null && farmaFMMPrimasEntrada.getMprima() != null && farmaFMMPrimasEntrada.getMprima().getCod_inte() != null) {
-                sql = sql.concat(" AND cod_inte=" + farmaFMMPrimasEntrada.getMprima().getCod_inte());
+            if (farmaFMMPrimas != null && farmaFMMPrimas.getCod_inte() != null) {
+                sql = sql.concat(" AND farm_fm_primas_ent.cod_inte=" + farmaFMMPrimas.getCod_inte());
             }
-            sql = sql.concat(" ORDER BY cod_inte,fecha");
+            sql = sql.concat(" ORDER BY farm_fm_primas_ent.cod_inte,fecha");
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
@@ -330,13 +345,12 @@ public class FarmaFMMprimasEntraDAO extends ConexionDAO {
         return listaEntradas;
     }
 
-    public Integer getNumeroSiguiente(FarmaFMMPrimas farmaFMMPrimas) {
+    public Integer getNumeroSiguiente(FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
         Connection connection = null;
-        FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = null;
         Integer siguiente = 1;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT max(numero) as valor FROM farm_fm_primas_ent WHERE    cod_inte=" + farmaFMMPrimas.getCod_inte();
+            sql = " SELECT max(numero) as valor FROM farm_fm_primas_ent WHERE    cod_inte=" + farmaFMMPrimasEntrada.getCod_inte();
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {

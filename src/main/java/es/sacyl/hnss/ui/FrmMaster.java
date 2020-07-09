@@ -28,6 +28,7 @@ public abstract class FrmMaster extends Dialog {
     public static final String AVISODATOALMACENADO = "Dato almacenado ";
 
     public static final String AVISODATOBORRADO = "Dato borrado ";
+    public static final String AVISODATOERRORBORRADO = "Error borrando el dato ";
 
     public static final String AVISODATOERRORBBDD = "Erro de datos en base de datos ";
 
