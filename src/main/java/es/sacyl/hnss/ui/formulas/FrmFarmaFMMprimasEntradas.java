@@ -39,12 +39,12 @@ import java.util.stream.Collectors;
  */
 public class FrmFarmaFMMprimasEntradas extends FrmMaster {
 
-    private IntegerField cod_inte = new IntegerField("Código");
+    private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
     private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
 
     private DatePicker fecha = ObjetosComunes.getDatePicker("Fecha entrada", null, LocalDate.now());
-    private IntegerField registro = new IntegerField("Registro");
-    private IntegerField envases = new IntegerField("Nº envases");
+    private IntegerField registro = ObjetosComunes.getIntegerField("Registro");
+    private IntegerField envases = ObjetosComunes.getIntegerField("Nº Envases");
 
     private TextField lote = ObjetosComunes.getTextField("Lote", "lote", 50, "100px");
 
@@ -54,7 +54,7 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     private TextField farmaceutico = ObjetosComunes.getTextField("Farmaceutico", "farmaceutico", 50, "100px");
     private TextField caducidad = ObjetosComunes.getTextField("Caducidad", "caducidad", 50, "100px");
 
-    private IntegerField numero = new IntegerField("Núumero");
+    private IntegerField numero = ObjetosComunes.getIntegerField("Número");
 
     private FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = null;
 
@@ -62,7 +62,6 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
 
     private ComboBox<FarmaFMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas(null, null);
 
-    // private FarmaFMMPrimas farmaFMMPrimas = null;
     private Binder<FarmaFMMPrimasEntrada> binder = new Binder<>();
 
     public FrmFarmaFMMprimasEntradas() {
@@ -77,35 +76,24 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
         this.farmaFMMPrimasEntradaAnterior = farmaFMMPrimasEntrada;
         cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
         producto.setValue(farmaFMMPrimasEntrada.getProducto());
+
         doHazFormulario();
     }
 
     public FrmFarmaFMMprimasEntradas(FarmaFMMPrimas farmaFMMPrimas) {
         super();
-        farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
-        this.farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
-        this.farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
+        if (farmaFMMPrimas != null) {
+            this.farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
+            this.farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
+            this.farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
 
-        cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
-        producto.setValue(farmaFMMPrimasEntrada.getProducto());
-        
+            cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
+            producto.setValue(farmaFMMPrimasEntrada.getProducto());
+        }
         doHazFormulario();
     }
 
     public void doFormatoCodigoProducto() {
-        cod_inte.getStyle().set("color", "red");
-        cod_inte.getStyle().set("fontWeight", "bold");
-        cod_inte.getStyle().set("font-weight", "bold");
-
-        producto.getStyle().set("color", "red");
-        producto.getStyle().set("fontWeight", "bold");
-        producto.getStyle().set("font-weight", "bold");
-
-        numero.focus();
-    }
-
-    public void doHazFormulario() {
-
         if (farmaFMMPrimasEntrada == null) {
             farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
             cod_inte.setEnabled(true);
@@ -113,11 +101,31 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
         } else {
             cod_inte.setReadOnly(true);
             producto.setReadOnly(true);
-            doFormatoCodigoProducto();
-        }
-        if (farmaFMMPrimasEntrada != null) {
+
+            comboMPrimas.setReadOnly(true);
+
+            comboMPrimas.setValue(farmaFMMPrimasEntrada);
+
+            cod_inte.getStyle().set("color", "red");
+            cod_inte.getStyle().set("fontWeight", "bold");
+            cod_inte.getStyle().set("font-weight", "bold");
+
+            producto.getStyle().set("color", "red");
+            producto.getStyle().set("fontWeight", "bold");
+            producto.getStyle().set("font-weight", "bold");
+
+            numero.getStyle().set("color", "red");
+            numero.getStyle().set("fontWeight", "bold");
+            numero.getStyle().set("font-weight", "bold");
+
             numero.setReadOnly(true);
+            registro.focus();
         }
+
+    }
+
+    public void doHazFormulario() {
+        doFormatoCodigoProducto();
 
         titulo.setText(farmaFMMPrimasEntrada.getLabelFrom());
 

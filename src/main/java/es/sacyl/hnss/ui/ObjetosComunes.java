@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
@@ -123,4 +124,13 @@ public class ObjetosComunes {
         combo.setWidth("300px");
         return combo;
     }
+
+    public static IntegerField getIntegerField(String label) {
+        IntegerField campo = new IntegerField();
+        if (label != null) {
+            campo.setLabel(label);
+        }
+        return campo;
+    }
+
 }

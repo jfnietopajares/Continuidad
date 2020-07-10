@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
  */
 public class FrmFarmaFMMprimas extends FrmMaster {
 
-    private IntegerField cod_inte = new IntegerField("Código");
+    private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
     private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
     private TextField cod_labo = ObjetosComunes.getTextField("Cod.Laboratorio", "código laboratorio   ", 15, "100px");
     private TextField laboratorio = ObjetosComunes.getTextField("Laboratorio", "laboratorio", 50, "100px");
     private Checkbox homologado = new Checkbox("Homologado");
-    private IntegerField n_labo = new IntegerField("n_labo");
-    private IntegerField stock_min = new IntegerField("stock_min");
+    private IntegerField n_labo = ObjetosComunes.getIntegerField("n_labo");
+    private IntegerField stock_min = ObjetosComunes.getIntegerField("stock_min");
 
     private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 255, "100px", "90px");
 
@@ -42,14 +42,16 @@ public class FrmFarmaFMMprimas extends FrmMaster {
 
     private TextField farmacetuico = ObjetosComunes.getTextField("Farmacétuico", "farmacetuico", 25, "100px");
 
-    private IntegerField existencias = new IntegerField("Existencias");
+    private IntegerField existencias = ObjetosComunes.getIntegerField("Existencias");
 
     private TextField nlaboratorio = ObjetosComunes.getTextField("N Laboratorio", "nlaboratorio", 10, "100px");
 
     private TextField presentacion = ObjetosComunes.getTextField("Presentación", "presentación", 25, "100px");
 
     private TextField descripcion = ObjetosComunes.getTextField("Descripción", "descripción", 255, "100px");
+
     private TextField requisitos = ObjetosComunes.getTextField("Requisitos", "requisitos", 255, "100px");
+
     private TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 255, "100px");
 
     private FarmaFMMPrimas famFMMprimas = new FarmaFMMPrimas();

@@ -11,25 +11,18 @@ import java.time.LocalDate;
  *
  * @author JuanNieto
  */
-public class FarmaFMMprimasSalidas extends FarmaFMMPrimas {
+public class FarmaFMMprimasSalida extends FarmaFMMPrimas {
 
-    private FarmaFMMPrimas mprima;
     private Integer numero;
     private String producto;
     private LocalDate fecha;
     private Integer cantidad;
     private String comentario1;
 
-    public FarmaFMMprimasSalidas() {
+    public static final String labelFrom = "Salidas de Materias primas ";
 
-    }
-
-    public FarmaFMMPrimas getMprima() {
-        return mprima;
-    }
-
-    public void setMprima(FarmaFMMPrimas mprima) {
-        this.mprima = mprima;
+    public FarmaFMMprimasSalida() {
+        super();
     }
 
     public Integer getNumero() {
@@ -74,7 +67,7 @@ public class FarmaFMMprimasSalidas extends FarmaFMMPrimas {
 
     @Override
     public String toString() {
-        return "FarmaFMMprimasSalidas{" + super.toString() + "mprima=" + mprima + ", numero=" + numero + ", producto=" + producto + ", fecha=" + fecha + ", cantidad=" + cantidad + ", comentario1=" + comentario1 + '}';
+        return "FarmaFMMprimasSalidas{" + super.toString() + ", numero=" + numero + ", producto=" + producto + ", fecha=" + fecha + ", cantidad=" + cantidad + ", comentario1=" + comentario1 + '}';
     }
 
 }
