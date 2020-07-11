@@ -351,10 +351,14 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = sql = "UPDATE   farm_fm_mprimas  SET existencias=?  WHERE cod_inte=?";
+            sql = "UPDATE   farm_fm_mprimas  SET existencias=?  WHERE cod_inte=?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            farmaFMMPrimas.setExistencias(farmaFMMPrimas.getExistencias() + valorEntraSale);
+            if (farmaFMMPrimas.getExistencias() != null) {
+                farmaFMMPrimas.setExistencias(farmaFMMPrimas.getExistencias() + valorEntraSale);
+            } else {
+                farmaFMMPrimas.setExistencias(valorEntraSale);
+            }
 
             if (farmaFMMPrimas.getExistencias() == null) {
                 statement.setNull(1, Types.INTEGER);
@@ -362,9 +366,9 @@ public class FarmaFMMprimasDAO extends ConexionDAO {
                 statement.setInt(1, farmaFMMPrimas.getExistencias());
             }
             statement.setLong(2, farmaFMMPrimas.getCod_inte());
+            LOGGER.debug(sql);
             insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
-
         } catch (SQLException e) {
             LOGGER.error(sql, e);
 

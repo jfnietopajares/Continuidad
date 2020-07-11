@@ -21,7 +21,28 @@ public class FarmaFMMPrimasEntrada extends FarmaFMMPrimas {
     public static final String labelFrom = "Entradas de Materias primas ";
 
     public FarmaFMMPrimasEntrada() {
-        super();
+        //  super();
+    }
+
+    public FarmaFMMPrimasEntrada(FarmaFMMPrimas farmaFMMPrimas) {
+        //super();
+        this.setCod_inte(farmaFMMPrimas.getCod_inte());
+        this.setProducto(farmaFMMPrimas.getProducto());
+        this.setCod_labo(farmaFMMPrimas.getCod_labo());
+        this.setLaboratorio(farmaFMMPrimas.getLaboratorio());
+        this.setHomologado(farmaFMMPrimas.getHomologado());
+        this.setN_labo(farmaFMMPrimas.getN_labo());
+        this.setStock_min(farmaFMMPrimas.getStock_min());
+        this.setObservaciones(farmaFMMPrimas.getObservaciones());
+        this.setEspecifica(farmaFMMPrimas.getEspecifica());
+        this.setUlti_revi(farmaFMMPrimas.getUlti_revi());
+        this.setFarmacetuico(farmaFMMPrimas.getFarmacetuico());
+        this.setExistencias(farmaFMMPrimas.getExistencias());
+        this.setNlaboratorio(farmaFMMPrimas.getNlaboratorio());
+        this.setPresentacion(farmaFMMPrimas.getPresentacion());
+        this.setDescripcion(farmaFMMPrimas.getDescripcion());
+        this.setRequisitos(farmaFMMPrimas.getRequisitos());
+        this.setConservacion(farmaFMMPrimas.getConservacion());
     }
 
     public LocalDate getFecha() {
@@ -139,4 +160,25 @@ public class FarmaFMMPrimasEntrada extends FarmaFMMPrimas {
         return "FarmaFMMPrimasEntrada{" + super.toString() + "fecha=" + fecha + ", registro=" + registro + ", envases=" + envases + ", lote=" + lote + ", verificacion=" + verificacion + ", ctrlAnalitico=" + ctrlAnalitico + ", farmaceutico=" + farmaceutico + ", caducidad=" + caducidad + ", numero=" + numero + ", cod_inte=" + '}';
     }
 
+    /*
+    public void setDatosMprima(FarmaFMMPrimas farmaFMMPrimas) {
+        this.setCod_inte(farmaFMMPrimas.getCod_inte());
+        this.setProducto(farmaFMMPrimas.getProducto());
+        this.setCod_labo(farmaFMMPrimas.getCod_labo());
+        this.setLaboratorio(farmaFMMPrimas.getLaboratorio());
+        this.setHomologado(farmaFMMPrimas.getHomologado());
+        this.setN_labo(farmaFMMPrimas.getN_labo());
+        this.setStock_min(farmaFMMPrimas.getStock_min());
+        this.setObservaciones(farmaFMMPrimas.getObservaciones());
+        this.setEspecifica(farmaFMMPrimas.getEspecifica());
+        this.setUlti_revi(farmaFMMPrimas.getUlti_revi());
+        this.setFarmacetuico(farmaFMMPrimas.getFarmacetuico());
+        this.setExistencias(farmaFMMPrimas.getExistencias());
+        this.setNlaboratorio(farmaFMMPrimas.getNlaboratorio());
+        this.setPresentacion(farmaFMMPrimas.getPresentacion());
+        this.setDescripcion(farmaFMMPrimas.getDescripcion());
+        this.setRequisitos(farmaFMMPrimas.getRequisitos());
+        this.setConservacion(farmaFMMPrimas.getConservacion());
+    }
+     */
 }

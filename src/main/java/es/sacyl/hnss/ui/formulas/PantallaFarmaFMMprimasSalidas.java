@@ -10,8 +10,11 @@ import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import es.sacyl.hnss.dao.FarmaFMMprimasEntraDAO;
+import es.sacyl.hnss.dao.FarmaFMMprimasSalidaDAO;
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
 import es.sacyl.hnss.entidades.FarmaFMMPrimasEntrada;
+import es.sacyl.hnss.entidades.FarmaFMMprimasSalida;
 import es.sacyl.hnss.ui.ObjetosComunes;
 import es.sacyl.hnss.ui.PantallaMaster;
 import java.util.ArrayList;
@@ -22,13 +25,13 @@ import java.util.ArrayList;
  */
 public class PantallaFarmaFMMprimasSalidas extends PantallaMaster {
 
-    private FarmaFMMPrimasEntrada farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
+    private FarmaFMMprimasSalida farmaFMMPrimasSalida = new FarmaFMMprimasSalida();
 
-    private ArrayList<FarmaFMMPrimasEntrada> listaEntradas = new ArrayList<FarmaFMMPrimasEntrada>();
+    private ArrayList<FarmaFMMprimasSalida> listaSalidas = new ArrayList<FarmaFMMprimasSalida>();
 
-    private Grid<FarmaFMMPrimasEntrada> grid = new Grid<FarmaFMMPrimasEntrada>();
+    private Grid<FarmaFMMprimasSalida> grid = new Grid<FarmaFMMprimasSalida>();
 
-    private FrmFarmaFMMprimasEntradas frmFarmaFMMprimasEntradas;
+    private FrmFarmaFMMprimasSalidas frmFarmaFMMprimasSalida;
 
     private ComboBox<FarmaFMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas("Filtro de entradas por materia prima", null);
 
@@ -37,15 +40,15 @@ public class PantallaFarmaFMMprimasSalidas extends PantallaMaster {
         doHazPantalla();
     }
 
-    public PantallaFarmaFMMprimasSalidas(FarmaFMMPrimasEntrada farmaFMMPrimasEntrada) {
+    public PantallaFarmaFMMprimasSalidas(FarmaFMMprimasSalida farmaFMMPrimasSalida) {
         super();
-        this.farmaFMMPrimasEntrada = farmaFMMPrimasEntrada;
+        this.farmaFMMPrimasSalida = farmaFMMPrimasSalida;
 
         doHazPantalla();
     }
 
     public void doHazPantalla() {
-        titulo.setText(farmaFMMPrimasEntrada.getLabelFrom());
+        titulo.setText(farmaFMMPrimasSalida.getLabelFrom());
 
         getContenedorGrid().add(comboMPrimas);
         getContenedorGrid().add(grid);
@@ -59,30 +62,30 @@ public class PantallaFarmaFMMprimasSalidas extends PantallaMaster {
         comboMPrimas.addValueChangeListener(e -> doActualizaGrid());
         //   grid.setColumns("numero", "fecha");
         //    grid.addColumn("")
-        grid.addColumn(FarmaFMMPrimasEntrada::getCodigoNumero).setHeader("Número");
-        grid.addColumn(FarmaFMMPrimasEntrada::getProducto).setHeader("Producto");
-        grid.addColumn(FarmaFMMPrimasEntrada::getFecha).setHeader("Fecha");
-        grid.addColumn(FarmaFMMPrimasEntrada::getEnvases).setHeader("Envases");
+        grid.addColumn(FarmaFMMprimasSalida::getCodigoNumero).setHeader("Número");
+        grid.addColumn(FarmaFMMprimasSalida::getProducto).setHeader("Producto");
+        grid.addColumn(FarmaFMMprimasSalida::getFecha).setHeader("Fecha");
+        grid.addColumn(FarmaFMMprimasSalida::getCantidad).setHeader("Cantidad");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
-            frmFarmaFMMprimasEntradas = new FrmFarmaFMMprimasEntradas(event.getItem());
-            doVentanaModal(frmFarmaFMMprimasEntradas);
+            frmFarmaFMMprimasSalida = new FrmFarmaFMMprimasSalidas(event.getItem());
+            doVentanaModal(frmFarmaFMMprimasSalida);
         }
         );
         doActualizaGrid();
     }
 
-    public void doVentanaModal(FrmFarmaFMMprimasEntradas frmFarmaFMMprimasEntradas) {
-        frmFarmaFMMprimasEntradas.open();
-        frmFarmaFMMprimasEntradas.addDialogCloseActionListener(e -> {
+    public void doVentanaModal(FrmFarmaFMMprimasSalidas frmFarmaFMMprimasSalidas) {
+        frmFarmaFMMprimasSalidas.open();
+        frmFarmaFMMprimasSalidas.addDialogCloseActionListener(e -> {
             doActualizaGrid();
         }
         );
-        frmFarmaFMMprimasEntradas.addDetachListener(e -> {
+        frmFarmaFMMprimasSalidas.addDetachListener(e -> {
             doActualizaGrid();
         });
     }
@@ -94,7 +97,7 @@ public class PantallaFarmaFMMprimasSalidas extends PantallaMaster {
 
     @Override
     public void doNuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.doVentanaModal(new FrmFarmaFMMprimasSalidas(comboMPrimas.getValue()));
     }
 
     @Override
@@ -104,7 +107,15 @@ public class PantallaFarmaFMMprimasSalidas extends PantallaMaster {
 
     @Override
     public void doActualizaGrid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        listaSalidas = new FarmaFMMprimasSalidaDAO().getListaSalidasMP(null, null, comboMPrimas.getValue());
+
+        grid.setItems(listaSalidas);
+
+        numeroRegistros.setText(":" + Integer.toString(listaSalidas.size()));
+
+        cabeceraGrid.setText(" Lista de " + FarmaFMMPrimasEntrada.getLabelFrom() + ". Registros: " + Integer.toString(listaSalidas.size()));
+
     }
 
 }

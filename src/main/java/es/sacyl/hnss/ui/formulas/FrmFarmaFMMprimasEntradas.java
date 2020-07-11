@@ -83,10 +83,11 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     public FrmFarmaFMMprimasEntradas(FarmaFMMPrimas farmaFMMPrimas) {
         super();
         if (farmaFMMPrimas != null) {
-            this.farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada();
-            this.farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
-            this.farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
+            this.farmaFMMPrimasEntrada = new FarmaFMMPrimasEntrada(farmaFMMPrimas);
 
+            //  this.farmaFMMPrimasEntrada.setDatosMprima(farmaFMMPrimas);
+            //   this.farmaFMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
+            //  this.farmaFMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
             cod_inte.setValue(farmaFMMPrimasEntrada.getCod_inte());
             producto.setValue(farmaFMMPrimasEntrada.getProducto());
         }
@@ -244,6 +245,7 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
     public void doActualizaExistencias() {
         Integer variacionExistencias = farmaFMMPrimasEntrada.getVariacionExistencias(farmaFMMPrimasEntradaAnterior.getEnvases(), "GRABAR");
 
+        /*
         // entrada nueva
         if (farmaFMMPrimasEntradaAnterior.getNumero() == null) {
             variacionExistencias = farmaFMMPrimasEntrada.getEnvases();
@@ -255,7 +257,7 @@ public class FrmFarmaFMMprimasEntradas extends FrmMaster {
                 variacionExistencias = farmaFMMPrimasEntradaAnterior.getEnvases() + farmaFMMPrimasEntrada.getEnvases();
             }
         }
-
+         */
         if (variacionExistencias != 0) {
             if (new FarmaFMMprimasDAO().doActualizaExistencias(farmaFMMPrimasEntrada, variacionExistencias)) {
                 Notification.show(FrmMaster.AVISODATOALMACENADO);

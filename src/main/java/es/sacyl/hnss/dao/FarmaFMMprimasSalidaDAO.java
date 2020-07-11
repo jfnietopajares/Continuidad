@@ -69,7 +69,7 @@ public class FarmaFMMprimasSalidaDAO extends ConexionDAO {
             }
             farmaFMMPrimasSalida.setFecha(localDate);
             farmaFMMPrimasSalida.setComentario1(rs.getString("comentario1"));
-            farmaFMMPrimasSalida.setCantidad(rs.getInt("envases"));
+            farmaFMMPrimasSalida.setCantidad(rs.getInt("cantidad"));
             farmaFMMPrimasSalida.setNumero(rs.getInt("numero"));
 
         } catch (SQLException e) {
@@ -175,7 +175,7 @@ public class FarmaFMMprimasSalidaDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = sql = "INSERT INTO    farm_fm_primas_sal  (cod_inte,numero, fecha,cantidad ,comentario) "
+            sql = sql = "INSERT INTO    farm_fm_primas_sal  (cod_inte,numero, fecha,cantidad ,comentario1) "
                     + " VALUES (?,?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -248,13 +248,13 @@ public class FarmaFMMprimasSalidaDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public ArrayList<FarmaFMMprimasSalida> getListaEntradasMP(LocalDate desde, LocalDate hasta, FarmaFMMPrimas farmaFMMPrimas) {
+    public ArrayList<FarmaFMMprimasSalida> getListaSalidasMP(LocalDate desde, LocalDate hasta, FarmaFMMPrimas farmaFMMPrimas) {
         Connection connection = null;
         ArrayList<FarmaFMMprimasSalida> listaSalidas = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_primas_sal, farm_fm_mprimas WHERE  "
-                    + " farm_fm_primas_ent.cod_inte= farm_fm_mprimas.cod_inte ";
+                    + " farm_fm_primas_sal.cod_inte= farm_fm_mprimas.cod_inte   ";
             if (desde != null) {
                 sql = sql.concat(" AND fecha>=" + dateTimeFormatterParser.format(desde));
             }

@@ -41,8 +41,6 @@ public class FrmFarmaFMViasAdm extends FrmMaster {
 
     private Binder<FarmaFMViasAdm> binder = new Binder<>();
 
-    private Grid<FarmaFMViasAdm> grid = null;
-
     /**
      * Constructor sin parámetro. Usa el valor de farmaFMViasAdm del atributo
      */

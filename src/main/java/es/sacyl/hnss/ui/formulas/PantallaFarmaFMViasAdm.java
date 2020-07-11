@@ -23,8 +23,6 @@ public class PantallaFarmaFMViasAdm extends PantallaMaster {
 
     private FarmaFMViasAdm farmaFMViasAdm = new FarmaFMViasAdm();
 
-    private ArrayList<FarmaFMViasAdm> listaVias = new ArrayList<>();
-
     private Grid<FarmaFMViasAdm> grid = new Grid<>(FarmaFMViasAdm.class);
 
     private FrmFarmaFMViasAdm frmFarmaFMViasAdministracion;

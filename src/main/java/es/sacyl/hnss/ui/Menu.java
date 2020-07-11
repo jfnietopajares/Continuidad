@@ -17,9 +17,11 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.sacyl.hnss.entidades.FarmaFMViasAdm;
+import es.sacyl.hnss.ui.formulas.PantallaFarmaFMFormas;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMInstumentos;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimas;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimasEntradas;
+import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimasSalidas;
 
 /**
  *
@@ -40,7 +42,8 @@ public class Menu extends MenuBar {
 
         SubMenu formulasSubMenu = formulas.getSubMenu();
         formulasSubMenu.addItem("Formas farmacéuticas", e -> {
-            new Notification("Vias clic", 5000);
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMFormas()));
         });
         MenuItem materiasPrimas = formulasSubMenu.addItem("Materias primas");
 
@@ -68,7 +71,7 @@ public class Menu extends MenuBar {
 
         formulasSubMenu.addItem("Materias primas salidas", e -> {
             contenedor.removeAll();
-            contenedor.add((new PantallaFarmaFMMprimasEntradas()));
+            contenedor.add((new PantallaFarmaFMMprimasSalidas()));
         });
 
         formulasSubMenu.addItem("Material e instrumental", e -> {

@@ -12,6 +12,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
 import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
 import es.sacyl.hnss.dao.FarmaFMMprimasEntraDAO;
 import es.sacyl.hnss.dao.FarmaFMMprimasSalidaDAO;
@@ -21,6 +23,8 @@ import es.sacyl.hnss.entidades.FarmaFMMprimasSalida;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.ObjetosComunes;
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,6 +46,8 @@ public class FrmFarmaFMMprimasSalidas extends FrmMaster {
 
     private FarmaFMMprimasSalida farmaFMMprimasSalida = new FarmaFMMprimasSalida();
 
+    private FarmaFMMprimasSalida farmaFMMprimasSalidaAnterior = new FarmaFMMprimasSalida();
+
     private ComboBox<FarmaFMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas(null, null);
 
     private Binder<FarmaFMMprimasSalida> binder = new Binder<FarmaFMMprimasSalida>();
@@ -54,6 +60,21 @@ public class FrmFarmaFMMprimasSalidas extends FrmMaster {
     public FrmFarmaFMMprimasSalidas(FarmaFMMprimasSalida farmaFMMprimasSalidas) {
         super();
         this.farmaFMMprimasSalida = farmaFMMprimasSalidas;
+        this.farmaFMMprimasSalidaAnterior = farmaFMMprimasSalidas;
+        doHazFormulario();
+    }
+
+    public FrmFarmaFMMprimasSalidas(FarmaFMMPrimas farmaFMMPrimas) {
+        super();
+        if (farmaFMMPrimas != null) {
+            this.farmaFMMprimasSalida = new FarmaFMMprimasSalida();
+            //  this.farmaFMMprimasSalida.setDatosMprima(farmaFMMPrimas);
+            // this.farmaFMMprimasSalida.setCod_inte(farmaFMMPrimas.getCod_inte());
+            //this.farmaFMMprimasSalida.setProducto(farmaFMMPrimas.getProducto());
+
+            cod_inte.setValue(farmaFMMprimasSalida.getCod_inte());
+            producto.setValue(farmaFMMprimasSalida.getProducto());
+        }
         doHazFormulario();
     }
 
@@ -169,9 +190,38 @@ public class FrmFarmaFMMprimasSalidas extends FrmMaster {
 
     }
 
+    public void doActualizaExistencias() {
+        Integer variacionExistencias = farmaFMMprimasSalida.getVariacionExistencias(farmaFMMprimasSalidaAnterior.getCantidad(), "GRABAR");
+        if (variacionExistencias != 0) {
+            if (new FarmaFMMprimasDAO().doActualizaExistencias(farmaFMMprimasSalida, variacionExistencias)) {
+                Notification.show(FrmMaster.AVISODATOALMACENADO);
+            } else {
+                (new Notification(FrmMaster.AVISODATOERRORBBDD + " Sin actualizar existenicas", 1000, Notification.Position.MIDDLE)).open();
+            }
+        }
+    }
+
     @Override
     public void doGrabar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        if (binder.writeBeanIfValid(farmaFMMprimasSalida)) {
+            if (new FarmaFMMprimasSalidaDAO().doGrabaDatos(farmaFMMprimasSalida) == true) {
+                (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
+                doActualizaExistencias();
+            } else {
+                (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
+            }
+
+            this.close();
+        } else {
+            BinderValidationStatus<FarmaFMMprimasSalida> validate = binder.validate();
+            String errorText = validate.getFieldValidationStatuses()
+                    .stream().filter(BindingValidationStatus::isError)
+                    .map(BindingValidationStatus::getMessage)
+                    .map(Optional::get).distinct()
+                    .collect(Collectors.joining(", "));
+            Notification.show(FrmMaster.AVISODATOERRORVALIDANO + errorText);
+        }
     }
 
     @Override
