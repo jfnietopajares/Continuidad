@@ -5,7 +5,7 @@
  */
 package es.sacyl.hnss.dao;
 
-import es.sacyl.hnss.entidades.FarmaFMViasAdm;
+import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.entidades.Usuario;
 import java.sql.Connection;
 import java.sql.ResultSet;
