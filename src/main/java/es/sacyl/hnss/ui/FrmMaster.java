@@ -52,10 +52,10 @@ public abstract class FrmMaster extends Dialog {
 
     public FrmMaster() {
         this.add(contenedorTitulo);
-        this.add(contenedorFormulario);
         this.add(contenedorBotones);
-        //    contenedorBorrado.getStyle().set("background-color", "#098742");
+        this.add(contenedorFormulario);
 
+        //    contenedorBorrado.getStyle().set("background-color", "#098742");
         contenedorTitulo.add(titulo);
 
         contenedorBotones.add(botonGrabar, botonBorrar, botonAyuda, botonCancelar);

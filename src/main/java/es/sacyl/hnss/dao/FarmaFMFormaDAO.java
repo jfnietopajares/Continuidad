@@ -6,7 +6,6 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FarmaFMForma;
-import es.sacyl.hnss.entidades.FarmaFMViasAdm;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,7 +69,7 @@ public class FarmaFMFormaDAO extends ConexionDAO {
         FarmaFMForma farmaFMForma = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_viaadm WHERE   nombre='" + nombre + "'";
+            sql = " SELECT * FROM farm_fm_tipoforma WHERE   nombre='" + nombre + "'";
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
@@ -177,12 +176,12 @@ public class FarmaFMFormaDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public ArrayList<FarmaFMForma> getListaViasAdm(String texto) {
+    public ArrayList<FarmaFMForma> getListaFormas(String texto) {
         Connection connection = null;
         ArrayList<FarmaFMForma> listaFormas = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_viaadm WHERE  1=1 ";
+            sql = " SELECT * FROM farm_fm_tipoforma WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
                 sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
             }

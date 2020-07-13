@@ -115,7 +115,7 @@ public class FrmFarmaFMMprimasSalidas extends FrmMaster {
         titulo.setText(farmaFMMprimasSalida.getLabelFrom());
 
         contenedorFormulario.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("5px", 1),
+                new FormLayout.ResponsiveStep("100px", 1),
                 new FormLayout.ResponsiveStep("100px", 2),
                 new FormLayout.ResponsiveStep("100px", 3));
 

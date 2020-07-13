@@ -86,7 +86,6 @@ public class PantallaFarmaFMViasAdm extends PantallaMaster {
     @Override
     public void doNuevo() {
         this.doVentanaModal(new FrmFarmaFMViasAdm());
-        doActualizaGrid();
     }
 
     @Override

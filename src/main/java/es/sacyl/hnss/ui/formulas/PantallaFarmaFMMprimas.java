@@ -109,7 +109,6 @@ public class PantallaFarmaFMMprimas extends PantallaMaster {
     @Override
     public void doNuevo() {
         this.doVentanaModal(new FrmFarmaFMMprimas());
-        doActualizaGrid();
     }
 
     @Override

@@ -14,10 +14,17 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import es.sacyl.hnss.dao.FarmaFMFormaDAO;
 import es.sacyl.hnss.dao.FarmaFMMprimasDAO;
+import es.sacyl.hnss.dao.FarmaFMViasAdmDAO;
+import es.sacyl.hnss.entidades.FarmaFMForma;
+import es.sacyl.hnss.entidades.FarmaFMFormulaAutoriza;
+import es.sacyl.hnss.entidades.FarmaFMFormulaTipo;
 import es.sacyl.hnss.entidades.FarmaFMMPrimas;
+import es.sacyl.hnss.entidades.FarmaFMViasAdm;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -26,8 +33,84 @@ import java.util.Locale;
  */
 public class ObjetosComunes {
 
+    public static ArrayList<String> SINO = new ArrayList<String>() {
+        {
+            add("S");
+            add("N");
+        }
+    };
+
     public ObjetosComunes() {
 
+    }
+
+    public static ComboBox<String> getComboToString(String label, String valor, ArrayList<String> lista, String ancho) {
+        ComboBox<String> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(lista);
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        if (ancho != null) {
+            combo.setWidth(ancho);
+        }
+        return combo;
+    }
+
+    public static ComboBox<FarmaFMFormulaTipo> getComboTipoForm(String label, FarmaFMFormulaTipo valor) {
+        ComboBox<FarmaFMFormulaTipo> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(FarmaFMFormulaTipo.LISTAFORMULASTIPOS);
+        combo.setItemLabelGenerator(FarmaFMFormulaTipo::getDescripcion);
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<FarmaFMFormulaAutoriza> getComboAutoriza(String label, FarmaFMFormulaAutoriza valor) {
+        ComboBox<FarmaFMFormulaAutoriza> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(FarmaFMFormulaAutoriza.LISTAAUTORIZA);
+        combo.setItemLabelGenerator(FarmaFMFormulaAutoriza::getDescripcion);
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<FarmaFMViasAdm> getComboVias(String label, FarmaFMViasAdm valor) {
+        ComboBox<FarmaFMViasAdm> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FarmaFMViasAdmDAO().getListaViasAdm(null));
+        combo.setItemLabelGenerator(FarmaFMViasAdm::getNombre);
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<FarmaFMForma> getComboForma(String label, FarmaFMForma valor) {
+        ComboBox<FarmaFMForma> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FarmaFMFormaDAO().getListaFormas(null));
+
+        combo.setItemLabelGenerator(FarmaFMForma::getNombre);
+
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
     }
 
     public static Button getBoton(String text, ButtonVariant buttonVariant, Icon icon) {

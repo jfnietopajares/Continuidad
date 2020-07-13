@@ -1,5 +1,6 @@
 package es.sacyl.hnss;
 
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.notification.Notification;
@@ -7,6 +8,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import es.sacyl.hnss.dao.ConexionDAO;
 import es.sacyl.hnss.ui.Menu;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +20,11 @@ import org.apache.logging.log4j.Logger;
  */
 @Route
 @PWA(name = "farmacia", shortName = "farmacia")
+@JsModule("@vaadin/vaadin-lumo-styles/presets/sizing.js")
+@Theme(value = Lumo.class)
+
 //@Theme(value = Lumo.class)
+//@Theme(value = Lumo.class, variant = Lumo.DARK)//
 public class MainView extends VerticalLayout {
 
     private static final Logger LOGGER = LogManager.getLogger(MainView.class);

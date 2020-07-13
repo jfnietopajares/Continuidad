@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.sacyl.hnss.entidades.FarmaFMViasAdm;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMFormas;
+import es.sacyl.hnss.ui.formulas.PantallaFarmaFMFormulas;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMInstumentos;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimas;
 import es.sacyl.hnss.ui.formulas.PantallaFarmaFMMprimasEntradas;
@@ -41,6 +42,12 @@ public class Menu extends MenuBar {
         });
 
         SubMenu formulasSubMenu = formulas.getSubMenu();
+
+        formulasSubMenu.addItem("Fórmulas", e -> {
+            contenedor.removeAll();
+            contenedor.add((new PantallaFarmaFMFormulas()));
+        });
+
         formulasSubMenu.addItem("Formas farmacéuticas", e -> {
             contenedor.removeAll();
             contenedor.add((new PantallaFarmaFMFormas()));
