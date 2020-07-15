@@ -7,6 +7,7 @@ package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaBibliografia;
+import es.sacyl.hnss.entidades.FMFormulaElabora;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,38 +22,38 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMFormulaBiblioDAO extends ConexionDAO {
+public class FMFormulaElaboraDAO extends ConexionDAO {
 
-    private static final Logger LOGGER = LogManager.getLogger(FMFormulaBiblioDAO.class);
+    private static final Logger LOGGER = LogManager.getLogger(FMFormulaElaboraDAO.class);
 
-    public FMFormulaBiblioDAO() {
+    public FMFormulaElaboraDAO() {
         super();
     }
 
-    private FMFormulaBibliografia getRegistroResulset(ResultSet rs) {
-        FMFormulaBibliografia fMFormulaBibliografia = new FMFormulaBibliografia();
+    private FMFormulaElabora getRegistroResulset(ResultSet rs) {
+        FMFormulaElabora fMFormulaElabora = new FMFormulaElabora();
         try {
-            fMFormulaBibliografia.setFormula(rs.getInt("formula"));
-            fMFormulaBibliografia.setOrden(rs.getInt("orden"));
-            fMFormulaBibliografia.setTexto(rs.getString("texto"));
+            fMFormulaElabora.setFormula(rs.getInt("formula"));
+            fMFormulaElabora.setOrden(rs.getInt("orden"));
+            fMFormulaElabora.setTexto(rs.getString("texto"));
 
         } catch (SQLException e) {
             LOGGER.error(e);
         }
-        return fMFormulaBibliografia;
+        return fMFormulaElabora;
     }
 
-    public FMFormulaBibliografia getPorCodigo(FMFormula fMFormula, Integer orden) {
+    public FMFormulaElabora getPorCodigo(FMFormula fMFormula, Integer orden) {
         Connection connection = null;
-        FMFormulaBibliografia fMFormulaBibliografia = null;
+        FMFormulaElabora fMFormulaElabora = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas_bib WHERE   formula = "
+            sql = " SELECT * FROM farm_fm_formulas_ela WHERE   formula = "
                     + fMFormula.getNumero() + " AND orden =" + orden;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
-                fMFormulaBibliografia = getRegistroResulset(resulSet);
+                fMFormulaElabora = getRegistroResulset(resulSet);
             }
             statement.close();
             LOGGER.debug(sql);
@@ -66,19 +67,19 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         } catch (SQLException e) {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
-        return fMFormulaBibliografia;
+        return fMFormulaElabora;
     }
 
-    public FMFormulaBibliografia getPorDescripcion(String nombre) {
+    public FMFormulaElabora getPorDescripcion(String nombre) {
         Connection connection = null;
-        FMFormulaBibliografia fMFormulaBibliografia = null;
+        FMFormulaElabora fMFormulaElabora = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas_bib WHERE   texto like '%" + nombre + "%'";
+            sql = " SELECT * FROM farm_fm_formulas_ela WHERE   texto like '%" + nombre + "%'";
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
-                fMFormulaBibliografia = getRegistroResulset(resulSet);
+                fMFormulaElabora = getRegistroResulset(resulSet);
             }
             statement.close();
             LOGGER.debug(sql);
@@ -92,44 +93,44 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         } catch (SQLException e) {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
-        return fMFormulaBibliografia;
+        return fMFormulaElabora;
     }
 
-    public boolean doGrabaDatos(FMFormula fMFormula, FMFormulaBibliografia fMFormulaBibliografia) {
+    public boolean doGrabaDatos(FMFormula fMFormula, FMFormulaElabora fMFormulaElabora) {
         boolean actualizado = false;
 
-        if (this.getPorCodigo(fMFormula, fMFormulaBibliografia.getOrden()) == null) {
-            actualizado = this.doInsertaDatos(fMFormulaBibliografia);
+        if (this.getPorCodigo(fMFormula, fMFormulaElabora.getOrden()) == null) {
+            actualizado = this.doInsertaDatos(fMFormulaElabora);
         } else {
-            actualizado = this.doActualizaDatos(fMFormulaBibliografia);
+            actualizado = this.doActualizaDatos(fMFormulaElabora);
         }
         return actualizado;
     }
 
-    public boolean doInsertaDatos(FMFormulaBibliografia fMFormulaBibliografia) {
+    public boolean doInsertaDatos(FMFormulaElabora fMFormulaElabora) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = sql = "INSERT INTO     farm_fm_formulas_bib "
+            sql = sql = "INSERT INTO     farm_fm_formulas_ela "
                     + "(formula,orden,texto)"
                     + " VALUES (?,?,?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            if (fMFormulaBibliografia == null && fMFormulaBibliografia.getFormula() != null) {
+            if (fMFormulaElabora == null && fMFormulaElabora.getFormula() != null) {
                 statement.setNull(1, Types.INTEGER);
             } else {
-                statement.setInt(1, fMFormulaBibliografia.getFormula());
+                statement.setInt(1, fMFormulaElabora.getFormula());
             }
-            if (fMFormulaBibliografia.getOrden() == null) {
+            if (fMFormulaElabora.getOrden() == null) {
                 statement.setNull(2, Types.VARCHAR);
             } else {
-                statement.setInt(2, fMFormulaBibliografia.getOrden());
+                statement.setInt(2, fMFormulaElabora.getOrden());
             }
-            if (fMFormulaBibliografia.getTexto() == null) {
+            if (fMFormulaElabora.getTexto() == null) {
                 statement.setNull(3, Types.VARCHAR);
             } else {
-                statement.setString(3, fMFormulaBibliografia.getTexto());
+                statement.setString(3, fMFormulaElabora.getTexto());
             }
 
             insertadoBoolean = statement.executeUpdate() > 0;
@@ -149,31 +150,31 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public boolean doActualizaDatos(FMFormulaBibliografia fMFormulaBibliografia) {
+    public boolean doActualizaDatos(FMFormulaElabora fMFormulaElabora) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = sql = "UPDATE     farm_fm_formulas_bib SET texto=?"
+            sql = sql = "UPDATE     farm_fm_formulas_ela SET texto=?"
                     + " WHERE formula=? AND orden=?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            if (fMFormulaBibliografia.getTexto() == null) {
+            if (fMFormulaElabora.getTexto() == null) {
                 statement.setNull(1, Types.VARCHAR);
             } else {
-                statement.setString(1, fMFormulaBibliografia.getTexto());
+                statement.setString(1, fMFormulaElabora.getTexto());
             }
 
-            if (fMFormulaBibliografia == null && fMFormulaBibliografia.getFormula() != null) {
+            if (fMFormulaElabora == null && fMFormulaElabora.getFormula() != null) {
                 statement.setNull(2, Types.INTEGER);
             } else {
-                statement.setInt(2, fMFormulaBibliografia.getFormula());
+                statement.setInt(2, fMFormulaElabora.getFormula());
             }
-            if (fMFormulaBibliografia.getOrden() == null) {
+            if (fMFormulaElabora.getOrden() == null) {
                 statement.setNull(3, Types.VARCHAR);
             } else {
-                statement.setInt(3, fMFormulaBibliografia.getOrden());
+                statement.setInt(3, fMFormulaElabora.getOrden());
             }
             insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
@@ -192,13 +193,13 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public boolean doBorraDatos(FMFormulaBibliografia fMFormulaBibliografia) {
+    public boolean doBorraDatos(FMFormulaElabora fMFormulaElabora) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = " DELETE FROM  farm_fm_formulas_bib WHERE formula=" + fMFormulaBibliografia.getFormula() + " "
-                    + " AND orden=" + fMFormulaBibliografia.getOrden();
+            sql = " DELETE FROM  farm_fm_formulas_ela WHERE formula=" + fMFormulaElabora.getFormula() + " "
+                    + " AND orden=" + fMFormulaElabora.getOrden();
             Statement statement = connection.createStatement();
             insertadoBoolean = statement.execute(sql);
             insertadoBoolean = true;
@@ -218,18 +219,18 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public ArrayList<FMFormulaBibliografia> getListaBiblio(FMFormula fMFormula) {
+    public ArrayList<FMFormulaElabora> getListaElabora(FMFormula fMFormula) {
         Connection connection = null;
-        ArrayList<FMFormulaBibliografia> listaBiblio = new ArrayList<>();
+        ArrayList<FMFormulaElabora> listaElabora = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas_bib WHERE formula=" + fMFormula.getNumero() + " "
+            sql = " SELECT * FROM farm_fm_formulas_ela WHERE formula=" + fMFormula.getNumero() + " "
                     + " ORDER BY orden";
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
-                // FMFormulaBibliografia biblio = getRegistroResulset(resulSet);
-                listaBiblio.add(getRegistroResulset(resulSet));
+                //   FMFormulaElabora biblio = getRegistroResulset(resulSet);
+                listaElabora.add(getRegistroResulset(resulSet));
 
             }
             statement.close();
@@ -244,6 +245,6 @@ public class FMFormulaBiblioDAO extends ConexionDAO {
         } catch (SQLException e) {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
-        return listaBiblio;
+        return listaElabora;
     }
 }

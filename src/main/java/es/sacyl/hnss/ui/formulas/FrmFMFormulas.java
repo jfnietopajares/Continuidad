@@ -105,12 +105,12 @@ public class FrmFMFormulas extends FrmMasterLista {
     private Button material = ObjetosComunes.getBoton("Material", null, VaadinIcon.WRENCH.create());
 
     public FrmFMFormulas() {
-        super();
+        super("1200px");
         doHazFormulario();
     }
 
     public FrmFMFormulas(FMFormula fMFormula) {
-        super();
+        super("1200px");
         this.fMFormula = fMFormula;
         doHazFormulario();
     }
@@ -135,12 +135,19 @@ public class FrmFMFormulas extends FrmMasterLista {
             doVentanaModal(frmFarmaFMFormulasBiblio);
 
         });
+        elaboración.addClickListener(e -> {
+            FrmFMFormulasElabora frmFarmaFMFormulasElabora = new FrmFMFormulasElabora(fMFormula);
+            doVentanaModal(frmFarmaFMFormulasElabora);
 
+        });
+        material.addClickListener(e -> {
+            FrmFMFormulasMaterial frmFMFormulasMaterial = new FrmFMFormulasMaterial(fMFormula);
+            doVentanaModal(frmFMFormulasMaterial);
+
+        });
         titulo.setText(FMFormula.getLabelFrom());
 
         contenedorFormulario.addClassName(Lumo.LIGHT);
-        //  contenedorFormulario.getStyle().set("theme", Lumo.DARK);
-        //     contenedorFormulario.addClassName("padding", Uniform.M);
         contenedorFormulario.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("150px", 1),
                 new FormLayout.ResponsiveStep("100px", 2),
@@ -270,13 +277,13 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     }
 
-    public void doVentanaModal(FrmFMFormulasBiblio frmFarmaFMFormulasBiblio) {
-        frmFarmaFMFormulasBiblio.open();
-        frmFarmaFMFormulasBiblio.addDialogCloseActionListener(e -> {
+    public void doVentanaModal(FrmMasterLista frmMasterLista) {
+        frmMasterLista.open();
+        frmMasterLista.addDialogCloseActionListener(e -> {
             //   doActualizaGrid();
         }
         );
-        frmFarmaFMFormulasBiblio.addDetachListener(e -> {
+        frmMasterLista.addDetachListener(e -> {
             //  doActualizaGrid();
         });
     }

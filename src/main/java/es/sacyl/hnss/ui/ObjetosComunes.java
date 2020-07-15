@@ -15,11 +15,13 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import es.sacyl.hnss.dao.FMFormaDAO;
+import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
+import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import java.time.LocalDate;
@@ -106,6 +108,21 @@ public class ObjetosComunes {
         combo.setItems(new FMFormaDAO().getListaFormas(null));
 
         combo.setItemLabelGenerator(FMForma::getNombre);
+
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<FMInstrumento> getComboInstrumento(String label, FMInstrumento valor) {
+        ComboBox<FMInstrumento> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FMInstrumentosDAO().getListaInstrumentos(null));
+
+        combo.setItemLabelGenerator(FMInstrumento::getNombre);
 
         if (valor != null) {
             combo.setValue(valor);

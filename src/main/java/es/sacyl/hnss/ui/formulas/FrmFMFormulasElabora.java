@@ -5,7 +5,6 @@
  */
 package es.sacyl.hnss.ui.formulas;
 
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,14 +14,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
-import es.sacyl.hnss.dao.FMFormaDAO;
-import es.sacyl.hnss.dao.FMFormulaBiblioDAO;
-import es.sacyl.hnss.dao.FMFormulasDAO;
-import es.sacyl.hnss.entidades.FMForma;
+import es.sacyl.hnss.dao.FMFormulaElaboraDAO;
 import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaBibliografia;
-import es.sacyl.hnss.entidades.FMMPrimasEntrada;
-import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.entidades.FMFormulaElabora;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
@@ -34,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMFormulasBiblio extends FrmMasterLista {
+public class FrmFMFormulasElabora extends FrmMasterLista {
 
     private IntegerField formula = ObjetosComunes.getIntegerField("Código");
 
@@ -46,23 +40,23 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
 
     private FMFormula fMFormula;
 
-    private FMFormulaBibliografia fMFormulaBibliografia = new FMFormulaBibliografia();
+    private FMFormulaElabora fMFormulaElabora = new FMFormulaElabora();
 
-    private Binder<FMFormulaBibliografia> binder = new Binder();
+    private Binder<FMFormulaElabora> binder = new Binder();
 
-    private Grid<FMFormulaBibliografia> grid = new Grid<>();
+    private Grid<FMFormulaElabora> grid = new Grid<>();
 
-    public FrmFMFormulasBiblio(FMFormulaBibliografia fMFormulaBibliografia, FMFormula fMFormula) {
+    public FrmFMFormulasElabora(FMFormulaElabora fMFormulaElabora, FMFormula fMFormula) {
         super("1000px");
 
-        this.fMFormulaBibliografia = fMFormulaBibliografia;
+        this.fMFormulaElabora = fMFormulaElabora;
 
         this.fMFormula = fMFormula;
 
         doHazFormulario();
     }
 
-    public FrmFMFormulasBiblio(FMFormula fMFormula) {
+    public FrmFMFormulasElabora(FMFormula fMFormula) {
         super("1000px");
 
         this.fMFormula = fMFormula;
@@ -76,15 +70,15 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
         this.contenedorVentana.setWidth("900px");
         this.setSizeFull();
 
-        titulo.setText(FMFormulaBibliografia.getLabelFrom());
+        titulo.setText(FMFormulaElabora.getLabelFrom());
 
         contenedorDerecha.add(grid);
 
         contenedorFormulario.add(nombre, orden, texto);
 
         nombre.setValue(fMFormula.getNombre());
-        grid.addColumn(FMFormulaBibliografia::getOrden).setHeader("Orden");
-        grid.addColumn(FMFormulaBibliografia::getTexto).setHeader("Texto").setWidth("300px");
+        grid.addColumn(FMFormulaElabora::getOrden).setHeader("Orden");
+        grid.addColumn(FMFormulaElabora::getTexto).setHeader("Texto").setWidth("300px");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
@@ -93,12 +87,12 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
         //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
-            fMFormulaBibliografia = event.getItem();
-            binder.readBean(fMFormulaBibliografia);
+            fMFormulaElabora = event.getItem();
+            binder.readBean(fMFormulaElabora);
         }
         );
         grid.setItems(
-                new FMFormulaBiblioDAO().getListaBiblio(fMFormula));
+                new FMFormulaElaboraDAO().getListaElabora(fMFormula));
 
         doActualizaGrid();
 
@@ -109,41 +103,36 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
 
         orden.addBlurListener(e
                 -> {
-            FMFormulaBibliografia fMFormulaBibliografiaExs = new FMFormulaBiblioDAO().getPorCodigo(fMFormula, orden.getValue());
-            if (fMFormulaBibliografiaExs != null) {
+            FMFormulaElabora fMFormulaElaboraExs = new FMFormulaElaboraDAO().getPorCodigo(fMFormula, orden.getValue());
+            if (fMFormulaElaboraExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                texto.setValue(fMFormulaBibliografiaExs.getTexto());
+                texto.setValue(fMFormulaElaboraExs.getTexto());
             }
         }
         );
-        /*
-        binder.forField(formula)
-                .asRequired()
-                .bind(FMFormulaBibliografia::getFormula, FMFormulaBibliografia::setFormula);
-         */
         binder.forField(orden)
                 .asRequired()
-                .bind(FMFormulaBibliografia::getOrden, FMFormulaBibliografia::setOrden);
+                .bind(FMFormulaElabora::getOrden, FMFormulaElabora::setOrden);
 
         binder.forField(texto)
                 .asRequired()
                 .withValidator(new StringLengthValidator(
                         FrmMaster.AVISODATOABLIGATORIO, 1, 50))
-                .bind(FMFormulaBibliografia::getTexto, FMFormulaBibliografia::setTexto);
+                .bind(FMFormulaElabora::getTexto, FMFormulaElabora::setTexto);
 
-        binder.readBean(fMFormulaBibliografia);
+        binder.readBean(fMFormulaElabora);
     }
 
     public void doActualizaGrid() {
-        grid.setItems(new FMFormulaBiblioDAO().getListaBiblio(fMFormula));
+        grid.setItems(new FMFormulaElaboraDAO().getListaElabora(fMFormula));
     }
 
     @Override
     public void doGrabar() {
-        if (binder.writeBeanIfValid(fMFormulaBibliografia)) {
-            fMFormulaBibliografia.setFormula(fMFormula.getNumero());
+        if (binder.writeBeanIfValid(fMFormulaElabora)) {
+            fMFormulaElabora.setFormula(fMFormula.getNumero());
 
-            if (new FMFormulaBiblioDAO().doGrabaDatos(fMFormula, fMFormulaBibliografia) == true) {
+            if (new FMFormulaElaboraDAO().doGrabaDatos(fMFormula, fMFormulaElabora) == true) {
 
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
 
@@ -152,15 +141,12 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaBibliografia = new FMFormulaBibliografia();
-            binder.readBean(fMFormulaBibliografia);
+            fMFormulaElabora = new FMFormulaElabora();
+            binder.readBean(fMFormulaElabora);
             formula.setValue(fMFormula.getNumero());
-            // orden.clear();
-            //texto.clear();
             doActualizaGrid();
-            // this.close();
         } else {
-            BinderValidationStatus<FMFormulaBibliografia> validate = binder.validate();
+            BinderValidationStatus<FMFormulaElabora> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
                     .stream().filter(BindingValidationStatus::isError)
                     .map(BindingValidationStatus::getMessage)
@@ -176,7 +162,7 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
                 "Conformación de acción",
                 "Seguro que quieres borrar el dato ",
                 "Borrar el dato actual ", () -> {
-                    new FMFormulaBiblioDAO().doBorraDatos(fMFormulaBibliografia);
+                    new FMFormulaElaboraDAO().doBorraDatos(fMFormulaElabora);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
                     this.close();
                 });

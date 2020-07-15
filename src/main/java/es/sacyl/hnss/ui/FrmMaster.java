@@ -51,8 +51,23 @@ public abstract class FrmMaster extends Dialog {
     protected H3 titulo = new H3();
 
     public FrmMaster() {
+        //  this.setWidth("400px");
+        // this.setHeight("150px");
+        doHazDialogo();
+    }
+
+    public FrmMaster(String ancho) {
+        this.setWidth(ancho);
+        // this.setHeight("150px");
+        doHazDialogo();
+    }
+
+    public void doHazDialogo() {
+
         this.add(contenedorTitulo);
+
         this.add(contenedorBotones);
+
         this.add(contenedorFormulario);
 
         //    contenedorBorrado.getStyle().set("background-color", "#098742");
@@ -83,4 +98,9 @@ public abstract class FrmMaster extends Dialog {
     public void doCancelar() {
         this.close();
     }
+
+    public Dialog getFrmMaster() {
+        return this;
+    }
+
 }
