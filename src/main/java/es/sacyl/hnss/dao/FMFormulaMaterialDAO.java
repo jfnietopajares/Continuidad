@@ -49,13 +49,13 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return fMFormulaMeterial;
     }
 
-    public FMFormulaMeterial getPorCodigo(FMFormula fMFormula, FMInstrumento fMInstrumento, Integer orden) {
+    public FMFormulaMeterial getPorCodigo(FMFormula fMFormula, FMInstrumento fMInstrumento, Integer linea) {
         Connection connection = null;
         FMFormulaMeterial fMFormulaMeterial = null;
         try {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_formulas_mat WHERE   formula = "
-                    + fMFormula.getNumero() + " AND codigo='" + fMInstrumento.getCodigo() + "'" + " AND orden =" + orden;
+                    + fMFormula.getNumero() + " AND codigo='" + fMInstrumento.getCodigo() + "'" + " AND linea =" + linea;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {

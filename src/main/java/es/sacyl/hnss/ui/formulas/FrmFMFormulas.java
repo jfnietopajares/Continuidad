@@ -145,6 +145,12 @@ public class FrmFMFormulas extends FrmMasterLista {
             doVentanaModal(frmFMFormulasMaterial);
 
         });
+        composicion.addClickListener(e -> {
+            FrmFMFormulasCompo frmFMFormulasCompo = new FrmFMFormulasCompo(fMFormula);
+            doVentanaModal(frmFMFormulasCompo);
+
+        });
+
         titulo.setText(FMFormula.getLabelFrom());
 
         contenedorFormulario.addClassName(Lumo.LIGHT);

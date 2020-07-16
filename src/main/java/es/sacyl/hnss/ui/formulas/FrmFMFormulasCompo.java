@@ -9,20 +9,23 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
-import es.sacyl.hnss.dao.FMFormulaMaterialDAO;
+import es.sacyl.hnss.dao.FMFormulaCompoDAO;
 import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaMeterial;
-import es.sacyl.hnss.entidades.FMInstrumento;
+import es.sacyl.hnss.entidades.FMFormulaCompo;
+import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,39 +33,44 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMFormulasMaterial extends FrmMasterLista {
+public class FrmFMFormulasCompo extends FrmMasterLista {
 
     private IntegerField formula = ObjetosComunes.getIntegerField("Código");
 
-    private IntegerField linea = ObjetosComunes.getIntegerField("Orden");
+    private IntegerField orden = ObjetosComunes.getIntegerField("Orden");
 
-    private IntegerField unidades = ObjetosComunes.getIntegerField("Unidades");
+    // private IntegerField cantidad = ObjetosComunes.getIntegerField("Cantidad");
+    private BigDecimalField cantidad = new BigDecimalField("Cantidad");
 
-    private TextField comentario = ObjetosComunes.getTextField("Comentario", "", 50, "100px");
+    private ComboBox<FMMPrimas> comboMprimas = ObjetosComunes.getComboMPrimas("Mprimas ", null);
 
-    private ComboBox<FMInstrumento> comboMaterial = ObjetosComunes.getComboInstrumento("Material", null);
+    private TextField unidades = ObjetosComunes.getTextField("unidades", "", 50, "100px");
 
     private TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
 
     private FMFormula fMFormula;
 
-    private FMFormulaMeterial fMFormulaMeterial = new FMFormulaMeterial();
+    private FMFormulaCompo fMFormulaCompo = new FMFormulaCompo();
 
-    private Binder<FMFormulaMeterial> binder = new Binder();
+    private Binder<FMFormulaCompo> binder = new Binder();
 
-    private Grid<FMFormulaMeterial> grid = new Grid<>();
+    private Grid<FMFormulaCompo> grid = new Grid<>();
 
-    public FrmFMFormulasMaterial(FMFormulaMeterial fMFormulaMeterial, FMFormula fMFormula) {
+    public FrmFMFormulasCompo() {
+
+    }
+
+    public FrmFMFormulasCompo(FMFormulaCompo fMFormulaCompo, FMFormula fMFormula) {
         super("1000px");
 
-        this.fMFormulaMeterial = fMFormulaMeterial;
+        this.fMFormulaCompo = fMFormulaCompo;
 
         this.fMFormula = fMFormula;
 
         doHazFormulario();
     }
 
-    public FrmFMFormulasMaterial(FMFormula fMFormula) {
+    public FrmFMFormulasCompo(FMFormula fMFormula) {
         super("1000px");
 
         this.fMFormula = fMFormula;
@@ -76,15 +84,15 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         this.contenedorVentana.setWidth("900px");
         this.setSizeFull();
 
-        titulo.setText(FMFormulaMeterial.getLabelFrom());
+        titulo.setText(FMFormulaCompo.getLabelFrom());
 
         contenedorDerecha.add(grid);
 
-        contenedorFormulario.add(nombre, comboMaterial, linea, unidades, comentario);
+        contenedorFormulario.add(nombre, comboMprimas, orden, cantidad, unidades);
 
         nombre.setValue(fMFormula.getNombre());
-        grid.addColumn(FMFormulaMeterial::getLinea).setHeader("Orden");
-        grid.addColumn(FMFormulaMeterial::getInstrumentoNombre).setHeader("Material").setWidth("300px");
+        grid.addColumn(FMFormulaCompo::getOrden).setHeader("Orden");
+        grid.addColumn(FMFormulaCompo::getMprimaDescripcion).setHeader("M.Prima").setWidth("300px");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
@@ -93,12 +101,12 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
-            fMFormulaMeterial = event.getItem();
-            binder.readBean(fMFormulaMeterial);
+            fMFormulaCompo = event.getItem();
+            binder.readBean(fMFormulaCompo);
         }
         );
         grid.setItems(
-                new FMFormulaMaterialDAO().getListaMateriales(fMFormula));
+                new FMFormulaCompoDAO().getListaCompos(fMFormula));
 
         doActualizaGrid();
 
@@ -107,54 +115,48 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
         formula.setValue(fMFormula.getNumero());
 
-        comboMaterial.addValueChangeListener(e -> {
-            FMFormulaMeterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
-            if (fMFormulaMaterialExs != null) {
-                (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMFormulaMaterialExs);
-                fMFormulaMeterial = fMFormulaMaterialExs;
-            }
-        });
-        linea.addBlurListener(e
+        orden.addBlurListener(e
                 -> {
-            FMFormulaMeterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
-            if (fMFormulaMaterialExs != null) {
+            FMFormulaCompo fMFormulaCompoExiste = new FMFormulaCompoDAO().getPorCodigo(fMFormula, comboMprimas.getValue(), orden.getValue());
+            if (fMFormulaCompoExiste != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMFormulaMaterialExs);
-                fMFormulaMeterial = fMFormulaMaterialExs;
+                binder.readBean(fMFormulaCompoExiste);
             }
         }
         );
 
-        binder.forField(comboMaterial)
+        binder.forField(comboMprimas)
                 .asRequired()
-                .bind(FMFormulaMeterial::getInstrumento, FMFormulaMeterial::setInstrumento);
+                .bind(FMFormulaCompo::getMprima, FMFormulaCompo::setMprima);
 
-        binder.forField(linea)
+        binder.forField(orden)
                 .asRequired()
-                .bind(FMFormulaMeterial::getLinea, FMFormulaMeterial::setLinea);
+                .bind(FMFormulaCompo::getOrden, FMFormulaCompo::setOrden);
+
+        binder.forField(cantidad)
+                .asRequired()
+                .bind(FMFormulaCompo::getCantidad, FMFormulaCompo::setCantidad);
+
         binder.forField(unidades)
-                .asRequired()
-                .bind(FMFormulaMeterial::getUnidades, FMFormulaMeterial::setUnidades);
-        binder.forField(comentario)
                 .asRequired()
                 .withValidator(new StringLengthValidator(
                         FrmMaster.AVISODATOABLIGATORIO, 1, 50))
-                .bind(FMFormulaMeterial::getComentario, FMFormulaMeterial::setComentario);
+                .bind(FMFormulaCompo::getUnidades, FMFormulaCompo::setUnidades);
 
-        binder.readBean(fMFormulaMeterial);
+        binder.readBean(fMFormulaCompo);
+        cantidad.setValue(new BigDecimal(0).setScale(2));
     }
 
     public void doActualizaGrid() {
-        grid.setItems(new FMFormulaMaterialDAO().getListaMateriales(fMFormula));
+        grid.setItems(new FMFormulaCompoDAO().getListaCompos(fMFormula));
     }
 
     @Override
     public void doGrabar() {
-        if (binder.writeBeanIfValid(fMFormulaMeterial)) {
-            fMFormulaMeterial.setFormula(fMFormula.getNumero());
+        if (binder.writeBeanIfValid(fMFormulaCompo)) {
+            fMFormulaCompo.setFormula(fMFormula.getNumero());
 
-            if (new FMFormulaMaterialDAO().doGrabaDatos(fMFormula, fMFormulaMeterial) == true) {
+            if (new FMFormulaCompoDAO().doGrabaDatos(fMFormula, fMFormulaCompo) == true) {
 
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
 
@@ -163,12 +165,15 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaMeterial = new FMFormulaMeterial();
-            binder.readBean(fMFormulaMeterial);
+            fMFormulaCompo = new FMFormulaCompo();
+            binder.readBean(fMFormulaCompo);
             formula.setValue(fMFormula.getNumero());
+            // orden.clear();
+            //texto.clear();
             doActualizaGrid();
+            // this.close();
         } else {
-            BinderValidationStatus<FMFormulaMeterial> validate = binder.validate();
+            BinderValidationStatus<FMFormulaCompo> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
                     .stream().filter(BindingValidationStatus::isError)
                     .map(BindingValidationStatus::getMessage)
@@ -184,7 +189,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
                 "Conformación de acción",
                 "Seguro que quieres borrar el dato ",
                 "Borrar el dato actual ", () -> {
-                    new FMFormulaMaterialDAO().doBorraDatos(fMFormulaMeterial);
+                    new FMFormulaCompoDAO().doBorraDatos(fMFormulaCompo);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
                     this.close();
                 });
@@ -192,7 +197,6 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         dialog.addDialogCloseActionListener(e -> {
             this.close();
         });
-        throw new UnsupportedOperationException("Not  yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
