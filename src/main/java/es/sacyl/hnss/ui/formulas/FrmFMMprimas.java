@@ -168,7 +168,7 @@ public class FrmFMMprimas extends FrmMaster {
                 .bind(FMMPrimas::getFarmacetuico, FMMPrimas::setFarmacetuico);
 
         binder.readBean(fMMPrimas);
-
+        doControlBotones(fMMPrimas.getCod_inte());
     }
 
     @Override

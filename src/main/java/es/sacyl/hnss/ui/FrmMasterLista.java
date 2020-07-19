@@ -9,9 +9,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import es.sacyl.hnss.entidades.FMFormulaBibliografia;
 
 /**
  *
@@ -27,13 +29,15 @@ public abstract class FrmMasterLista extends Dialog {
 
     protected Button botonCancelar = ObjetosComunes.getBoton("Cancelar", null, VaadinIcon.CLOSE_CIRCLE.create());
 
-    protected H3 titulo = new H3();
+    protected H6 titulo = new H6();
     protected HorizontalLayout contenedorBotones = new HorizontalLayout();
 
     protected VerticalLayout contenedorTitulo = new VerticalLayout();
 
     protected FormLayout contenedorFormulario = new FormLayout();
-    protected HorizontalLayout contenedorVentana = new HorizontalLayout();
+    //   protected HorizontalLayout contenedorVentana = new HorizontalLayout();
+    protected HorizontalLayout contenedorVentanaCabecera = new HorizontalLayout();
+    protected HorizontalLayout contenedorVentanaContenido = new HorizontalLayout();
     protected VerticalLayout contenedorIzquierda = new VerticalLayout();
     protected VerticalLayout contenedorDerecha = new VerticalLayout();
 
@@ -50,12 +54,17 @@ public abstract class FrmMasterLista extends Dialog {
     }
 
     public void doHazVentana() {
-        this.add(contenedorVentana);
-        contenedorTitulo.add(titulo);
+        this.add(contenedorVentanaCabecera, contenedorVentanaContenido);
+        //    contenedorVentana.add(contenedorVentanaCabecera, contenedorVentanaContenido);
 
+        contenedorVentanaCabecera.add(contenedorTitulo, contenedorBotones);
+        contenedorTitulo.add(titulo);
         contenedorBotones.add(botonGrabar, botonBorrar, botonAyuda, botonCancelar);
-        contenedorVentana.add(contenedorIzquierda, contenedorDerecha);
-        contenedorIzquierda.add(contenedorTitulo, contenedorBotones, contenedorFormulario);
+
+        contenedorVentanaContenido.add(contenedorIzquierda, contenedorDerecha);
+        //    contenedorVentana.add(contenedorIzquierda, contenedorDerecha);
+        contenedorIzquierda.add(contenedorFormulario);
+
         botonGrabar.addClickListener(e -> {
             doGrabar();
         });
@@ -80,7 +89,11 @@ public abstract class FrmMasterLista extends Dialog {
         this.close();
     }
 
-    public Dialog getFrmMaster() {
-        return this;
+    public void doControlBotones(Object obj) {
+        if (obj != null) {
+            botonBorrar.setEnabled(true);
+        } else {
+            botonBorrar.setEnabled(false);
+        }
     }
 }

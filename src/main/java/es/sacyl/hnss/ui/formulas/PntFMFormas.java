@@ -10,7 +10,6 @@ import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import es.sacyl.hnss.dao.FMFormaDAO;
-import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.PantallaMaster;
@@ -28,7 +27,7 @@ public class PntFMFormas extends PantallaMaster {
 
     private Grid<FMForma> grid = new Grid<>(FMForma.class);
 
-    private FrmFMForma frmFMForma;
+    private FrmFMFormas frmFMFormas;
 
     public PntFMFormas() {
         super();
@@ -59,8 +58,8 @@ public class PntFMFormas extends PantallaMaster {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
-            frmFMForma = new FrmFMForma(event.getItem());
-            doVentanaModal(frmFMForma);
+            frmFMFormas = new FrmFMFormas(event.getItem());
+            doVentanaModal(frmFMFormas);
             doActualizaGrid();
         }
         );
@@ -68,13 +67,13 @@ public class PntFMFormas extends PantallaMaster {
         doActualizaGrid();
     }
 
-    public void doVentanaModal(FrmFMForma frmFMForma) {
-        frmFMForma.open();
-        frmFMForma.addDialogCloseActionListener(e -> {
+    public void doVentanaModal(FrmFMFormas frmFMFormas) {
+        frmFMFormas.open();
+        frmFMFormas.addDialogCloseActionListener(e -> {
             doActualizaGrid();
         }
         );
-        frmFMForma.addDetachListener(e -> {
+        frmFMFormas.addDetachListener(e -> {
             doActualizaGrid();
         });
     }
@@ -86,7 +85,7 @@ public class PntFMFormas extends PantallaMaster {
 
     @Override
     public void doNuevo() {
-        this.doVentanaModal(new FrmFMForma());
+        this.doVentanaModal(new FrmFMFormas());
     }
 
     @Override

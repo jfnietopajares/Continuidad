@@ -182,6 +182,7 @@ public class FrmFMMprimasSalidas extends FrmMaster {
                 .bind(FMMprimasSalida::getComentario1, FMMprimasSalida::setComentario1);
 
         binder.readBean(fMMprimasSalida);
+        doControlBotones(fMMprimasSalida.getNumero());
         if (numero.isEmpty()) {
             numero.setValue(new FMMprimasSalidaDAO().getNumeroSiguiente(fMMprimasSalida));
             fecha.setValue(LocalDate.now());

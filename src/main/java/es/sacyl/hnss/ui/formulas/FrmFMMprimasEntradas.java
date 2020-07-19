@@ -211,6 +211,7 @@ public class FrmFMMprimasEntradas extends FrmMaster {
                 .bind(FMMPrimasEntrada::getFarmaceutico, FMMPrimasEntrada::setFarmaceutico);
 
         binder.readBean(fMMPrimasEntrada);
+        doControlBotones(fMMPrimasEntrada.getNumero());
         if (numero.isEmpty()) {
             numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
             fecha.setValue(LocalDate.now());

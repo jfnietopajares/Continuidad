@@ -55,7 +55,7 @@ public class FMFormulaCompoDAO extends ConexionDAO {
         try {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_formulas_comp WHERE   formula = "
-                    + fMFormula.getNumero() + " AND  cod_inte=" + fMMprima.getCod_inte() + " orden =" + orden;
+                    + fMFormula.getNumero() + " AND  cod_inte=" + fMMprima.getCod_inte() + " AND  orden =" + orden;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {

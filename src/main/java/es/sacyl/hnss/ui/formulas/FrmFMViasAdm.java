@@ -90,7 +90,7 @@ public class FrmFMViasAdm extends FrmMaster {
                 .bind(FMViasAdm::getNombre, FMViasAdm::setNombre);
 
         binder.readBean(fMViasAdm);
-
+        doControlBotones(fMViasAdm.getCodigo());
     }
 
     @Override

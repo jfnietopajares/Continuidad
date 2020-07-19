@@ -73,8 +73,7 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
     public void doHazFormulario() {
         this.setWidth("900px");
         //  this.setMaxWidth("900px");
-        this.contenedorVentana.setWidth("900px");
-        this.setSizeFull();
+        // this.setSizeFull();
 
         titulo.setText(FMFormulaBibliografia.getLabelFrom());
 
@@ -83,6 +82,7 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
         contenedorFormulario.add(nombre, orden, texto);
 
         nombre.setValue(fMFormula.getNombre());
+
         grid.addColumn(FMFormulaBibliografia::getOrden).setHeader("Orden");
         grid.addColumn(FMFormulaBibliografia::getTexto).setHeader("Texto").setWidth("300px");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
@@ -94,7 +94,7 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
         grid.addItemClickListener(event
                 -> {
             fMFormulaBibliografia = event.getItem();
-            binder.readBean(fMFormulaBibliografia);
+            doControlEventosRecpera(fMFormulaBibliografia);
         }
         );
         grid.setItems(
@@ -112,15 +112,10 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
             FMFormulaBibliografia fMFormulaBibliografiaExs = new FMFormulaBiblioDAO().getPorCodigo(fMFormula, orden.getValue());
             if (fMFormulaBibliografiaExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                texto.setValue(fMFormulaBibliografiaExs.getTexto());
+                doControlEventosRecpera(fMFormulaBibliografiaExs);
             }
         }
         );
-        /*
-        binder.forField(formula)
-                .asRequired()
-                .bind(FMFormulaBibliografia::getFormula, FMFormulaBibliografia::setFormula);
-         */
         binder.forField(orden)
                 .asRequired()
                 .bind(FMFormulaBibliografia::getOrden, FMFormulaBibliografia::setOrden);
@@ -132,10 +127,30 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
                 .bind(FMFormulaBibliografia::getTexto, FMFormulaBibliografia::setTexto);
 
         binder.readBean(fMFormulaBibliografia);
+        orden.focus();
+        doControlBotones(fMFormulaBibliografia.getOrden());
     }
 
     public void doActualizaGrid() {
         grid.setItems(new FMFormulaBiblioDAO().getListaBiblio(fMFormula));
+    }
+
+    public void doControlEventosRecpera(FMFormulaBibliografia fMFormulaBibliografia) {
+        this.fMFormulaBibliografia = fMFormulaBibliografia;
+        binder.readBean(fMFormulaBibliografia);
+        orden.setEnabled(false);
+        texto.focus();
+        botonBorrar.setEnabled(true);
+    }
+
+    public void doControlEventosNuevo() {
+        fMFormulaBibliografia = new FMFormulaBibliografia();
+        fMFormulaBibliografia.setFormula(fMFormula.getNumero());
+        binder.readBean(fMFormulaBibliografia);
+        orden.setEnabled(true);
+        orden.focus();
+        botonBorrar.setEnabled(false);
+        doActualizaGrid();
     }
 
     @Override
@@ -147,18 +162,12 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
 
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
 
-                String clase = this.getParent().get().getClass().getName();
+                doControlEventosNuevo();
 
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaBibliografia = new FMFormulaBibliografia();
-            binder.readBean(fMFormulaBibliografia);
-            formula.setValue(fMFormula.getNumero());
-            // orden.clear();
-            //texto.clear();
-            doActualizaGrid();
-            // this.close();
+            doControlEventosNuevo();
         } else {
             BinderValidationStatus<FMFormulaBibliografia> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
@@ -178,7 +187,7 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
                 "Borrar el dato actual ", () -> {
                     new FMFormulaBiblioDAO().doBorraDatos(fMFormulaBibliografia);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
-                    this.close();
+                    doControlEventosNuevo();
                 });
         dialog.open();
         dialog.addDialogCloseActionListener(e -> {

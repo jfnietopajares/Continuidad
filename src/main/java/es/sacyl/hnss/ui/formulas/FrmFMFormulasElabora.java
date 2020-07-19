@@ -16,6 +16,7 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import es.sacyl.hnss.dao.FMFormulaElaboraDAO;
 import es.sacyl.hnss.entidades.FMFormula;
+import es.sacyl.hnss.entidades.FMFormulaCompo;
 import es.sacyl.hnss.entidades.FMFormulaElabora;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
@@ -67,8 +68,7 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
     public void doHazFormulario() {
         this.setWidth("900px");
         //  this.setMaxWidth("900px");
-        this.contenedorVentana.setWidth("900px");
-        this.setSizeFull();
+//        this.setSizeFull();
 
         titulo.setText(FMFormulaElabora.getLabelFrom());
 
@@ -87,8 +87,7 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
         //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
-            fMFormulaElabora = event.getItem();
-            binder.readBean(fMFormulaElabora);
+            doControlEventosRecpera(event.getItem());
         }
         );
         grid.setItems(
@@ -106,7 +105,7 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
             FMFormulaElabora fMFormulaElaboraExs = new FMFormulaElaboraDAO().getPorCodigo(fMFormula, orden.getValue());
             if (fMFormulaElaboraExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                texto.setValue(fMFormulaElaboraExs.getTexto());
+                doControlEventosRecpera(fMFormulaElaboraExs);
             }
         }
         );
@@ -121,6 +120,26 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
                 .bind(FMFormulaElabora::getTexto, FMFormulaElabora::setTexto);
 
         binder.readBean(fMFormulaElabora);
+        doControlBotones(fMFormulaElabora.getOrden());
+    }
+
+    public void doControlEventosRecpera(FMFormulaElabora fMFormulaElabora) {
+        this.fMFormulaElabora = fMFormulaElabora;
+        binder.readBean(fMFormulaElabora);
+        orden.setEnabled(false);
+        orden.focus();
+        botonBorrar.setEnabled(true);
+    }
+
+    public void doControlEventosNuevo() {
+        fMFormulaElabora = new FMFormulaElabora();
+        fMFormulaElabora.setFormula(fMFormula.getNumero());
+
+        binder.readBean(fMFormulaElabora);
+        orden.setEnabled(true);
+        orden.focus();
+        botonBorrar.setEnabled(false);
+        doActualizaGrid();
     }
 
     public void doActualizaGrid() {
@@ -141,10 +160,7 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaElabora = new FMFormulaElabora();
-            binder.readBean(fMFormulaElabora);
-            formula.setValue(fMFormula.getNumero());
-            doActualizaGrid();
+            doControlEventosNuevo();
         } else {
             BinderValidationStatus<FMFormulaElabora> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
@@ -164,7 +180,7 @@ public class FrmFMFormulasElabora extends FrmMasterLista {
                 "Borrar el dato actual ", () -> {
                     new FMFormulaElaboraDAO().doBorraDatos(fMFormulaElabora);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
-                    this.close();
+                    doControlEventosNuevo();
                 });
         dialog.open();
         dialog.addDialogCloseActionListener(e -> {

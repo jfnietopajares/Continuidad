@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -95,10 +96,9 @@ public class FrmFMFormulas extends FrmMasterLista {
     private Grid<FMFormula> grid = null;
 
     //   private HorizontalLayout contenedorFormula = new HorizontalLayout();
-    private HorizontalLayout contenedorBotones1 = new HorizontalLayout();
+    //   private HorizontalLayout contenedorBotones1 = new HorizontalLayout();
     // private VerticalLayout contenedorIzquierda = new VerticalLayout();
     //private VerticalLayout contenedorDerecha = new VerticalLayout();
-
     private Button blibliografia = ObjetosComunes.getBoton("Bibliog", null, VaadinIcon.BOOK.create());
     private Button composicion = ObjetosComunes.getBoton("Compo", null, VaadinIcon.FLASK.create());
     private Button elaboración = ObjetosComunes.getBoton("Elabor", null, VaadinIcon.COGS.create());
@@ -120,15 +120,18 @@ public class FrmFMFormulas extends FrmMasterLista {
         // this.add(contenedorFormula);
 
         //  contenedorFormula.add(contenedorIzquierda, contenedorDerecha);
-        contenedorIzquierda.removeAll();
-        contenedorIzquierda.add(contenedorTitulo, contenedorBotones, contenedorBotones1, contenedorFormulario);
-        contenedorBotones1.add(blibliografia, composicion, elaboración, material);
+        //   contenedorIzquierda.removeAll();
+        //  contenedorIzquierda.add(contenedorTitulo, contenedorBotones, contenedorBotones1, contenedorFormulario);
+        // contenedorBotones1.add(blibliografia, composicion, elaboración, material);
+        contenedorBotones.add(blibliografia, composicion, elaboración, material);
+        contenedorDerecha.add(new Label("aadfadfaafa"));
+
         if (fMFormula.getNumero() == null) {
             blibliografia.setEnabled(false);
             composicion.setEnabled(false);
             elaboración.setEnabled(false);
             material.setEnabled(false);
-            contenedorBotones1.setVisible(false);
+            // contenedorBotones1.setVisible(false);
         }
         blibliografia.addClickListener(e -> {
             FrmFMFormulasBiblio frmFarmaFMFormulasBiblio = new FrmFMFormulasBiblio(fMFormula);
@@ -280,7 +283,7 @@ public class FrmFMFormulas extends FrmMasterLista {
                 .bind(FMFormula::getEtiqueta2, FMFormula::setEtiqueta2);
 
         binder.readBean(fMFormula);
-
+        doControlBotones(fMFormula.getNumero());
     }
 
     public void doVentanaModal(FrmMasterLista frmMasterLista) {

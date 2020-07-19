@@ -12,7 +12,6 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import es.sacyl.hnss.dao.FMFormaDAO;
-import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.ConfirmDialog;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMForma extends FrmMaster {
+public class FrmFMFormas extends FrmMaster {
 
     private TextField codigo = ObjetosComunes.getTextField("Código", "codigo", 15, "50px");
 
@@ -35,12 +34,12 @@ public class FrmFMForma extends FrmMaster {
 
     private Binder<FMForma> binder = new Binder<>();
 
-    public FrmFMForma() {
+    public FrmFMFormas() {
         super();
         doHazFormulario();
     }
 
-    public FrmFMForma(FMForma fMForma) {
+    public FrmFMFormas(FMForma fMForma) {
         super();
         this.fMForma = fMForma;
         doHazFormulario();
@@ -81,7 +80,7 @@ public class FrmFMForma extends FrmMaster {
                 .bind(FMForma::getNombre, FMForma::setNombre);
 
         binder.readBean(fMForma);
-
+        doControlBotones(fMForma.getCodigo());
     }
 
     @Override

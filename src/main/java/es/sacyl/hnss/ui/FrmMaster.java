@@ -21,7 +21,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
  */
 public abstract class FrmMaster extends Dialog {
 
-    public static final String AVISODATOSEXISTE = "Dato ya existe ";
+    public static final String AVISODATOSEXISTE = "Dato ya existe, es posible su modificación ";
 
     public static final String AVISODATOABLIGATORIO = "El dato es obligatorio, no puede estar en blanco o vacío ";
 
@@ -103,4 +103,11 @@ public abstract class FrmMaster extends Dialog {
         return this;
     }
 
+    public void doControlBotones(Object obj) {
+        if (obj != null) {
+            botonBorrar.setEnabled(true);
+        } else {
+            botonBorrar.setEnabled(false);
+        }
+    }
 }

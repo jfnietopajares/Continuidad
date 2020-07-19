@@ -17,6 +17,7 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import es.sacyl.hnss.dao.FMFormulaMaterialDAO;
 import es.sacyl.hnss.entidades.FMFormula;
+import es.sacyl.hnss.entidades.FMFormulaElabora;
 import es.sacyl.hnss.entidades.FMFormulaMeterial;
 import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.ui.ConfirmDialog;
@@ -73,8 +74,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
     public void doHazFormulario() {
         this.setWidth("900px");
         //  this.setMaxWidth("900px");
-        this.contenedorVentana.setWidth("900px");
-        this.setSizeFull();
+//        this.setSizeFull();
 
         titulo.setText(FMFormulaMeterial.getLabelFrom());
 
@@ -93,8 +93,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
-            fMFormulaMeterial = event.getItem();
-            binder.readBean(fMFormulaMeterial);
+            doControlEventosRecpera(event.getItem());
         }
         );
         grid.setItems(
@@ -120,8 +119,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
             FMFormulaMeterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
             if (fMFormulaMaterialExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMFormulaMaterialExs);
-                fMFormulaMeterial = fMFormulaMaterialExs;
+                doControlEventosRecpera(fMFormulaMaterialExs);
             }
         }
         );
@@ -143,6 +141,29 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
                 .bind(FMFormulaMeterial::getComentario, FMFormulaMeterial::setComentario);
 
         binder.readBean(fMFormulaMeterial);
+        comboMaterial.focus();
+        doControlBotones(fMFormulaMeterial.getLinea());
+    }
+
+    public void doControlEventosRecpera(FMFormulaMeterial fMFormulaMeterial) {
+        this.fMFormulaMeterial = fMFormulaMeterial;
+        binder.readBean(fMFormulaMeterial);
+        comboMaterial.setEnabled(false);
+        linea.setEnabled(false);
+        unidades.focus();
+        botonBorrar.setEnabled(true);
+    }
+
+    public void doControlEventosNuevo() {
+        fMFormulaMeterial = new FMFormulaMeterial();
+        fMFormulaMeterial.setFormula(fMFormula.getNumero());
+
+        binder.readBean(fMFormulaMeterial);
+        comboMaterial.setEnabled(true);
+        linea.setEnabled(true);
+        comboMaterial.focus();
+        botonBorrar.setEnabled(false);
+        doActualizaGrid();
     }
 
     public void doActualizaGrid() {
@@ -158,15 +179,10 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
 
-                String clase = this.getParent().get().getClass().getName();
-
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaMeterial = new FMFormulaMeterial();
-            binder.readBean(fMFormulaMeterial);
-            formula.setValue(fMFormula.getNumero());
-            doActualizaGrid();
+            doControlEventosNuevo();
         } else {
             BinderValidationStatus<FMFormulaMeterial> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
@@ -186,7 +202,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
                 "Borrar el dato actual ", () -> {
                     new FMFormulaMaterialDAO().doBorraDatos(fMFormulaMeterial);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
-                    this.close();
+                    doControlEventosNuevo();
                 });
         dialog.open();
         dialog.addDialogCloseActionListener(e -> {

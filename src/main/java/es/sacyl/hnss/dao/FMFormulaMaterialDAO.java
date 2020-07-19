@@ -6,7 +6,6 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaElabora;
 import es.sacyl.hnss.entidades.FMFormulaMeterial;
 import es.sacyl.hnss.entidades.FMInstrumento;
 import java.sql.Connection;
@@ -144,9 +143,9 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = " DELETE FROM  farm_fm_formulas_ela WHERE formula=" + fMFormulaMeterial.getFormula() + " "
+            sql = " DELETE FROM  farm_fm_formulas_mat WHERE formula=" + fMFormulaMeterial.getFormula() + " "
                     + " AND codigo=" + fMFormulaMeterial.getInstrumento().getCodigo()
-                    + " AND orden=" + fMFormulaMeterial.getLinea();
+                    + " AND linea=" + fMFormulaMeterial.getLinea();
             Statement statement = connection.createStatement();
             insertadoBoolean = statement.execute(sql);
             insertadoBoolean = true;

@@ -19,6 +19,7 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import es.sacyl.hnss.dao.FMFormulaCompoDAO;
 import es.sacyl.hnss.entidades.FMFormula;
+import es.sacyl.hnss.entidades.FMFormulaBibliografia;
 import es.sacyl.hnss.entidades.FMFormulaCompo;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.ui.ConfirmDialog;
@@ -81,8 +82,7 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
     public void doHazFormulario() {
         this.setWidth("900px");
         //  this.setMaxWidth("900px");
-        this.contenedorVentana.setWidth("900px");
-        this.setSizeFull();
+//        this.setSizeFull();
 
         titulo.setText(FMFormulaCompo.getLabelFrom());
 
@@ -101,8 +101,7 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
         //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
-            fMFormulaCompo = event.getItem();
-            binder.readBean(fMFormulaCompo);
+            doControlEventosRecpera(event.getItem());
         }
         );
         grid.setItems(
@@ -120,7 +119,7 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
             FMFormulaCompo fMFormulaCompoExiste = new FMFormulaCompoDAO().getPorCodigo(fMFormula, comboMprimas.getValue(), orden.getValue());
             if (fMFormulaCompoExiste != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMFormulaCompoExiste);
+                doControlEventosRecpera(fMFormulaCompoExiste);
             }
         }
         );
@@ -144,7 +143,30 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
                 .bind(FMFormulaCompo::getUnidades, FMFormulaCompo::setUnidades);
 
         binder.readBean(fMFormulaCompo);
+        doControlBotones(fMFormulaCompo.getOrden());
         cantidad.setValue(new BigDecimal(0).setScale(2));
+    }
+
+    public void doControlEventosRecpera(FMFormulaCompo fMFormulaCompo) {
+        this.fMFormulaCompo = fMFormulaCompo;
+        binder.readBean(fMFormulaCompo);
+        comboMprimas.setEnabled(false);
+        orden.setEnabled(false);
+        unidades.focus();
+        botonBorrar.setEnabled(true);
+    }
+
+    public void doControlEventosNuevo() {
+        fMFormulaCompo = new FMFormulaCompo();
+        fMFormulaCompo.setFormula(fMFormula.getNumero());
+
+        binder.readBean(fMFormulaCompo);
+        comboMprimas.setEnabled(true);
+        comboMprimas.focus();
+        orden.setEnabled(true);
+
+        botonBorrar.setEnabled(false);
+        doActualizaGrid();
     }
 
     public void doActualizaGrid() {
@@ -160,18 +182,12 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
 
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
 
-                String clase = this.getParent().get().getClass().getName();
+                doControlEventosNuevo();
 
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            fMFormulaCompo = new FMFormulaCompo();
-            binder.readBean(fMFormulaCompo);
-            formula.setValue(fMFormula.getNumero());
-            // orden.clear();
-            //texto.clear();
-            doActualizaGrid();
-            // this.close();
+            doControlEventosNuevo();
         } else {
             BinderValidationStatus<FMFormulaCompo> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
@@ -191,7 +207,7 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
                 "Borrar el dato actual ", () -> {
                     new FMFormulaCompoDAO().doBorraDatos(fMFormulaCompo);
                     Notification.show(FrmMaster.AVISODATOBORRADO);
-                    this.close();
+                    doControlEventosNuevo();
                 });
         dialog.open();
         dialog.addDialogCloseActionListener(e -> {

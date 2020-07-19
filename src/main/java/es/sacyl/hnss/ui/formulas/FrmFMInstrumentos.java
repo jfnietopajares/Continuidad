@@ -84,7 +84,7 @@ public class FrmFMInstrumentos extends FrmMaster {
                 .bind(FMInstrumento::getNombre, FMInstrumento::setNombre);
 
         binder.readBean(fMInstrumento);
-
+        doControlBotones(fMInstrumento.getCodigo());
     }
 
     public void doGrabar() {
