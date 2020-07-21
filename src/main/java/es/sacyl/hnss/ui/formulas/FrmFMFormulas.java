@@ -33,6 +33,7 @@ import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.ConfirmDialog;
+import es.sacyl.hnss.ui.EmbeddedPdfDocument;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
@@ -284,6 +285,18 @@ public class FrmFMFormulas extends FrmMasterLista {
 
         binder.readBean(fMFormula);
         doControlBotones(fMFormula.getNumero());
+        doVerPdf();
+
+    }
+
+    public void doVerPdf() {
+        contenedorDerecha.add(new EmbeddedPdfDocument("pdf.pdf"));
+        /*
+        contenedorDerecha.add(new EmbeddedPdfDocument(new StreamResource("book-of-vaadin.pdf", () -> {
+
+             return new FMFormulaFicha().getStream();
+        })));
+         */
     }
 
     public void doVentanaModal(FrmMasterLista frmMasterLista) {
