@@ -7,11 +7,14 @@ package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.entidades.FMFormula;
+import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.PantallaMaster;
 import java.util.ArrayList;
@@ -57,17 +60,25 @@ public class PntFMFormulas extends PantallaMaster {
             doVentanaModal(frmFMFormulas);
         }
         );
+        grid.addColumn(new NativeButtonRenderer<>("Fabricar",
+                clickedItem -> {
+                    FrmFMFormulaFabricar frmFMFormulaFabricar = new FrmFMFormulaFabricar(clickedItem);
+
+                    doVentanaModal(new FrmFMFormulaFabricar(clickedItem));
+                    //  Notification.show("Sin dato seleccionado" + grid.getSelectedItems().size());
+                }
+        ));
 
         doActualizaGrid();
     }
 
-    public void doVentanaModal(FrmFMFormulas frmFMFormulas) {
-        frmFMFormulas.open();
-        frmFMFormulas.addDialogCloseActionListener(e -> {
+    public void doVentanaModal(Dialog frm) {
+        frm.open();
+        frm.addDialogCloseActionListener(e -> {
             doActualizaGrid();
         }
         );
-        frmFMFormulas.addDetachListener(e -> {
+        frm.addDetachListener(e -> {
             doActualizaGrid();
         });
     }

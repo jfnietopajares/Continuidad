@@ -15,10 +15,12 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import es.sacyl.hnss.dao.FMFormaDAO;
+import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMForma;
+import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMInstrumento;
@@ -115,6 +117,21 @@ public class ObjetosComunes {
         return combo;
     }
 
+    public static ComboBox<FMFormula> getComboFormula(String label, FMFormula valor) {
+        ComboBox<FMFormula> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FMFormulasDAO().getListaFormulas(null));
+
+        combo.setItemLabelGenerator(FMFormula::getNombre);
+
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
     public static ComboBox<FMInstrumento> getComboInstrumento(String label, FMInstrumento valor) {
         ComboBox<FMInstrumento> combo = new ComboBox<>();
         if (label != null) {
@@ -165,7 +182,7 @@ public class ObjetosComunes {
         return textField;
     }
 
-    public static TextArea getTextArea(String text, String Placeholder, Integer maxLength, String width, String height) {
+    public static TextArea getTextArea(String text, String Placeholder, Integer maxLength, String width, String height, String maxHeight, String minHeight) {
         TextArea textArea = new TextArea();
         if (text != null) {
             textArea.setLabel(text);
@@ -183,7 +200,13 @@ public class ObjetosComunes {
         if (height != null) {
             textArea.setHeight(height);
         }
-        textArea.getEmptyValue();
+        if (maxHeight != null) {
+            textArea.getStyle().set("maxHeight", "150px");
+        }
+        if (minHeight != null) {
+            textArea.getStyle().set("minHeight", "150px");
+        }
+
         return textArea;
     }
 

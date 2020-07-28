@@ -11,6 +11,7 @@ import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +29,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMFormulasDAO extends ConexionDAO {
+public class FMFormulasDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMFormulasDAO.class);
 

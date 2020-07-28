@@ -45,7 +45,7 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
 
     private ComboBox<FMMPrimas> comboMprimas = ObjetosComunes.getComboMPrimas("Mprimas ", null);
 
-    private TextField unidades = ObjetosComunes.getTextField("unidades", "", 50, "100px");
+    private TextField unidades = ObjetosComunes.getTextField("unidades", "", 10, "100px");
 
     private TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
 

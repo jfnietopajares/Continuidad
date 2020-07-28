@@ -6,6 +6,7 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMViasAdm;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +20,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author 06551256M
  */
-public class FMViasAdmDAO extends ConexionDAO {
+public class FMViasAdmDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMViasAdmDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FMViasAdmDAO() {
         super();

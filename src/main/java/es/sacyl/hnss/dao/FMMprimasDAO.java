@@ -6,6 +6,7 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMMPrimas;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,9 +23,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMMprimasDAO extends ConexionDAO {
+public class FMMprimasDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMMprimasDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FMMprimasDAO() {
         super();

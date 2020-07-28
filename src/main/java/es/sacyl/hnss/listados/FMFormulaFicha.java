@@ -1,41 +1,26 @@
 package es.sacyl.hnss.listados;
 
-import java.io.ByteArrayOutputStream;
-import java.time.format.DateTimeFormatter;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.itextpdf.io.IOException;
 import com.itextpdf.io.font.FontConstants;
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
-
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServlet;
 import es.sacyl.hnss.entidades.FMFormula;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import javax.servlet.ServletContext;
+import java.time.format.DateTimeFormatter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -94,8 +79,16 @@ public class FMFormulaFicha implements Serializable {
 
             document.setMargins(25, 15, 5, 35);
 
-            document.add(new Paragraph(new Text("  Fecha:" + fechadma.format(LocalDate.now()) + "\n")
-                    .setFont(bold).setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER.CENTER)));
+            PdfEventoPaginaListado evento = new PdfEventoPaginaListado(document, "Texto 1",
+                    "Texto 2");
+
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, evento);
+
+            document.add(new Paragraph(new Text("\n\n\n\n\n\n  Nº:" + fMFormula.getNumero() + " " + fMFormula.getNombre())
+                    .setFont(bold).setFontSize(15).setHorizontalAlignment(HorizontalAlignment.CENTER.CENTER)));
+
+            document.add(new Paragraph().add(new Text(fMFormula.getNombre()).setFont(bold).setFontSize(12)
+                    .setHorizontalAlignment(HorizontalAlignment.LEFT)));
 
             document.close();
 

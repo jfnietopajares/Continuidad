@@ -5,7 +5,6 @@
  */
 package es.sacyl.hnss.ui.formulas;
 
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,14 +14,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
-import es.sacyl.hnss.dao.FMFormaDAO;
 import es.sacyl.hnss.dao.FMFormulaBiblioDAO;
-import es.sacyl.hnss.dao.FMFormulasDAO;
-import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaBibliografia;
-import es.sacyl.hnss.entidades.FMMPrimasEntrada;
-import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
@@ -72,8 +66,6 @@ public class FrmFMFormulasBiblio extends FrmMasterLista {
 
     public void doHazFormulario() {
         this.setWidth("900px");
-        //  this.setMaxWidth("900px");
-        // this.setSizeFull();
 
         titulo.setText(FMFormulaBibliografia.getLabelFrom());
 

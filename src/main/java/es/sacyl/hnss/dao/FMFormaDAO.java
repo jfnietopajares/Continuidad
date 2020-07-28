@@ -6,6 +6,7 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMForma;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,9 +19,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMFormaDAO extends ConexionDAO {
+public class FMFormaDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMFormaDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FMFormaDAO() {
         super();

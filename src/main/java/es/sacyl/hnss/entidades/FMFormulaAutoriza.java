@@ -5,13 +5,16 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author JuanNieto
  */
-public class FMFormulaAutoriza {
+public class FMFormulaAutoriza implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String codigo;
     private String descripcion;

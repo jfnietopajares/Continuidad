@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,9 +20,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMMprimasEntraDAO extends ConexionDAO {
+public class FMMprimasEntraDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMMprimasEntraDAO.class);
+    private static final long serialVersionUID = 1L;
 
     DateTimeFormatter dateTimeFormatterParser = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -174,7 +171,7 @@ public class FMMprimasEntraDAO extends ConexionDAO {
             } else {
                 statement.setString(8, fMInstrumento.getCaducidad());
             }
-            if (fMInstrumento == null && fMInstrumento.getCod_inte() != null) {
+            if (fMInstrumento == null || fMInstrumento.getCod_inte() == null) {
                 statement.setNull(9, Types.INTEGER);
             } else {
                 statement.setInt(9, fMInstrumento.getCod_inte());
@@ -213,7 +210,7 @@ public class FMMprimasEntraDAO extends ConexionDAO {
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            if (fMInstrumento == null && fMInstrumento.getCod_inte() != null) {
+            if (fMInstrumento == null || fMInstrumento.getCod_inte() == null) {
                 statement.setNull(1, Types.INTEGER);
             } else {
                 statement.setInt(1, fMInstrumento.getCod_inte());

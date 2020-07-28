@@ -27,14 +27,20 @@ import java.util.stream.Collectors;
 public class FrmFMMprimas extends FrmMaster {
 
     private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
+
     private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
+
     private TextField cod_labo = ObjetosComunes.getTextField("Cod.Laboratorio", "código laboratorio   ", 15, "100px");
+
     private TextField laboratorio = ObjetosComunes.getTextField("Laboratorio", "laboratorio", 50, "100px");
+
     private Checkbox homologado = new Checkbox("Homologado");
+
     private IntegerField n_labo = ObjetosComunes.getIntegerField("n_labo");
+
     private IntegerField stock_min = ObjetosComunes.getIntegerField("stock_min");
 
-    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 255, "100px", "90px");
+    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 255, "100px", "90px", "90px", "90px");
 
     private TextField especifica = ObjetosComunes.getTextField("Especificaciones", "especifica", 255, "100px");
 

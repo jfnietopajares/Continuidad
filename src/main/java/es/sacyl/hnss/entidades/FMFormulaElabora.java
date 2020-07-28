@@ -6,12 +6,15 @@
 package es.sacyl.hnss.entidades;
 
 import static es.sacyl.hnss.entidades.FMFormulaBibliografia.labelFrom;
+import java.io.Serializable;
 
 /**
  *
  * @author JuanNieto
  */
-public class FMFormulaElabora {
+public class FMFormulaElabora implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer formula;
     private Integer orden;

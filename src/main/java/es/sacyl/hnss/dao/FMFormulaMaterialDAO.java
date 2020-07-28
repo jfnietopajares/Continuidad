@@ -6,8 +6,9 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaMeterial;
+import es.sacyl.hnss.entidades.FMFormulaMaterial;
 import es.sacyl.hnss.entidades.FMInstrumento;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,16 +23,17 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMFormulaMaterialDAO extends ConexionDAO {
+public class FMFormulaMaterialDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMFormulaMaterialDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FMFormulaMaterialDAO() {
         super();
     }
 
-    private FMFormulaMeterial getRegistroResulset(ResultSet rs, FMInstrumento fMInstrumento) {
-        FMFormulaMeterial fMFormulaMeterial = new FMFormulaMeterial();
+    private FMFormulaMaterial getRegistroResulset(ResultSet rs, FMInstrumento fMInstrumento) {
+        FMFormulaMaterial fMFormulaMeterial = new FMFormulaMaterial();
         try {
             fMFormulaMeterial.setFormula(rs.getInt("formula"));
             fMFormulaMeterial.setLinea(rs.getInt("linea"));
@@ -48,9 +50,9 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return fMFormulaMeterial;
     }
 
-    public FMFormulaMeterial getPorCodigo(FMFormula fMFormula, FMInstrumento fMInstrumento, Integer linea) {
+    public FMFormulaMaterial getPorCodigo(FMFormula fMFormula, FMInstrumento fMInstrumento, Integer linea) {
         Connection connection = null;
-        FMFormulaMeterial fMFormulaMeterial = null;
+        FMFormulaMaterial fMFormulaMeterial = null;
         try {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_formulas_mat WHERE   formula = "
@@ -75,7 +77,7 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return fMFormulaMeterial;
     }
 
-    public boolean doGrabaDatos(FMFormula fMFormula, FMFormulaMeterial fMFormulaMeterial) {
+    public boolean doGrabaDatos(FMFormula fMFormula, FMFormulaMaterial fMFormulaMeterial) {
         boolean actualizado = false;
 
         if (this.getPorCodigo(fMFormula, fMFormulaMeterial.getInstrumento(), fMFormulaMeterial.getLinea()) == null) {
@@ -86,7 +88,7 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return actualizado;
     }
 
-    public boolean doInsertaDatos(FMFormulaMeterial fMFormulaMeterial) {
+    public boolean doInsertaDatos(FMFormulaMaterial fMFormulaMeterial) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
@@ -138,7 +140,7 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public boolean doBorraDatos(FMFormulaMeterial fMFormulaMeterial) {
+    public boolean doBorraDatos(FMFormulaMaterial fMFormulaMeterial) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
@@ -165,7 +167,7 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public boolean doActualizaDatos(FMFormulaMeterial fMFormulaMeterial) {
+    public boolean doActualizaDatos(FMFormulaMaterial fMFormulaMeterial) {
         Connection connection = null;
         Boolean insertadoBoolean = false;
         try {
@@ -218,9 +220,9 @@ public class FMFormulaMaterialDAO extends ConexionDAO {
         return insertadoBoolean;
     }
 
-    public ArrayList<FMFormulaMeterial> getListaMateriales(FMFormula fMFormula) {
+    public ArrayList<FMFormulaMaterial> getListaMateriales(FMFormula fMFormula) {
         Connection connection = null;
-        ArrayList<FMFormulaMeterial> listaMaterial = new ArrayList<>();
+        ArrayList<FMFormulaMaterial> listaMaterial = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_formulas_mat WHERE formula=" + fMFormula.getNumero() + " "

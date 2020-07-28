@@ -8,6 +8,7 @@ package es.sacyl.hnss.dao;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaBibliografia;
 import es.sacyl.hnss.entidades.FMFormulaElabora;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,9 +23,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FMFormulaElaboraDAO extends ConexionDAO {
+public class FMFormulaElaboraDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FMFormulaElaboraDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FMFormulaElaboraDAO() {
         super();

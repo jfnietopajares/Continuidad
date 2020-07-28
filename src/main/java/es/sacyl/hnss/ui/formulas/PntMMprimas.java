@@ -8,6 +8,7 @@ package es.sacyl.hnss.ui.formulas;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
@@ -35,6 +36,7 @@ public class PntMMprimas extends PantallaMaster {
 
     public PntMMprimas() {
         super();
+        this.setWidth("1000px");
         doHazPantalla();
     }
 
@@ -68,16 +70,23 @@ public class PntMMprimas extends PantallaMaster {
         grid.addColumn(new NativeButtonRenderer<>("Entradas",
                 clickedItem -> {
                     FMMPrimasEntrada fMMPrimasEntrada = new FMMPrimasEntrada();
-                    fMMPrimasEntrada.setCod_inte(clickedItem.getCod_inte());
-                    fMMPrimasEntrada.setProducto(clickedItem.getProducto());
-                    doVentanaModalEntradas(new FrmFMMprimasEntradas(fMMPrimasEntrada));
+                    //   fMMPrimasEntrada.setCod_inte(clickedItem.getCod_inte());
+                    // fMMPrimasEntrada.setProducto(clickedItem.getProducto());
+                    doVentanaModal(new FrmFMMprimasEntradas(clickedItem));
                     //  Notification.show("Sin dato seleccionado" + grid.getSelectedItems().size());
                 }
         ));
-
+        grid.addColumn(new NativeButtonRenderer<>("Salidas",
+                clickedItem -> {
+                    //  FrmFMMprimasSalidas frmFMMprimasSalidas = new FrmFMMprimasSalidas();
+                    doVentanaModal(new FrmFMMprimasSalidas(clickedItem));
+                    //  Notification.show("Sin dato seleccionado" + grid.getSelectedItems().size());
+                }
+        ));
         doActualizaGrid();
     }
 
+    /*
     public void doVentanaModalEntradas(FrmFMMprimasEntradas frmFarmaFMMprimasEntradas) {
         frmFarmaFMMprimasEntradas.open();
         frmFarmaFMMprimasEntradas.addDialogCloseActionListener(e -> {
@@ -88,8 +97,8 @@ public class PntMMprimas extends PantallaMaster {
             doActualizaGrid();
         });
     }
-
-    public void doVentanaModal(FrmFMMprimas frmFarmaFMMPrimas) {
+     */
+    public void doVentanaModal(Dialog frmFarmaFMMPrimas) {
         frmFarmaFMMPrimas.open();
         frmFarmaFMMPrimas.addDialogCloseActionListener(e -> {
             doActualizaGrid();

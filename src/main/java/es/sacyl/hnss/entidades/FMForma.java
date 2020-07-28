@@ -5,11 +5,15 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JuanNieto
  */
-public class FMForma {
+public class FMForma implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String codigo;
     private String nombre;

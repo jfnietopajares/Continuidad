@@ -7,6 +7,7 @@ package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.entidades.Usuario;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +20,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author JuanNieto
  */
-public class FarmatoolsDAO extends ConexionDAO {
+public class FarmatoolsDAO extends ConexionDAO implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger(FarmatoolsDAO.class);
+    private static final long serialVersionUID = 1L;
 
     public FarmatoolsDAO() {
         super();

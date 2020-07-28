@@ -18,7 +18,7 @@ import com.vaadin.flow.data.validator.StringLengthValidator;
 import es.sacyl.hnss.dao.FMFormulaMaterialDAO;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaElabora;
-import es.sacyl.hnss.entidades.FMFormulaMeterial;
+import es.sacyl.hnss.entidades.FMFormulaMaterial;
 import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
@@ -47,13 +47,13 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
     private FMFormula fMFormula;
 
-    private FMFormulaMeterial fMFormulaMeterial = new FMFormulaMeterial();
+    private FMFormulaMaterial fMFormulaMeterial = new FMFormulaMaterial();
 
-    private Binder<FMFormulaMeterial> binder = new Binder();
+    private Binder<FMFormulaMaterial> binder = new Binder();
 
-    private Grid<FMFormulaMeterial> grid = new Grid<>();
+    private Grid<FMFormulaMaterial> grid = new Grid<>();
 
-    public FrmFMFormulasMaterial(FMFormulaMeterial fMFormulaMeterial, FMFormula fMFormula) {
+    public FrmFMFormulasMaterial(FMFormulaMaterial fMFormulaMeterial, FMFormula fMFormula) {
         super("1000px");
 
         this.fMFormulaMeterial = fMFormulaMeterial;
@@ -76,15 +76,15 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         //  this.setMaxWidth("900px");
 //        this.setSizeFull();
 
-        titulo.setText(FMFormulaMeterial.getLabelFrom());
+        titulo.setText(FMFormulaMaterial.getLabelFrom());
 
         contenedorDerecha.add(grid);
 
         contenedorFormulario.add(nombre, comboMaterial, linea, unidades, comentario);
 
         nombre.setValue(fMFormula.getNombre());
-        grid.addColumn(FMFormulaMeterial::getLinea).setHeader("Orden");
-        grid.addColumn(FMFormulaMeterial::getInstrumentoNombre).setHeader("Material").setWidth("300px");
+        grid.addColumn(FMFormulaMaterial::getLinea).setHeader("Orden");
+        grid.addColumn(FMFormulaMaterial::getInstrumentoNombre).setHeader("Material").setWidth("300px");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 
@@ -107,7 +107,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         formula.setValue(fMFormula.getNumero());
 
         comboMaterial.addValueChangeListener(e -> {
-            FMFormulaMeterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
+            FMFormulaMaterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
             if (fMFormulaMaterialExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
                 binder.readBean(fMFormulaMaterialExs);
@@ -116,7 +116,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         });
         linea.addBlurListener(e
                 -> {
-            FMFormulaMeterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
+            FMFormulaMaterial fMFormulaMaterialExs = new FMFormulaMaterialDAO().getPorCodigo(fMFormula, comboMaterial.getValue(), linea.getValue());
             if (fMFormulaMaterialExs != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
                 doControlEventosRecpera(fMFormulaMaterialExs);
@@ -126,26 +126,26 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
         binder.forField(comboMaterial)
                 .asRequired()
-                .bind(FMFormulaMeterial::getInstrumento, FMFormulaMeterial::setInstrumento);
+                .bind(FMFormulaMaterial::getInstrumento, FMFormulaMaterial::setInstrumento);
 
         binder.forField(linea)
                 .asRequired()
-                .bind(FMFormulaMeterial::getLinea, FMFormulaMeterial::setLinea);
+                .bind(FMFormulaMaterial::getLinea, FMFormulaMaterial::setLinea);
         binder.forField(unidades)
                 .asRequired()
-                .bind(FMFormulaMeterial::getUnidades, FMFormulaMeterial::setUnidades);
+                .bind(FMFormulaMaterial::getUnidades, FMFormulaMaterial::setUnidades);
         binder.forField(comentario)
                 .asRequired()
                 .withValidator(new StringLengthValidator(
                         FrmMaster.AVISODATOABLIGATORIO, 1, 50))
-                .bind(FMFormulaMeterial::getComentario, FMFormulaMeterial::setComentario);
+                .bind(FMFormulaMaterial::getComentario, FMFormulaMaterial::setComentario);
 
         binder.readBean(fMFormulaMeterial);
         comboMaterial.focus();
         doControlBotones(fMFormulaMeterial.getLinea());
     }
 
-    public void doControlEventosRecpera(FMFormulaMeterial fMFormulaMeterial) {
+    public void doControlEventosRecpera(FMFormulaMaterial fMFormulaMeterial) {
         this.fMFormulaMeterial = fMFormulaMeterial;
         binder.readBean(fMFormulaMeterial);
         comboMaterial.setEnabled(false);
@@ -155,7 +155,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
     }
 
     public void doControlEventosNuevo() {
-        fMFormulaMeterial = new FMFormulaMeterial();
+        fMFormulaMeterial = new FMFormulaMaterial();
         fMFormulaMeterial.setFormula(fMFormula.getNumero());
 
         binder.readBean(fMFormulaMeterial);
@@ -184,7 +184,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
             }
             doControlEventosNuevo();
         } else {
-            BinderValidationStatus<FMFormulaMeterial> validate = binder.validate();
+            BinderValidationStatus<FMFormulaMaterial> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
                     .stream().filter(BindingValidationStatus::isError)
                     .map(BindingValidationStatus::getMessage)

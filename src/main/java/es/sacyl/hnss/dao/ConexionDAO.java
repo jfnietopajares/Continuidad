@@ -5,6 +5,7 @@ package es.sacyl.hnss.dao;
  * @author 06551256M
  */
 import com.vaadin.flow.component.notification.Notification;
+import java.io.Serializable;
 import java.sql.Connection;
 
 import javax.naming.InitialContext;
@@ -19,7 +20,9 @@ import org.apache.logging.log4j.Logger;
  * @author JuanNieto
  * @version 23.5.2018
  */
-public class ConexionDAO {
+public class ConexionDAO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private DataSource dataSource = null;
 

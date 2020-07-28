@@ -17,6 +17,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.ui.formulas.FrmFMFormulaFabricar;
 import es.sacyl.hnss.ui.formulas.PntFMFormas;
 import es.sacyl.hnss.ui.formulas.PntFMFormulas;
 import es.sacyl.hnss.ui.formulas.PntFMInstumentos;
@@ -34,7 +35,6 @@ public class Menu extends MenuBar {
 
     public Menu(HorizontalLayout contenedor) {
         //MenuBar menuBar = new MenuBar();
-
         MenuItem formulas = this.addItem("Fórmulas");
         MenuItem equivalentes = this.addItem("Equivalenes");
         MenuItem oncologia = this.addItem("Oncología");

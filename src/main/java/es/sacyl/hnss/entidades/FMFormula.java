@@ -5,6 +5,7 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public class FMFormula {
+public class FMFormula implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer numero;
     private String nombre;
@@ -42,6 +45,9 @@ public class FMFormula {
     private String observaciones1;
 
     private ArrayList<FMFormulaBibliografia> lisaBibliografias = new ArrayList<>();
+    private ArrayList<FMFormulaCompo> lisaComposiciones = new ArrayList<>();
+    private ArrayList<FMFormulaElabora> lisaElaboraciones = new ArrayList<>();
+    private ArrayList<FMFormulaMaterial> lisaMaterial = new ArrayList<>();
 
     public static final String labelFrom = "Fórmulas magistrales  ";
 
@@ -255,6 +261,30 @@ public class FMFormula {
 
     public void setLisaBibliografias(ArrayList<FMFormulaBibliografia> lisaBibliografias) {
         this.lisaBibliografias = lisaBibliografias;
+    }
+
+    public ArrayList<FMFormulaCompo> getLisaComposiciones() {
+        return lisaComposiciones;
+    }
+
+    public void setLisaComposiciones(ArrayList<FMFormulaCompo> lisaComposiciones) {
+        this.lisaComposiciones = lisaComposiciones;
+    }
+
+    public ArrayList<FMFormulaElabora> getLisaElaboraciones() {
+        return lisaElaboraciones;
+    }
+
+    public void setLisaElaboraciones(ArrayList<FMFormulaElabora> lisaElaboraciones) {
+        this.lisaElaboraciones = lisaElaboraciones;
+    }
+
+    public ArrayList<FMFormulaMaterial> getLisaMaterial() {
+        return lisaMaterial;
+    }
+
+    public void setLisaMaterial(ArrayList<FMFormulaMaterial> lisaMaterial) {
+        this.lisaMaterial = lisaMaterial;
     }
 
 }

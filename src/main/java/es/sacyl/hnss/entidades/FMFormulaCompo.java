@@ -5,13 +5,16 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  *
  * @author JuanNieto
  */
-public class FMFormulaCompo {
+public class FMFormulaCompo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer formula;
     private Integer orden;

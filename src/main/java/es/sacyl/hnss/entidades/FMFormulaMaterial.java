@@ -5,11 +5,15 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JuanNieto
  */
-public class FMFormulaMeterial {
+public class FMFormulaMaterial implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer formula;
     private Integer linea;
@@ -19,7 +23,7 @@ public class FMFormulaMeterial {
 
     public static final String labelFrom = "Material para la elaboración de la fórmula ";
 
-    public FMFormulaMeterial() {
+    public FMFormulaMaterial() {
 
     }
 

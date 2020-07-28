@@ -1,26 +1,58 @@
 package es.sacyl.hnss;
 
+import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.BodySize;
+import com.vaadin.flow.component.page.Inline;
+import com.vaadin.flow.component.page.Inline.Wrapping;
+import com.vaadin.flow.component.page.Meta;
+import com.vaadin.flow.component.page.TargetElement;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.DefaultErrorHandler;
+import com.vaadin.flow.server.ErrorEvent;
+import com.vaadin.flow.server.InitialPageSettings.Position;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.VaadinServletResponse;
+import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.shared.communication.PushMode;
+import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import es.sacyl.hnss.dao.ConexionDAO;
 import es.sacyl.hnss.ui.Menu;
+import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * The main view contains a button and a click listener.
  */
+@Viewport("width=device-width, initial-scale=1")
+@PageTitle("Servicio de Farmacia. Complejo Asistencial de Ávila")
+@BodySize(height = "100vh", width = "100vw")
+@Meta(name = "author", content = "Juan")
+
+//@Inline(wrapping = Wrapping.AUTOMATIC,
+//       position = Position.APPEND,
+//    target = TargetElement.BODY,
+//    value = "custom.html")
+//@Push(value = PushMode.MANUAL, transport = Transport.WEBSOCKET)
 @Route
 @PWA(name = "farmacia", shortName = "farmacia")
-@JsModule("@vaadin/vaadin-lumo-styles/presets/sizing.js")
+//@JsModule("@vaadin/vaadin-lumo-styles/presets/sizing.js")
 @Theme(value = Lumo.class)
 
 //@Theme(value = Lumo.class)

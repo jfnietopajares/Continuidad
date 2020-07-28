@@ -1,12 +1,15 @@
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  *
  * @author JuanNieto
  */
-public class FMMPrimasEntrada extends FMMPrimas {
+public class FMMPrimasEntrada extends FMMPrimas implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private LocalDate fecha;
     private Integer registro;

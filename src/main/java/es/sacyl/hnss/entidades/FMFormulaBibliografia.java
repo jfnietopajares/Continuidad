@@ -5,11 +5,15 @@
  */
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JuanNieto
  */
-public class FMFormulaBibliografia {
+public class FMFormulaBibliografia implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer formula;
     private Integer orden;

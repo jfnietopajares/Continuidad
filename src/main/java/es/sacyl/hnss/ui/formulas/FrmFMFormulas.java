@@ -6,16 +6,12 @@
 package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -24,21 +20,27 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.theme.lumo.Lumo;
-import es.sacyl.hnss.dao.FMFormaDAO;
+import com.vaadin.server.StreamResource.StreamSource;
+import es.sacyl.hnss.dao.FMFormulaBiblioDAO;
+import es.sacyl.hnss.dao.FMFormulaCompoDAO;
+import es.sacyl.hnss.dao.FMFormulaElaboraDAO;
+import es.sacyl.hnss.dao.FMFormulaMaterialDAO;
 import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
-import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.listados.FMFormulaFicha;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.EmbeddedPdfDocument;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
-import java.sql.Blob;
-import java.time.LocalDate;
+import es.sacyl.hnss.utilidades.Constantes;
+import es.sacyl.hnss.utilidades.Utilidades;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,7 +68,7 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     private TextField caducidad = ObjetosComunes.getTextField("Caducidad", "Caducidad", 15, "150px");
 
-    private TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "60px");
+    private TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "60px", "100px", "100px");
 
     private TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 15, "150px");
 
@@ -74,7 +76,7 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     private ComboBox<FMFormulaAutoriza> autorizacion = ObjetosComunes.getComboAutoriza("Autoización", null);
 
-    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "60px");
+    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "60px", "100px", "100px");
 
     private TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
 
@@ -105,6 +107,10 @@ public class FrmFMFormulas extends FrmMasterLista {
     private Button elaboración = ObjetosComunes.getBoton("Elabor", null, VaadinIcon.COGS.create());
     private Button material = ObjetosComunes.getBoton("Material", null, VaadinIcon.WRENCH.create());
 
+    String nombrePdfAbsoluto = null;
+
+    String nombrePdfRelativo = null;
+
     public FrmFMFormulas() {
         super("1200px");
         doHazFormulario();
@@ -113,19 +119,21 @@ public class FrmFMFormulas extends FrmMasterLista {
     public FrmFMFormulas(FMFormula fMFormula) {
         super("1200px");
         this.fMFormula = fMFormula;
+
+        this.fMFormula.setLisaBibliografias(new FMFormulaBiblioDAO().getListaBiblio(fMFormula));
+        this.fMFormula.setLisaComposiciones(new FMFormulaCompoDAO().getListaCompos(fMFormula));
+        this.fMFormula.setLisaElaboraciones(new FMFormulaElaboraDAO().getListaElabora(fMFormula));
+        this.fMFormula.setLisaMaterial(new FMFormulaMaterialDAO().getListaMateriales(fMFormula));
+        nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf";
+        nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf";
+        //  nombrePdf = "./" + fMFormula.getNombre().replace(" ", "") + ".pdf";
+        InputStream is = new FMFormulaFicha(fMFormula).getStream();
+        File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
         doHazFormulario();
     }
 
     public void doHazFormulario() {
-        //  this.removeAll();
-        // this.add(contenedorFormula);
-
-        //  contenedorFormula.add(contenedorIzquierda, contenedorDerecha);
-        //   contenedorIzquierda.removeAll();
-        //  contenedorIzquierda.add(contenedorTitulo, contenedorBotones, contenedorBotones1, contenedorFormulario);
-        // contenedorBotones1.add(blibliografia, composicion, elaboración, material);
         contenedorBotones.add(blibliografia, composicion, elaboración, material);
-        contenedorDerecha.add(new Label("aadfadfaafa"));
 
         if (fMFormula.getNumero() == null) {
             blibliografia.setEnabled(false);
@@ -290,13 +298,35 @@ public class FrmFMFormulas extends FrmMasterLista {
     }
 
     public void doVerPdf() {
-        contenedorDerecha.add(new EmbeddedPdfDocument("pdf.pdf"));
+        if (nombrePdfRelativo != null) {
+            contenedorDerecha.add(new EmbeddedPdfDocument(nombrePdfRelativo));
+        }
         /*
-        contenedorDerecha.add(new EmbeddedPdfDocument(new StreamResource("book-of-vaadin.pdf", () -> {
+        File fichero = new File("pdf.pdf");
+        Embedded pdf = new Embedded("", new FileResource(fichero));
+        pdf.setMimeType("application/pdf");
+        pdf.setType(Embedded.TYPE_BROWSER);
+        pdf.setWidth("750px");
+        pdf.setHeight("610px");
 
-             return new FMFormulaFicha().getStream();
-        })));
+        WTPdfViewer pdfViewer = new WTPdfViewer();
          */
+    }
+
+    class InputStreamSource implements StreamSource {
+
+        private final InputStream data;
+
+        public InputStreamSource(InputStream data) {
+            super();
+            this.data = data;
+        }
+
+        @Override
+        public InputStream getStream() {
+            return data;
+        }
+
     }
 
     public void doVentanaModal(FrmMasterLista frmMasterLista) {

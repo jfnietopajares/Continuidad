@@ -8,8 +8,8 @@
         </Console>
         <!--  filename="/opt/tomcat/logs/lopd.log"  -->
 
-        <RollingFile name="RollingFile" filename="logs/farmacia.log"
-                     filepattern="${logPath}/%d{YYYYMMddHHmmss}-co.log">
+        <RollingFile name="RollingFile" filename="/Users/JuanNieto/Applications/apache-tomcat-9.0.10/logs/farmacia.logs"
+                     filepattern="${logPath}/%d{YYYYMMddHHmmss}-farmacia.log">
             <PatternLayout
                 pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
 
@@ -21,10 +21,9 @@
 
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console" />
             <AppenderRef ref="RollingFile" />
         </Root>
-  
     </Loggers>
 </Configuration>

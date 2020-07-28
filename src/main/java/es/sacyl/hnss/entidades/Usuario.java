@@ -1,10 +1,14 @@
 package es.sacyl.hnss.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JuanNieto
  */
-public class Usuario {
+public class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String dni;
     private String nombre;
