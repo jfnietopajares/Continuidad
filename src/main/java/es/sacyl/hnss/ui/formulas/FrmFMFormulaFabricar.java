@@ -50,7 +50,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
     private final IntegerField caducidad = ObjetosComunes.getIntegerField("Caducidad");
 
     //  private final IntegerField registro = ObjetosComunes.getIntegerField("Registro");
-    private final TextField lote = ObjetosComunes.getTextField("Lote", "lote", 50, "150px");
+    private final TextField lote = ObjetosComunes.getTextField("Lote", "lote", 5, "150px");
 
     private final ComboBox<String> ccalidad = ObjetosComunes.getComboToString("C.Calidad", null, ObjetosComunes.SINO, "50px");
 
@@ -64,9 +64,9 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
 
     private final TextField ndescripcion = ObjetosComunes.getTextField("N.Prescripción", "n prest", 50, "150px");
 
-    private final TextArea observaciones = ObjetosComunes.getTextArea("observaciones", "observaciones", 50, "150px", "150px", null, null);
+    private final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 50, "150px", "150px", null, null);
 
-    private final IntegerField uni_dispen = ObjetosComunes.getIntegerField("uni_dispen");
+    private final IntegerField uni_dispen = ObjetosComunes.getIntegerField("Unidades Dispensadas");
 
     private FMFormulaFrabicar fMFormulaFrabicar = new FMFormulaFrabicar();
 
@@ -173,6 +173,8 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
 
         grid.addColumn(FMFormulaFrabicar::getNumero).setHeader("Orden");
         grid.addColumn(FMFormulaFrabicar::getFecha).setHeader("Fecha");
+        grid.addColumn(FMFormulaFrabicar::getUnidades).setHeader("Unidades");
+        grid.addColumn(FMFormulaFrabicar::getFormulas).setHeader("Fórmulas");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 

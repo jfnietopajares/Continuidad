@@ -173,6 +173,7 @@ public class FrmFMFormulas extends FrmMasterLista {
                 new FormLayout.ResponsiveStep("100px", 4));
 
         contenedorFormulario.setMaxWidth("1000px");
+
         contenedorFormulario.add(numero, nombre, comboPedirWeb);
         contenedorFormulario.setColspan(nombre, 2);
 

@@ -39,9 +39,8 @@ import java.util.stream.Collectors;
  */
 public class FrmFMMprimasEntradas extends FrmMaster {
 
-    private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
-    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
-
+    //   private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
+    //  private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
     private DatePicker fecha = ObjetosComunes.getDatePicker("Fecha entrada", null, LocalDate.now());
     private IntegerField registro = ObjetosComunes.getIntegerField("Registro");
     private IntegerField envases = ObjetosComunes.getIntegerField("Nº Envases");
@@ -74,8 +73,8 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         this.fMMPrimasEntrada = fMMPrimasEntrada;
 
         this.fMMPrimasEntradaAnterior = fMMPrimasEntrada;
-        cod_inte.setValue(fMMPrimasEntrada.getCod_inte());
-        producto.setValue(fMMPrimasEntrada.getProducto());
+        //      cod_inte.setValue(fMMPrimasEntrada.getCod_inte());
+        //    producto.setValue(fMMPrimasEntrada.getProducto());
 
         doHazFormulario();
     }
@@ -88,8 +87,8 @@ public class FrmFMMprimasEntradas extends FrmMaster {
             //  this.fMMPrimasEntrada.setDatosMprima(farmaFMMPrimas);
             //   this.fMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
             //  this.fMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
-            cod_inte.setValue(fMMPrimasEntrada.getCod_inte());
-            producto.setValue(fMMPrimasEntrada.getProducto());
+            //       cod_inte.setValue(fMMPrimasEntrada.getCod_inte());
+            //     producto.setValue(fMMPrimasEntrada.getProducto());
         }
         doHazFormulario();
     }
@@ -97,24 +96,22 @@ public class FrmFMMprimasEntradas extends FrmMaster {
     public void doFormatoCodigoProducto() {
         if (fMMPrimasEntrada == null) {
             fMMPrimasEntrada = new FMMPrimasEntrada();
-            cod_inte.setEnabled(true);
-            cod_inte.focus();
+            //     cod_inte.setEnabled(true);
+            //   cod_inte.focus();
         } else {
-            cod_inte.setReadOnly(true);
-            producto.setReadOnly(true);
+            //  cod_inte.setReadOnly(true);
+            // producto.setReadOnly(true);
 
             comboMPrimas.setReadOnly(true);
 
             comboMPrimas.setValue(fMMPrimasEntrada);
 
-            cod_inte.getStyle().set("color", "red");
-            cod_inte.getStyle().set("fontWeight", "bold");
-            cod_inte.getStyle().set("font-weight", "bold");
-
-            producto.getStyle().set("color", "red");
-            producto.getStyle().set("fontWeight", "bold");
-            producto.getStyle().set("font-weight", "bold");
-
+            //cod_inte.getStyle().set("color", "red");
+            //cod_inte.getStyle().set("fontWeight", "bold");
+            //cod_inte.getStyle().set("font-weight", "bold");
+            //producto.getStyle().set("color", "red");
+            //producto.getStyle().set("fontWeight", "bold");
+            //producto.getStyle().set("font-weight", "bold");
             numero.getStyle().set("color", "red");
             numero.getStyle().set("fontWeight", "bold");
             numero.getStyle().set("font-weight", "bold");
@@ -137,8 +134,8 @@ public class FrmFMMprimasEntradas extends FrmMaster {
 
         contenedorFormulario.setMaxWidth("600px");
         contenedorFormulario.add(comboMPrimas, 3);
-        contenedorFormulario.add(cod_inte, producto);
-        contenedorFormulario.setColspan(producto, 2);
+        //  contenedorFormulario.add(cod_inte, producto);
+        // contenedorFormulario.setColspan(producto, 2);
         contenedorFormulario.add(numero, fecha, registro);
         contenedorFormulario.add(envases, lote, verificacion);
         contenedorFormulario.add(caducidad);
@@ -146,18 +143,19 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         contenedorFormulario.add(farmaceutico, 3);
 
         comboMPrimas.addValueChangeListener(e -> {
-            cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
-            producto.setValue(comboMPrimas.getValue().getProducto());
+            //   cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
+            //  producto.setValue(comboMPrimas.getValue().getProducto());
             fMMPrimasEntrada.setCod_inte(comboMPrimas.getValue().getCod_inte());
             fMMPrimasEntrada.setProducto(comboMPrimas.getValue().getProducto());
             numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
             fecha.setValue(LocalDate.now());
             registro.focus();
-            cod_inte.setReadOnly(true);
-            producto.setReadOnly(true);
+            // cod_inte.setReadOnly(true);
+            //producto.setReadOnly(true);
         });
-        cod_inte.setWidth("25px");
-        cod_inte.addBlurListener(e -> {
+        // cod_inte.setWidth("25px");
+        /*
+       cod_inte.addBlurListener(e -> {
             if (cod_inte.isEmpty() && comboMPrimas.getValue() == null) {
                 Notification.show("Código obligatorio");
                 comboMPrimas.focus();
@@ -178,6 +176,8 @@ public class FrmFMMprimasEntradas extends FrmMaster {
                 }
             }
         });
+         */
+ /*
         numero.addBlurListener(e -> {
             FMMPrimasEntrada fMMPrimasEntradaExiste = new FMMprimasEntraDAO().getPorMPNumero(cod_inte.getValue(), numero.getValue());
             if (fMMPrimasEntradaExiste != null) {
@@ -186,7 +186,7 @@ public class FrmFMMprimasEntradas extends FrmMaster {
                 binder.readBean(fMMPrimasEntrada);
             }
         });
-
+         */
         binder.forField(numero)
                 .asRequired()
                 .bind(FMMPrimasEntrada::getNumero, FMMPrimasEntrada::setNumero);

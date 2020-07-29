@@ -52,6 +52,7 @@ public class Menu extends MenuBar {
             contenedor.removeAll();
             contenedor.add((new PntFMFormas()));
         });
+        /*
         MenuItem materiasPrimas = formulasSubMenu.addItem("Materias primas");
 
         SubMenu materiasSubMenu = materiasPrimas.getSubMenu();
@@ -65,12 +66,15 @@ public class Menu extends MenuBar {
             contenedor.removeAll();
             contenedor.add((new PntFMMprimasEntradas()));
         });
+           MenuItem salidas = materiasSubMenu.addItem("Salidas");
+         */
 
-        formulasSubMenu.addItem("Materias primas definición", e -> {
+        formulasSubMenu.addItem("Materias primas ", e -> {
             contenedor.removeAll();
             contenedor.add((new PntMMprimas()));
         });
 
+        /*
         formulasSubMenu.addItem("Materias primas entradas", e -> {
             contenedor.removeAll();
             contenedor.add((new PntFMMprimasEntradas()));
@@ -80,7 +84,7 @@ public class Menu extends MenuBar {
             contenedor.removeAll();
             contenedor.add((new PntFMMprimasSalidas()));
         });
-
+         */
         formulasSubMenu.addItem("Material e instrumental", e -> {
             contenedor.removeAll();
             contenedor.add((new PntFMInstumentos()));
@@ -90,8 +94,6 @@ public class Menu extends MenuBar {
             contenedor.add((new PntFMViasAdm()));
 
         });
-
-        MenuItem salidas = materiasSubMenu.addItem("Salidas");
 
     }
 

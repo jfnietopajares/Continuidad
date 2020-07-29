@@ -32,17 +32,15 @@ import java.util.stream.Collectors;
  */
 public class FrmFMMprimasSalidas extends FrmMaster {
 
-    private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
-
-    private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
-
+    //   private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
+    // private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
     private final IntegerField numero = ObjetosComunes.getIntegerField("Número");
 
     private final IntegerField cantidad = ObjetosComunes.getIntegerField("Cantidad");
 
     private final TextField comentario1 = ObjetosComunes.getTextField("Comentario", "comentario", 50, "100px");
 
-    private final DatePicker fecha = ObjetosComunes.getDatePicker("Fecha salidan", null, LocalDate.now());
+    private final DatePicker fecha = ObjetosComunes.getDatePicker("Fecha salida", null, LocalDate.now());
 
     private FMMprimasSalida fMMprimasSalida = new FMMprimasSalida();
 
@@ -67,37 +65,35 @@ public class FrmFMMprimasSalidas extends FrmMaster {
     public FrmFMMprimasSalidas(FMMPrimas fMMPrimas) {
         super();
         if (fMMPrimas != null) {
-            this.fMMprimasSalida = new FMMprimasSalida();
-            //  this.fMMprimasSalida.setDatosMprima(fMMPrimas);
-            // this.fMMprimasSalida.setCod_inte(fMMPrimas.getCod_inte());
-            //this.fMMprimasSalida.setProducto(fMMPrimas.getProducto());
-
-            cod_inte.setValue(fMMprimasSalida.getCod_inte());
-            producto.setValue(fMMprimasSalida.getProducto());
+            this.fMMprimasSalida = new FMMprimasSalida(fMMPrimas);
+            comboMPrimas.setValue(fMMPrimas);
+            comboMPrimas.setReadOnly(true);
         }
         doHazFormulario();
     }
 
     public void doFormatoCodigoProducto() {
-        if (fMMprimasSalida == null) {
-            fMMprimasSalida = new FMMprimasSalida();
+        if (fMMprimasSalida == null || fMMprimasSalida.getNumero() == null) {
+            // fMMprimasSalida = new FMMprimasSalida();
+            /*
             cod_inte.setEnabled(true);
             cod_inte.focus();
+             */
         } else {
+            /*
             cod_inte.setReadOnly(true);
             producto.setReadOnly(true);
-
-            comboMPrimas.setReadOnly(true);
-
-            comboMPrimas.setValue(fMMprimasSalida);
-
-            cod_inte.getStyle().set("color", "red");
+  cod_inte.getStyle().set("color", "red");
             cod_inte.getStyle().set("fontWeight", "bold");
             cod_inte.getStyle().set("font-weight", "bold");
 
             producto.getStyle().set("color", "red");
             producto.getStyle().set("fontWeight", "bold");
             producto.getStyle().set("font-weight", "bold");
+             */
+            comboMPrimas.setReadOnly(true);
+
+            comboMPrimas.setValue(fMMprimasSalida);
 
             numero.getStyle().set("color", "red");
             numero.getStyle().set("fontWeight", "bold");
@@ -121,16 +117,15 @@ public class FrmFMMprimasSalidas extends FrmMaster {
 
         contenedorFormulario.setMaxWidth("600px");
         contenedorFormulario.add(comboMPrimas, 3);
-        contenedorFormulario.add(cod_inte, producto);
-        contenedorFormulario.setColspan(producto, 2);
+        //   contenedorFormulario.add(cod_inte, producto);
+        //  contenedorFormulario.setColspan(producto, 2);
         contenedorFormulario.add(numero, fecha);
         contenedorFormulario.add(cantidad);
         contenedorFormulario.add(comentario1, 3);
 
+        /*
         comboMPrimas.addValueChangeListener(e -> {
-            cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
-            producto.setValue(comboMPrimas.getValue().getProducto());
-            fMMprimasSalida.setCod_inte(comboMPrimas.getValue().getCod_inte());
+        //    cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
             fMMprimasSalida.setProducto(comboMPrimas.getValue().getProducto());
             numero.setValue(new FMMprimasSalidaDAO().getNumeroSiguiente(fMMprimasSalida));
             fecha.setValue(LocalDate.now());
@@ -160,6 +155,7 @@ public class FrmFMMprimasSalidas extends FrmMaster {
                 }
             }
         });
+
         numero.addBlurListener(e -> {
             FMMprimasSalida fMMPrimasSalidaExiste = new FMMprimasSalidaDAO().getPorMPNumero(cod_inte.getValue(), numero.getValue());
             if (fMMPrimasSalidaExiste != null) {
@@ -168,7 +164,7 @@ public class FrmFMMprimasSalidas extends FrmMaster {
                 binder.readBean(fMMprimasSalida);
             }
         });
-
+         */
         binder.forField(numero)
                 .asRequired()
                 .bind(FMMprimasSalida::getNumero, FMMprimasSalida::setNumero);
