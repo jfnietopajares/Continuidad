@@ -21,7 +21,7 @@ import es.sacyl.hnss.ui.formulas.FrmFMFormulaFabricar;
 import es.sacyl.hnss.ui.formulas.PntFMFormas;
 import es.sacyl.hnss.ui.formulas.PntFMFormulas;
 import es.sacyl.hnss.ui.formulas.PntFMInstumentos;
-import es.sacyl.hnss.ui.formulas.PntMMprimas;
+import es.sacyl.hnss.ui.formulas.PntFMprimas;
 import es.sacyl.hnss.ui.formulas.PntFMMprimasEntradas;
 import es.sacyl.hnss.ui.formulas.PntFMMprimasSalidas;
 
@@ -59,7 +59,7 @@ public class Menu extends MenuBar {
         MenuItem definicion = materiasSubMenu.addItem("Definición");
         definicion.addClickListener(e -> {
             contenedor.removeAll();
-            contenedor.add((new PntMMprimas()));
+            contenedor.add((new PntFMprimas()));
         });
         MenuItem entradas = materiasSubMenu.addItem("Entradas");
         entradas.addClickListener(e -> {
@@ -71,7 +71,7 @@ public class Menu extends MenuBar {
 
         formulasSubMenu.addItem("Materias primas ", e -> {
             contenedor.removeAll();
-            contenedor.add((new PntMMprimas()));
+            contenedor.add((new PntFMprimas()));
         });
 
         /*

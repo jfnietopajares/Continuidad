@@ -24,7 +24,7 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public class PntMMprimas extends PantallaMaster {
+public class PntFMprimas extends PantallaMaster {
 
     private FMMPrimas fMMPrimas = new FMMPrimas();
 
@@ -34,7 +34,7 @@ public class PntMMprimas extends PantallaMaster {
 
     private FrmFMMprimas frmFarmaFMMPrimas;
 
-    public PntMMprimas() {
+    public PntFMprimas() {
         super();
         this.setWidth("1000px");
         doHazPantalla();

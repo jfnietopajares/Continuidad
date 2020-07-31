@@ -64,7 +64,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
 
     private final TextField ndescripcion = ObjetosComunes.getTextField("N.Prescripción", "n prest", 50, "150px");
 
-    private final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 50, "150px", "150px", null, null);
+    private final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", 50, "150px", "90px", null, null);
 
     private final IntegerField uni_dispen = ObjetosComunes.getIntegerField("Unidades Dispensadas");
 
@@ -112,7 +112,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
             FMFormulaFrabicar fMFormulaFrabicarExiste = new FMFormulaFrabicarDAO().getPorCodigo(numero.getValue());
             if (fMFormulaFrabicarExiste != null) {
                 (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                doControlEventosRecpera(fMFormulaFrabicarExiste);
+                doControlBotones(fMFormulaFrabicarExiste);
             }
         }
         );
@@ -182,18 +182,36 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
 
         grid.addItemClickListener(event
                 -> {
-            fMFormulaFrabicar = event.getItem();
-            doControlEventosRecpera(fMFormulaFrabicar);
+            doControlBotones(event.getItem());
         }
         );
         doActualizaGrid();
-        doControlEventosRecpera(null);
+        doControlBotones(null);
     }
 
     public void doActualizaGrid() {
         grid.setItems(new FMFormulaFrabicarDAO().getListaFMFormulaFrabicar(comboFormula.getValue()));
     }
 
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+        if (obj == null) {
+            fMFormulaFrabicar = new FMFormulaFrabicar();
+            fMFormulaFrabicar.setFormula(fMFormula);
+            binder.readBean(fMFormulaFrabicar);
+            numero.setValue(new FMFormulaFrabicarDAO().getSiguienteNumero(fMFormula));
+            fecha.setValue(LocalDate.now());
+            ndescripcion.focus();
+        } else {
+            this.fMFormulaFrabicar = (FMFormulaFrabicar) obj;
+            binder.readBean(fMFormulaFrabicar);
+            numero.setEnabled(false);
+            medico.focus();
+        }
+    }
+
+    /*
     public void doControlEventosRecpera(FMFormulaFrabicar fMFormulaFrabicar) {
         if (fMFormulaFrabicar == null) {
             fMFormulaFrabicar = new FMFormulaFrabicar();
@@ -212,7 +230,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
         }
         doActualizaGrid();
     }
-
+     */
     public void doGrabar() {
         if (binder.writeBeanIfValid(fMFormulaFrabicar)) {
 
@@ -223,7 +241,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-            doControlEventosRecpera(null);
+            doControlBotones(null);
         } else {
             BinderValidationStatus<FMFormulaFrabicar> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()

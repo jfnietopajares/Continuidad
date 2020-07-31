@@ -85,6 +85,8 @@ public abstract class FrmMasterLista extends Dialog {
 
     public abstract void doAyuda();
 
+       public abstract void doActualizaGrid();
+       
     public void doCancelar() {
         this.close();
     }

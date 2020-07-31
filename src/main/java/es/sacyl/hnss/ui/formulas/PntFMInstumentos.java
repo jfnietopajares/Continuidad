@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.theme.lumo.Lumo;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMInstrumento;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public class PntFMInstumentos extends PantallaMaster {
+public final class PntFMInstumentos extends PantallaMaster {
 
     private FMInstrumento fMInstrumento = new FMInstrumento();
 
@@ -33,7 +34,6 @@ public class PntFMInstumentos extends PantallaMaster {
     ArrayList<FMInstrumento> listaFarmaFMInstrumento = new ArrayList<>();
 
     public PntFMInstumentos() {
-
         super();
         doHazPantalla();
     }
@@ -47,6 +47,7 @@ public class PntFMInstumentos extends PantallaMaster {
     }
 
     public void doHazPantalla() {
+        this.setClassName(Lumo.DARK);
         titulo.setText(fMInstrumento.getLabelFrom());
 
         getContenedorGrid().add(grid);
@@ -60,13 +61,11 @@ public class PntFMInstumentos extends PantallaMaster {
         grid.setColumns("codigo", "nombre");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
             frmFMInstrumentos = new FrmFMInstrumentos(event.getItem());
             doVentanaModal(frmFMInstrumentos);
-            // doActualizaGrid();
         }
         );
         doActualizaGrid();

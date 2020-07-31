@@ -26,17 +26,17 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMInstrumentos extends FrmMaster {
+public final class FrmFMInstrumentos extends FrmMaster {
 
-    private TextField codigo = ObjetosComunes.getTextField("Código", "codigo", 15, "50px");
+    private final TextField codigo = ObjetosComunes.getTextField("Código", "codigo", 15, "50px");
 
-    private TextField nombre = ObjetosComunes.getTextField("Nombre", "descripción", 50, "150px");
+    private final TextField nombre = ObjetosComunes.getTextField("Nombre", "descripción", 50, "150px");
 
     private FMInstrumento fMInstrumento = new FMInstrumento();
 
-    private Binder<FMInstrumento> binder = new Binder<>();
+    private final Binder<FMInstrumento> binder = new Binder<>();
 
-    private Grid<FMInstrumento> grid = null;
+    private final Grid<FMInstrumento> grid = null;
 
     public FrmFMInstrumentos() {
         super();
@@ -57,11 +57,6 @@ public class FrmFMInstrumentos extends FrmMaster {
 
         codigo.setWidth("50px");
         nombre.setWidth("250px");
-        if (fMInstrumento == null || fMInstrumento.getCodigo() == null) {
-            codigo.setEnabled(true);
-        } else {
-            codigo.setEnabled(false);
-        }
 
         codigo.addBlurListener(e -> {
             FMInstrumento fMInstrumentosExiste = new FMInstrumentosDAO().getPorCodigo(codigo.getValue());
@@ -85,6 +80,35 @@ public class FrmFMInstrumentos extends FrmMaster {
 
         binder.readBean(fMInstrumento);
         doControlBotones(fMInstrumento.getCodigo());
+    }
+
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+        if (obj == null) {
+            codigo.setEnabled(true);
+            codigo.focus();
+            /*
+            codigo.getStyle().set("color", "red");
+            codigo.getStyle().set("fontWeight", "bold");
+            codigo.getStyle().set("font-weight", "bold");
+             */
+        } else {
+            // codigo.setEnabled(false);
+            codigo.setReadOnly(true);
+            nombre.focus();
+            /*
+            .v-textfield-visible.v-readonly,
+.v-textfield-visible.v-disabled{
+    border: 1px solid #b6b6b6;
+    border-top-color: #9d9d9d;
+    border-bottom-color: #d6d6d6;
+    border-right-color: #d6d6d6;
+    color: #464f52;
+    opacity: 1.0;
+}
+             */
+        }
     }
 
     public void doGrabar() {

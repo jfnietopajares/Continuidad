@@ -11,6 +11,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
@@ -21,13 +23,16 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
+import es.sacyl.hnss.dao.FMFormulaFrabicarDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMMprimasEntraDAO;
+import es.sacyl.hnss.entidades.FMFormulaFrabicar;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
+import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,7 +42,7 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMMprimasEntradas extends FrmMaster {
+public class FrmFMMprimasEntradas extends FrmMasterLista {
 
     //   private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
     //  private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
@@ -55,13 +60,17 @@ public class FrmFMMprimasEntradas extends FrmMaster {
 
     private IntegerField numero = ObjetosComunes.getIntegerField("Número");
 
-    private FMMPrimasEntrada fMMPrimasEntrada = null;
+    private FMMPrimas fMMPrimas = new FMMPrimas();
+
+    private FMMPrimasEntrada fMMPrimasEntrada = new FMMPrimasEntrada();
 
     private FMMPrimasEntrada fMMPrimasEntradaAnterior = new FMMPrimasEntrada();
 
     private ComboBox<FMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas(null, null);
 
     private Binder<FMMPrimasEntrada> binder = new Binder<>();
+
+    private Grid<FMMPrimasEntrada> grid = new Grid<>();
 
     public FrmFMMprimasEntradas() {
         super();
@@ -79,52 +88,16 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         doHazFormulario();
     }
 
-    public FrmFMMprimasEntradas(FMMPrimas farmaFMMPrimas) {
+    public FrmFMMprimasEntradas(FMMPrimas fMMPrimas) {
         super();
-        if (farmaFMMPrimas != null) {
-            this.fMMPrimasEntrada = new FMMPrimasEntrada(farmaFMMPrimas);
-
-            //  this.fMMPrimasEntrada.setDatosMprima(farmaFMMPrimas);
-            //   this.fMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
-            //  this.fMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
-            //       cod_inte.setValue(fMMPrimasEntrada.getCod_inte());
-            //     producto.setValue(fMMPrimasEntrada.getProducto());
+        if (fMMPrimas != null) {
+            this.fMMPrimas = fMMPrimas;
+            this.fMMPrimasEntrada = new FMMPrimasEntrada(fMMPrimas);
         }
         doHazFormulario();
     }
 
-    public void doFormatoCodigoProducto() {
-        if (fMMPrimasEntrada == null) {
-            fMMPrimasEntrada = new FMMPrimasEntrada();
-            //     cod_inte.setEnabled(true);
-            //   cod_inte.focus();
-        } else {
-            //  cod_inte.setReadOnly(true);
-            // producto.setReadOnly(true);
-
-            comboMPrimas.setReadOnly(true);
-
-            comboMPrimas.setValue(fMMPrimasEntrada);
-
-            //cod_inte.getStyle().set("color", "red");
-            //cod_inte.getStyle().set("fontWeight", "bold");
-            //cod_inte.getStyle().set("font-weight", "bold");
-            //producto.getStyle().set("color", "red");
-            //producto.getStyle().set("fontWeight", "bold");
-            //producto.getStyle().set("font-weight", "bold");
-            numero.getStyle().set("color", "red");
-            numero.getStyle().set("fontWeight", "bold");
-            numero.getStyle().set("font-weight", "bold");
-
-            numero.setReadOnly(true);
-            registro.focus();
-        }
-
-    }
-
     public void doHazFormulario() {
-        doFormatoCodigoProducto();
-
         titulo.setText(fMMPrimasEntrada.getLabelFrom());
 
         contenedorFormulario.setResponsiveSteps(
@@ -142,51 +115,17 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         contenedorFormulario.add(ctrlAnalitico, 2);
         contenedorFormulario.add(farmaceutico, 3);
 
+        contenedorDerecha.add(grid);
+
         comboMPrimas.addValueChangeListener(e -> {
-            //   cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
-            //  producto.setValue(comboMPrimas.getValue().getProducto());
             fMMPrimasEntrada.setCod_inte(comboMPrimas.getValue().getCod_inte());
             fMMPrimasEntrada.setProducto(comboMPrimas.getValue().getProducto());
             numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
             fecha.setValue(LocalDate.now());
             registro.focus();
-            // cod_inte.setReadOnly(true);
             //producto.setReadOnly(true);
         });
-        // cod_inte.setWidth("25px");
-        /*
-       cod_inte.addBlurListener(e -> {
-            if (cod_inte.isEmpty() && comboMPrimas.getValue() == null) {
-                Notification.show("Código obligatorio");
-                comboMPrimas.focus();
-            } else {
-                FMMPrimas farmaFMMPrimas = new FMMprimasDAO().getPorCodigo(cod_inte.getValue());
-                if (farmaFMMPrimas == null) {
-                    Notification.show("No existe materia prima para exe código:" + cod_inte.getValue());
-                    producto.clear();
-                    cod_inte.focus();
-                } else {
-                    producto.setValue(farmaFMMPrimas.getProducto());
-                    producto.setReadOnly(true);
-                    fMMPrimasEntrada.setCod_inte(farmaFMMPrimas.getCod_inte());
-                    fMMPrimasEntrada.setProducto(farmaFMMPrimas.getProducto());
-                    numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
-                    fecha.setValue(LocalDate.now());
-                    registro.focus();
-                }
-            }
-        });
-         */
- /*
-        numero.addBlurListener(e -> {
-            FMMPrimasEntrada fMMPrimasEntradaExiste = new FMMprimasEntraDAO().getPorMPNumero(cod_inte.getValue(), numero.getValue());
-            if (fMMPrimasEntradaExiste != null) {
-                fMMPrimasEntrada = fMMPrimasEntradaExiste;
-                (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMMPrimasEntrada);
-            }
-        });
-         */
+
         binder.forField(numero)
                 .asRequired()
                 .bind(FMMPrimasEntrada::getNumero, FMMPrimasEntrada::setNumero);
@@ -211,10 +150,48 @@ public class FrmFMMprimasEntradas extends FrmMaster {
                 .bind(FMMPrimasEntrada::getFarmaceutico, FMMPrimasEntrada::setFarmaceutico);
 
         binder.readBean(fMMPrimasEntrada);
-        doControlBotones(fMMPrimasEntrada.getNumero());
-        if (numero.isEmpty()) {
-            numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
-            fecha.setValue(LocalDate.now());
+        doControlBotones(fMMPrimasEntrada);
+
+        grid.addColumn(FMMPrimasEntrada::getNumero).setHeader("Orden");
+        grid.addColumn(FMMPrimasEntrada::getFecha).setHeader("Fecha");
+        grid.addColumn(FMMPrimasEntrada::getEnvases).setHeader("Envases");
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
+                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+        grid.addItemClickListener(event
+                -> {
+            doControlBotones(event.getItem());
+        }
+        );
+        doActualizaGrid();
+        doControlBotones(null);
+    }
+
+    public void doActualizaGrid() {
+        grid.setItems(new FMMprimasEntraDAO().getListaEntradasMP(null, null, fMMPrimas));
+    }
+
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+        if (obj == null || ((FMMPrimasEntrada) obj).getCod_inte() == null) {
+            fMMPrimasEntrada = new FMMPrimasEntrada();
+            binder.readBean(fMMPrimasEntrada);
+            numero.setEnabled(true);
+            numero.focus();
+            if (numero.isEmpty()) {
+                numero.setValue(new FMMprimasEntraDAO().getNumeroSiguiente(fMMPrimasEntrada));
+                fecha.setValue(LocalDate.now());
+                registro.focus();
+            }
+        } else {
+            fMMPrimasEntrada = (FMMPrimasEntrada) obj;
+            binder.readBean(fMMPrimasEntrada);
+            comboMPrimas.setReadOnly(true);
+            comboMPrimas.setValue((FMMPrimasEntrada) obj);
+            numero.setReadOnly(true);
             registro.focus();
         }
 
@@ -226,7 +203,7 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         if (binder.writeBeanIfValid(fMMPrimasEntrada)) {
             if (new FMMprimasEntraDAO().doGrabaDatos(fMMPrimasEntrada) == true) {
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
-                doActualizaExistencias();
+                doActualizaExistencias(FrmFMMprimas.MOVIMIENTOGRABAR);
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
@@ -243,8 +220,8 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         }
     }
 
-    public void doActualizaExistencias() {
-        Integer variacionExistencias = fMMPrimasEntrada.getVariacionExistencias(fMMPrimasEntradaAnterior.getEnvases(), "GRABAR");
+    public void doActualizaExistencias(String tipoMovimiento) {
+        Integer variacionExistencias = fMMPrimasEntrada.getVariacionExistencias(fMMPrimasEntradaAnterior.getEnvases(), tipoMovimiento);
 
         /*
         // entrada nueva
@@ -286,11 +263,14 @@ public class FrmFMMprimasEntradas extends FrmMaster {
         if (new FMMprimasEntraDAO().doBorraDatos(fMMPrimasEntrada) == true) {
             Notification.show(FrmMaster.AVISODATOBORRADO);
             // descuenta existencias
+            doActualizaExistencias(FrmFMMprimas.MOVIMIENTOBORRAR);
+            /*
             if (new FMMprimasDAO().doActualizaExistencias(fMMPrimasEntrada, fMMPrimasEntrada.getNumero() * (-1)) == true) {
                 Notification.show("Existencias actualizadas");
             } else {
                 Notification.show("Error actualizando existencias actualizadas");
             }
+             */
             this.close();
         } else {
             Notification.show(FrmMaster.AVISODATOERRORBORRADO);

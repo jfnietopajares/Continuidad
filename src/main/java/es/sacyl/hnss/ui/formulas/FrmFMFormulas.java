@@ -68,7 +68,7 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     private TextField caducidad = ObjetosComunes.getTextField("Caducidad", "Caducidad", 15, "150px");
 
-    private TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "60px", "100px", "100px");
+    private TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "90px", "90px", "90px");
 
     private TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 15, "150px");
 
@@ -76,7 +76,7 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     private ComboBox<FMFormulaAutoriza> autorizacion = ObjetosComunes.getComboAutoriza("Autoización", null);
 
-    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "60px", "100px", "100px");
+    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
 
     private TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
 
@@ -98,10 +98,6 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     private Grid<FMFormula> grid = null;
 
-    //   private HorizontalLayout contenedorFormula = new HorizontalLayout();
-    //   private HorizontalLayout contenedorBotones1 = new HorizontalLayout();
-    // private VerticalLayout contenedorIzquierda = new VerticalLayout();
-    //private VerticalLayout contenedorDerecha = new VerticalLayout();
     private Button blibliografia = ObjetosComunes.getBoton("Bibliog", null, VaadinIcon.BOOK.create());
     private Button composicion = ObjetosComunes.getBoton("Compo", null, VaadinIcon.FLASK.create());
     private Button elaboración = ObjetosComunes.getBoton("Elabor", null, VaadinIcon.COGS.create());
@@ -133,7 +129,8 @@ public class FrmFMFormulas extends FrmMasterLista {
     }
 
     public void doHazFormulario() {
-        contenedorBotones.add(blibliografia, composicion, elaboración, material);
+        contenedorBotones.removeAll();
+        contenedorBotones.add(botonGrabar,botonBorrar, blibliografia, composicion, elaboración, material,botonAyuda,botonCancelar);
 
         if (fMFormula.getNumero() == null) {
             blibliografia.setEnabled(false);
@@ -312,6 +309,11 @@ public class FrmFMFormulas extends FrmMasterLista {
 
         WTPdfViewer pdfViewer = new WTPdfViewer();
          */
+    }
+
+    @Override
+    public void doActualizaGrid() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     class InputStreamSource implements StreamSource {

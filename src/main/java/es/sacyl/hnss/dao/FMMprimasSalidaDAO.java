@@ -35,8 +35,8 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
         super();
     }
 
-    private FMMprimasSalida getRegistroResulset(ResultSet rs) {
-        FMMprimasSalida fMMPrimasSalida = new FMMprimasSalida();
+    private FMMprimasSalida getRegistroResulset(ResultSet rs, FMMPrimas fMMPrimas) {
+        FMMprimasSalida fMMPrimasSalida = new FMMprimasSalida(fMMPrimas);
         try {
 
             // esto es una chapu esta parte es el método getRegistroResulset de
@@ -45,6 +45,7 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
                 String ulti = Integer.toString(rs.getInt("ulti_revi"));
                 localDateUlti = LocalDate.parse(ulti, dateTimeFormatterParser);
             }
+
             fMMPrimasSalida.setCod_inte(rs.getInt("cod_inte"));
             fMMPrimasSalida.setProducto(rs.getString("producto"));
             fMMPrimasSalida.setCod_labo(rs.getString("cod_labo"));
@@ -62,6 +63,7 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
             fMMPrimasSalida.setDescripcion(rs.getString("descripcion"));
             fMMPrimasSalida.setRequisitos(rs.getString("requisitos"));
             fMMPrimasSalida.setConservacion(rs.getString("conservacion"));
+
 // fin de la chapu
             LocalDate localDate = null;
             if (rs.getInt("fecha") != 0) {
@@ -92,7 +94,7 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
-                fMMPrimasSalida = getRegistroResulset(resulSet);
+                fMMPrimasSalida = getRegistroResulset(resulSet, null);
             }
             statement.close();
             LOGGER.debug(sql);
@@ -144,14 +146,14 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
                 statement.setString(3, farmaFMMprimasSalida.getComentario1());
             }
             if (farmaFMMprimasSalida == null && farmaFMMprimasSalida.getCod_inte() != null) {
-                statement.setNull(9, Types.INTEGER);
+                statement.setNull(4, Types.INTEGER);
             } else {
-                statement.setInt(9, farmaFMMprimasSalida.getCod_inte());
+                statement.setInt(4, farmaFMMprimasSalida.getCod_inte());
             }
             if (farmaFMMprimasSalida.getNumero() == null) {
-                statement.setNull(10, Types.INTEGER);
+                statement.setNull(5, Types.INTEGER);
             } else {
-                statement.setInt(10, farmaFMMprimasSalida.getNumero());
+                statement.setInt(5, farmaFMMprimasSalida.getNumero());
             }
 
             insertadoBoolean = statement.executeUpdate() > 0;
@@ -269,7 +271,7 @@ public class FMMprimasSalidaDAO extends ConexionDAO implements Serializable {
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
-                listaSalidas.add(getRegistroResulset(resulSet));
+                listaSalidas.add(getRegistroResulset(resulSet, farmaFMMPrimas));
             }
             statement.close();
             LOGGER.debug(sql);

@@ -53,11 +53,6 @@ public class FrmFMFormas extends FrmMaster {
 
         codigo.setWidth("50px");
         nombre.setWidth("250px");
-        if (fMForma == null || fMForma.getCodigo() == null) {
-            codigo.setEnabled(true);
-        } else {
-            codigo.setEnabled(false);
-        }
 
         codigo.addBlurListener(e -> {
             FMForma fMFormaExiste = new FMFormaDAO().getPorCodigo(codigo.getValue());
@@ -81,6 +76,19 @@ public class FrmFMFormas extends FrmMaster {
 
         binder.readBean(fMForma);
         doControlBotones(fMForma.getCodigo());
+    }
+
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+        if (obj == null) {
+            codigo.setEnabled(true);
+            codigo.focus();
+        } else {
+            // codigo.setEnabled(false);
+            codigo.setReadOnly(true);
+            nombre.focus();
+        }
     }
 
     @Override

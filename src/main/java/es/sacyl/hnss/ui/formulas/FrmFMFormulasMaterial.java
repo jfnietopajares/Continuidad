@@ -73,8 +73,6 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
     public void doHazFormulario() {
         this.setWidth("900px");
-        //  this.setMaxWidth("900px");
-//        this.setSizeFull();
 
         titulo.setText(FMFormulaMaterial.getLabelFrom());
 
@@ -90,7 +88,6 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
             doControlEventosRecpera(event.getItem());
@@ -144,6 +141,7 @@ public class FrmFMFormulasMaterial extends FrmMasterLista {
         comboMaterial.focus();
         doControlBotones(fMFormulaMeterial.getLinea());
     }
+    //   grid.setSelectionMode(Grid.SelectionMode.NONE);
 
     public void doControlEventosRecpera(FMFormulaMaterial fMFormulaMeterial) {
         this.fMFormulaMeterial = fMFormulaMeterial;

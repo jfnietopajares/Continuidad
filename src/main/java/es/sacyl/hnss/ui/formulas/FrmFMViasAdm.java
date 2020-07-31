@@ -63,11 +63,6 @@ public class FrmFMViasAdm extends FrmMaster {
 
         codigo.setWidth("50px");
         nombre.setWidth("250px");
-        if (fMViasAdm == null || fMViasAdm.getCodigo() == null) {
-            codigo.setEnabled(true);
-        } else {
-            codigo.setEnabled(false);
-        }
 
         codigo.addBlurListener(e -> {
             FMViasAdm fMViasAdmExiste = new FMViasAdmDAO().getPorCodigo(codigo.getValue());
@@ -91,6 +86,19 @@ public class FrmFMViasAdm extends FrmMaster {
 
         binder.readBean(fMViasAdm);
         doControlBotones(fMViasAdm.getCodigo());
+    }
+
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+        if (obj == null) {
+            codigo.setEnabled(true);
+            codigo.focus();
+        } else {
+            codigo.setEnabled(false);
+            nombre.focus();
+        }
+
     }
 
     @Override

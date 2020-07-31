@@ -1,5 +1,6 @@
 package es.sacyl.hnss;
 
+import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -54,7 +55,9 @@ import org.apache.logging.log4j.Logger;
 @PWA(name = "farmacia", shortName = "farmacia")
 //@JsModule("@vaadin/vaadin-lumo-styles/presets/sizing.js")
 @Theme(value = Lumo.class)
-
+//@HtmlImport("frontend://FarmaciaTema.html")
+//@HtmlImport("frontend//FarmaciaTema.html")
+//@HtmlImport("frontend://bower_components/iron-form/iron-form.html") //
 //@Theme(value = Lumo.class)
 //@Theme(value = Lumo.class, variant = Lumo.DARK)//
 public class MainView extends VerticalLayout {

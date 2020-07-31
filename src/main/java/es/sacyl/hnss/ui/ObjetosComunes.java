@@ -201,10 +201,10 @@ public class ObjetosComunes {
             textArea.setHeight(height);
         }
         if (maxHeight != null) {
-            textArea.getStyle().set("maxHeight", "150px");
+            textArea.getStyle().set("maxHeight", maxHeight);
         }
         if (minHeight != null) {
-            textArea.getStyle().set("minHeight", "150px");
+            textArea.getStyle().set("minHeight", minHeight);
         }
 
         return textArea;

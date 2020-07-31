@@ -11,7 +11,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.validator.StringLengthValidator;
+import es.sacyl.hnss.dao.FMFormulaFrabicarDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
+import es.sacyl.hnss.entidades.FMFormulaFrabicar;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
@@ -64,6 +66,10 @@ public class FrmFMMprimas extends FrmMaster {
 
     private Binder<FMMPrimas> binder = new Binder<>();
 
+    public static final String MOVIMIENTOGRABAR = "GRABAR";
+
+    public static final String MOVIMIENTOBORRAR = "BORRAR";
+
     public FrmFMMprimas() {
         super();
         doHazFormulario();
@@ -99,13 +105,6 @@ public class FrmFMMprimas extends FrmMaster {
         contenedorFormulario.add(existencias, stock_min, ulti_revi);
         contenedorFormulario.add(farmacetuico, 3);
 
-        if (fMMPrimas == null || fMMPrimas.getCod_inte() == null) {
-            cod_inte.setEnabled(true);
-            cod_inte.focus();
-        } else {
-            cod_inte.setEnabled(false);
-            producto.focus();
-        }
         cod_inte.setWidth("25px");
         cod_inte.addBlurListener(e -> {
             FMMPrimas fMMPrimasExiste = new FMMprimasDAO().getPorCodigo(cod_inte.getValue());
@@ -174,7 +173,25 @@ public class FrmFMMprimas extends FrmMaster {
                 .bind(FMMPrimas::getFarmacetuico, FMMPrimas::setFarmacetuico);
 
         binder.readBean(fMMPrimas);
-        doControlBotones(fMMPrimas.getCod_inte());
+        doControlBotones(fMMPrimas);
+    }
+
+    @Override
+    public void doControlBotones(Object obj) {
+        super.doControlBotones(obj);
+
+        if (obj == null || ((FMMPrimas) obj).getCod_inte() == null) {
+            fMMPrimas = new FMMPrimas();
+            binder.readBean(fMMPrimas);
+            ulti_revi.setValue(LocalDate.now());
+            cod_inte.setEnabled(true);
+            cod_inte.focus();
+        } else {
+            this.fMMPrimas = (FMMPrimas) obj;
+            binder.readBean(fMMPrimas);
+            cod_inte.setEnabled(false);
+            producto.focus();
+        }
     }
 
     @Override

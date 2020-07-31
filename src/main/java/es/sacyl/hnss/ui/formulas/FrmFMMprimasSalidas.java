@@ -8,19 +8,25 @@ package es.sacyl.hnss.ui.formulas;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
+import es.sacyl.hnss.dao.FMFormulaCompoDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMMprimasEntraDAO;
 import es.sacyl.hnss.dao.FMMprimasSalidaDAO;
+import es.sacyl.hnss.entidades.FMFormulaCompo;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMMprimasSalida;
+import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
+import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -30,7 +36,7 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMMprimasSalidas extends FrmMaster {
+public class FrmFMMprimasSalidas extends FrmMasterLista {
 
     //   private IntegerField cod_inte = ObjetosComunes.getIntegerField("Código");
     // private TextField producto = ObjetosComunes.getTextField("Nombre prodcuto", "nombre", 50, "100px");
@@ -46,9 +52,13 @@ public class FrmFMMprimasSalidas extends FrmMaster {
 
     private FMMprimasSalida fMMprimasSalidaAnterior = new FMMprimasSalida();
 
-    private ComboBox<FMMPrimas> comboMPrimas = ObjetosComunes.getComboMPrimas(null, null);
+    private FMMPrimas fMMprimas = new FMMPrimas();
+
+    private TextField producto = ObjetosComunes.getTextField("Producto", "comentario", 50, "100px");
 
     private Binder<FMMprimasSalida> binder = new Binder<FMMprimasSalida>();
+
+    private Grid<FMMprimasSalida> grid = new Grid<>();
 
     public FrmFMMprimasSalidas() {
         super();
@@ -65,48 +75,13 @@ public class FrmFMMprimasSalidas extends FrmMaster {
     public FrmFMMprimasSalidas(FMMPrimas fMMPrimas) {
         super();
         if (fMMPrimas != null) {
+            this.fMMprimas = fMMPrimas;
             this.fMMprimasSalida = new FMMprimasSalida(fMMPrimas);
-            comboMPrimas.setValue(fMMPrimas);
-            comboMPrimas.setReadOnly(true);
         }
         doHazFormulario();
     }
 
-    public void doFormatoCodigoProducto() {
-        if (fMMprimasSalida == null || fMMprimasSalida.getNumero() == null) {
-            // fMMprimasSalida = new FMMprimasSalida();
-            /*
-            cod_inte.setEnabled(true);
-            cod_inte.focus();
-             */
-        } else {
-            /*
-            cod_inte.setReadOnly(true);
-            producto.setReadOnly(true);
-  cod_inte.getStyle().set("color", "red");
-            cod_inte.getStyle().set("fontWeight", "bold");
-            cod_inte.getStyle().set("font-weight", "bold");
-
-            producto.getStyle().set("color", "red");
-            producto.getStyle().set("fontWeight", "bold");
-            producto.getStyle().set("font-weight", "bold");
-             */
-            comboMPrimas.setReadOnly(true);
-
-            comboMPrimas.setValue(fMMprimasSalida);
-
-            numero.getStyle().set("color", "red");
-            numero.getStyle().set("fontWeight", "bold");
-            numero.getStyle().set("font-weight", "bold");
-
-            numero.setReadOnly(true);
-            cantidad.focus();
-        }
-
-    }
-
     public void doHazFormulario() {
-        doFormatoCodigoProducto();
 
         titulo.setText(fMMprimasSalida.getLabelFrom());
 
@@ -116,55 +91,17 @@ public class FrmFMMprimasSalidas extends FrmMaster {
                 new FormLayout.ResponsiveStep("100px", 3));
 
         contenedorFormulario.setMaxWidth("600px");
-        contenedorFormulario.add(comboMPrimas, 3);
-        //   contenedorFormulario.add(cod_inte, producto);
-        //  contenedorFormulario.setColspan(producto, 2);
+        contenedorFormulario.add(producto, 3);
         contenedorFormulario.add(numero, fecha);
         contenedorFormulario.add(cantidad);
         contenedorFormulario.add(comentario1, 3);
 
-        /*
-        comboMPrimas.addValueChangeListener(e -> {
-        //    cod_inte.setValue(comboMPrimas.getValue().getCod_inte());
-            fMMprimasSalida.setProducto(comboMPrimas.getValue().getProducto());
-            numero.setValue(new FMMprimasSalidaDAO().getNumeroSiguiente(fMMprimasSalida));
-            fecha.setValue(LocalDate.now());
-            cantidad.focus();
-            cod_inte.setReadOnly(true);
-            producto.setReadOnly(true);
-        });
-        cod_inte.setWidth("25px");
-        cod_inte.addBlurListener(e -> {
-            if (cod_inte.isEmpty() && comboMPrimas.getValue() == null) {
-                Notification.show("Código obligatorio");
-                comboMPrimas.focus();
-            } else {
-                FMMPrimas fMMPrimas = new FMMprimasDAO().getPorCodigo(cod_inte.getValue());
-                if (fMMPrimas == null) {
-                    Notification.show("No existe materia prima para exe código:" + cod_inte.getValue());
-                    producto.clear();
-                    cod_inte.focus();
-                } else {
-                    producto.setValue(fMMPrimas.getProducto());
-                    producto.setReadOnly(true);
-                    fMMprimasSalida.setCod_inte(fMMPrimas.getCod_inte());
-                    fMMprimasSalida.setProducto(fMMPrimas.getProducto());
-                    numero.setValue(new FMMprimasSalidaDAO().getNumeroSiguiente(fMMprimasSalida));
-                    fecha.setValue(LocalDate.now());
-                    cantidad.focus();
-                }
-            }
-        });
+        contenedorDerecha.add(grid);
 
-        numero.addBlurListener(e -> {
-            FMMprimasSalida fMMPrimasSalidaExiste = new FMMprimasSalidaDAO().getPorMPNumero(cod_inte.getValue(), numero.getValue());
-            if (fMMPrimasSalidaExiste != null) {
-                fMMprimasSalida = fMMPrimasSalidaExiste;
-                (new Notification(FrmMaster.AVISODATOSEXISTE, 1000, Notification.Position.MIDDLE)).open();
-                binder.readBean(fMMprimasSalida);
-            }
-        });
-         */
+        producto.setReadOnly(true);
+        binder.forField(producto)
+                .asRequired()
+                .bind(FMMprimasSalida::getProducto, FMMprimasSalida::setProducto);
         binder.forField(numero)
                 .asRequired()
                 .bind(FMMprimasSalida::getNumero, FMMprimasSalida::setNumero);
@@ -179,16 +116,53 @@ public class FrmFMMprimasSalidas extends FrmMaster {
 
         binder.readBean(fMMprimasSalida);
         doControlBotones(fMMprimasSalida.getNumero());
-        if (numero.isEmpty()) {
+
+        grid.addColumn(FMMprimasSalida::getNumero).setHeader("Número");
+        grid.addColumn(FMMprimasSalida::getFecha).setHeader("Fecha");
+        grid.addColumn(FMMprimasSalida::getCantidad).setHeader("Unidades");
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
+                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+        grid.addItemClickListener(event
+                -> {
+            doFormatoCodigoProducto(event.getItem());
+        }
+        );
+        doActualizaGrid();
+        doFormatoCodigoProducto(null);
+    }
+
+    public void doFormatoCodigoProducto(FMMprimasSalida fMMprimasSalidaParam) {
+
+        if (fMMprimasSalidaParam == null) {
+            fMMprimasSalida = new FMMprimasSalida(fMMprimas);
+            binder.readBean(fMMprimasSalida);
             numero.setValue(new FMMprimasSalidaDAO().getNumeroSiguiente(fMMprimasSalida));
             fecha.setValue(LocalDate.now());
+            cantidad.focus();
+            botonBorrar.setEnabled(false);
+        } else {
+            fMMprimasSalida = fMMprimasSalidaParam;
+            binder.readBean(fMMprimasSalida);
+            botonBorrar.setEnabled(true);
+            numero.setReadOnly(true);
+            numero.getStyle().set("color", "red");
+            numero.getStyle().set("fontWeight", "bold");
+            numero.getStyle().set("font-weight", "bold");
+
             cantidad.focus();
         }
 
     }
 
-    public void doActualizaExistencias() {
-        Integer variacionExistencias = fMMprimasSalida.getVariacionExistencias(fMMprimasSalidaAnterior.getCantidad(), "GRABAR");
+    public void doActualizaGrid() {
+        grid.setItems(new FMMprimasSalidaDAO().getListaSalidasMP(null, null, fMMprimasSalida));
+    }
+
+    public void doActualizaExistencias(String tipoMovimiento) {
+        Integer variacionExistencias = fMMprimasSalida.getVariacionExistencias(fMMprimasSalidaAnterior.getCantidad(), tipoMovimiento);
         if (variacionExistencias != 0) {
             if (new FMMprimasDAO().doActualizaExistencias(fMMprimasSalida, variacionExistencias)) {
                 Notification.show(FrmMaster.AVISODATOALMACENADO);
@@ -204,12 +178,12 @@ public class FrmFMMprimasSalidas extends FrmMaster {
         if (binder.writeBeanIfValid(fMMprimasSalida)) {
             if (new FMMprimasSalidaDAO().doGrabaDatos(fMMprimasSalida) == true) {
                 (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
-                doActualizaExistencias();
+                doActualizaExistencias(FrmFMMprimas.MOVIMIENTOGRABAR);
             } else {
                 (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
             }
-
-            this.close();
+            doActualizaGrid();
+            doFormatoCodigoProducto(null);// this.close();
         } else {
             BinderValidationStatus<FMMprimasSalida> validate = binder.validate();
             String errorText = validate.getFieldValidationStatuses()
@@ -223,7 +197,34 @@ public class FrmFMMprimasSalidas extends FrmMaster {
 
     @Override
     public void doBorrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ConfirmDialog dialog = new ConfirmDialog("Borrado del registro actual",
+                "Seguro que quires borrar el dato actual. Numero de entrada : " + fMMprimasSalidaAnterior.getNumero(),
+                "Borrar", this::onDelete);
+
+        dialog.open();
+
+        dialog.addDialogCloseActionListener(e -> {
+            this.close();
+        });
+    }
+
+    public void onDelete() {
+        if (new FMMprimasSalidaDAO().doBorraDatos(fMMprimasSalida) == true) {
+            Notification.show(FrmMaster.AVISODATOBORRADO);
+            // descuenta existencias
+            doActualizaExistencias(FrmFMMprimas.MOVIMIENTOBORRAR);
+            this.close();
+        } else {
+            Notification.show(FrmMaster.AVISODATOERRORBORRADO);
+        }
+    }
+
+    public void onDiscard() {
+
+    }
+
+    public void onCancel() {
+
     }
 
     @Override
