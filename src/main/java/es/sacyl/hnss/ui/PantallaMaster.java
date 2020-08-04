@@ -12,6 +12,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 
 /**
  *
@@ -44,7 +45,10 @@ public abstract class PantallaMaster extends VerticalLayout {
         this.add(contenedorGrid);
 
         textoABuscar.setClearButtonVisible(true);
-
+ textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.addValueChangeListener(event -> {
+            doActualizaGrid();
+        });
         contenedorGrid.add(contenedorFiltro);
 
         getContenedorFiltro().add(textoABuscar, botonBuscar, botonAnadir, botonListar);

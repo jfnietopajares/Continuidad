@@ -7,13 +7,11 @@ package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
-import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
@@ -24,13 +22,15 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public class PntFMprimas extends PantallaMaster {
+public final class PntFMprimas extends PantallaMaster {
 
-    private FMMPrimas fMMPrimas = new FMMPrimas();
+    private static final long serialVersionUID = 1L;
+
+    private final FMMPrimas fMMPrimas = new FMMPrimas();
 
     private ArrayList<FMMPrimas> listaMprimas = new ArrayList<>();
 
-    private Grid<FMMPrimas> grid = new Grid<>(FMMPrimas.class);
+    private final Grid<FMMPrimas> grid = new Grid<>(FMMPrimas.class);
 
     private FrmFMMprimas frmFarmaFMMPrimas;
 
@@ -44,7 +44,14 @@ public class PntFMprimas extends PantallaMaster {
         titulo.setText(FMMPrimas.getLabelFrom());
 
         getContenedorGrid().add(grid);
-
+        textoABuscar.focus();
+        textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.addValueChangeListener(event -> {
+            doActualizaGrid();
+            if (listaMprimas.size() == 1) {
+                doVentanaModal(new FrmFMMprimas(listaMprimas.get(0)));
+            }
+        });
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });

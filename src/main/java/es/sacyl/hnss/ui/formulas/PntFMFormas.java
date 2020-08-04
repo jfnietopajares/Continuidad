@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import es.sacyl.hnss.dao.FMFormaDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMViasAdm;
@@ -19,23 +20,27 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public class PntFMFormas extends PantallaMaster {
+public final class PntFMFormas extends PantallaMaster {
+
+    private static final long serialVersionUID = 1L;
 
     private FMForma fMForma = new FMForma();
 
     private ArrayList<FMForma> listaFormas = new ArrayList<>();
 
-    private Grid<FMForma> grid = new Grid<>(FMForma.class);
+    private final Grid<FMForma> grid;
 
     private FrmFMFormas frmFMFormas;
 
     public PntFMFormas() {
         super();
+        this.grid = new Grid<>(FMForma.class);
         doHazPantalla();
     }
 
     public PntFMFormas(FMForma fMForma) {
         super();
+        this.grid = new Grid<>(FMForma.class);
         this.fMForma = fMForma;
         doHazPantalla();
     }
@@ -45,6 +50,14 @@ public class PntFMFormas extends PantallaMaster {
 
         getContenedorGrid().add(grid);
 
+textoABuscar.focus();
+        textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.addValueChangeListener(event -> {
+            doActualizaGrid();
+            if (listaFormas.size() == 1) {
+                doVentanaModal(new FrmFMFormas(listaFormas.get(0)));
+            }
+        });
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });

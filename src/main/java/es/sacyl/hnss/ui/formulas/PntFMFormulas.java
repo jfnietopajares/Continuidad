@@ -11,6 +11,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.entidades.FMFormula;
@@ -42,7 +43,14 @@ public class PntFMFormulas extends PantallaMaster {
         titulo.setText(FMFormula.getLabelFrom());
 
         getContenedorGrid().add(grid);
-
+textoABuscar.focus();
+        textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.addValueChangeListener(event -> {
+            doActualizaGrid();
+            if (listaFormulas.size() == 1) {
+                doVentanaModal(new FrmFMFormulas(listaFormulas.get(0)));
+            }
+        });
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });

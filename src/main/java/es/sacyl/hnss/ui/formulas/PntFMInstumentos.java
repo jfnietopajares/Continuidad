@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.theme.lumo.Lumo;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
@@ -31,7 +32,7 @@ public final class PntFMInstumentos extends PantallaMaster {
 
     private FrmFMInstrumentos frmFMInstrumentos;
 
-    ArrayList<FMInstrumento> listaFarmaFMInstrumento = new ArrayList<>();
+ //   ArrayList<FMInstrumento> listaFarmaFMInstrumento = new ArrayList<>();
 
     public PntFMInstumentos() {
         super();
@@ -51,7 +52,14 @@ public final class PntFMInstumentos extends PantallaMaster {
         titulo.setText(fMInstrumento.getLabelFrom());
 
         getContenedorGrid().add(grid);
-
+textoABuscar.focus();
+        textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.addValueChangeListener(event -> {
+            doActualizaGrid();
+            if (listaInstrumentos.size() == 1) {
+                doVentanaModal(new FrmFMInstrumentos(listaInstrumentos.get(0)));
+            }
+        });
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });
@@ -101,13 +109,13 @@ public final class PntFMInstumentos extends PantallaMaster {
     @Override
     public void doActualizaGrid() {
 
-        listaFarmaFMInstrumento = new FMInstrumentosDAO().getListaInstrumentos(textoABuscar.getValue());
+        listaInstrumentos = new FMInstrumentosDAO().getListaInstrumentos(textoABuscar.getValue());
 
-        grid.setItems(listaFarmaFMInstrumento);
+        grid.setItems(listaInstrumentos);
 
-        numeroRegistros.setText(":" + Integer.toString(listaFarmaFMInstrumento.size()));
+        numeroRegistros.setText(":" + Integer.toString(listaInstrumentos.size()));
 
-        cabeceraGrid.setText(" Lista de " + fMInstrumento.getLabelFrom() + ". Registros: " + Integer.toString(listaFarmaFMInstrumento.size()));
+        cabeceraGrid.setText(" Lista de " + fMInstrumento.getLabelFrom() + ". Registros: " + Integer.toString(listaInstrumentos.size()));
 
     }
 }

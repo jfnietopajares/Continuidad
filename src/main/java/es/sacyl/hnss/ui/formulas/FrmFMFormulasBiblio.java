@@ -28,17 +28,19 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMFormulasBiblio extends FrmMasterLista {
+public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
-    private IntegerField formula = ObjetosComunes.getIntegerField("Código");
+    private static final long serialVersionUID = 1L;
 
-    private IntegerField orden = ObjetosComunes.getIntegerField("Código");
+    private final IntegerField formula = ObjetosComunes.getIntegerField("Código");
 
-    private TextField texto = ObjetosComunes.getTextField("Texto", "", 50, "100px");
+    private final IntegerField orden = ObjetosComunes.getIntegerField("Código");
 
-    private TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
+    private final TextField texto = ObjetosComunes.getTextField("Texto", "", 50, "100px");
 
-    private FMFormula fMFormula;
+    private final TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
+
+    private  FMFormula fMFormula;
 
     private FMFormulaBibliografia fMFormulaBibliografia = new FMFormulaBibliografia();
 
