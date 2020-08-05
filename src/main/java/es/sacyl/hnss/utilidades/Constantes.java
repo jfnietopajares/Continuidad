@@ -30,4 +30,6 @@ public class Constantes {
     public static final String DIRECTORIORICONOSRELATIVEPATH
             = "icons/";
 
+    public static final String SERVICIO_NOMBRE = "Servicio de Farmacia";
+     public static final String SECCION_NOMBRE = "Fórmulas Magistrales";
 }

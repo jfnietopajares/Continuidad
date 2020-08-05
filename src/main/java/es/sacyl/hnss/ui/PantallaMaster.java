@@ -45,7 +45,7 @@ public abstract class PantallaMaster extends VerticalLayout {
         this.add(contenedorGrid);
 
         textoABuscar.setClearButtonVisible(true);
- textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
+        textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
         textoABuscar.addValueChangeListener(event -> {
             doActualizaGrid();
         });
