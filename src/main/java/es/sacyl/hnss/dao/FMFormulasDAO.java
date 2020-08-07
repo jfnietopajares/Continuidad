@@ -161,7 +161,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql = sql = "INSERT INTO     farm_fm_formulas "
+            sql  = "INSERT INTO     farm_fm_formulas "
                     + "(numero,nombre,tipo,esteril,forma,via,unidades_f,indicacion,conservacion, caducidad,controles "
                     + " ,dunidades_f,indicacion1,observaciones,p_autorizado,pedirweb,realizado,fecha_r,actualizado "
                     + " ,fecha_a,hoja_paci,etiqueta1,etiqueta2,observaciones1 )"

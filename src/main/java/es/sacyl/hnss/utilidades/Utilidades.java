@@ -6,7 +6,6 @@
 package es.sacyl.hnss.utilidades;
 
 import com.itextpdf.io.IOException;
-import es.sacyl.hnss.dao.ConexionDAO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

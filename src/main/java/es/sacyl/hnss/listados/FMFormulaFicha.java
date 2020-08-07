@@ -20,8 +20,10 @@ import es.sacyl.hnss.entidades.FMFormulaCompo;
 import es.sacyl.hnss.entidades.FMFormulaElabora;
 import es.sacyl.hnss.entidades.FMFormulaMaterial;
 import es.sacyl.hnss.utilidades.Constantes;
+import es.sacyl.hnss.utilidades.Utilidades;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,15 +42,15 @@ public class FMFormulaFicha implements Serializable {
 
     private static final Logger logger = LogManager.getLogger(FMFormulaFicha.class);
 
-    private ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    private PdfWriter writer = new PdfWriter(out);
+    private final PdfWriter writer = new PdfWriter(out);
 
-    private PdfDocument pdf = new PdfDocument(writer);
+    private final PdfDocument pdf = new PdfDocument(writer);
 
-    private Document document;
+    private Document document = new Document(pdf);
 
-    private DateTimeFormatter fechadma = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    private final DateTimeFormatter fechadma = DateTimeFormatter.ofPattern("dd/MM/YYYY");
 
     private PdfFont normal;
 
@@ -60,11 +62,6 @@ public class FMFormulaFicha implements Serializable {
 
     private FMFormula fMFormula = new FMFormula();
 
-    public FMFormulaFicha() {
-
-        createPdf();
-    }
-
     public FMFormulaFicha(FMFormula fMFormula) {
         this.fMFormula = fMFormula;
 
@@ -74,6 +71,14 @@ public class FMFormulaFicha implements Serializable {
     public InputStream getStream() {
         // Here we return the pdf contents as a byte-array
         return new ByteArrayInputStream(out.toByteArray());
+    }
+
+    public ByteArrayOutputStream getOut() {
+        return out;
+    }
+
+    public File getFilePdf() {
+        return Utilidades.iStoFile(this.getStream(), Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf");
     }
 
     public void createPdf() {
@@ -93,7 +98,7 @@ public class FMFormulaFicha implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PdfEventoPaginaListado evento = new PdfEventoPaginaListado(document,Constantes.SERVICIO_NOMBRE,
+            PdfEventoPaginaListado evento = new PdfEventoPaginaListado(document, Constantes.SERVICIO_NOMBRE,
                     Constantes.SECCION_NOMBRE);
 
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, evento);
@@ -112,7 +117,11 @@ public class FMFormulaFicha implements Serializable {
             document.add(tabla);
             tabla = new Table(anchos2);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getIndicacion()).setFont(times).setFontSize(11)));
+            if (fMFormula.getIndicacion() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getIndicacion()).setFont(times).setFontSize(11)));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
             document.add(tabla);
 
             tabla = new Table(anchos1);
@@ -120,7 +129,11 @@ public class FMFormulaFicha implements Serializable {
             document.add(tabla);
             tabla = new Table(anchos2);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getVia().getNombre()).setFont(times).setFontSize(11)));
+            if (fMFormula.getVia() != null && fMFormula.getVia().getNombre() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getVia().getNombre()).setFont(times).setFontSize(11)));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
             document.add(tabla);
 
             tabla = new Table(anchos1);
@@ -159,60 +172,86 @@ public class FMFormulaFicha implements Serializable {
             document.add(tabla);
             tabla = new Table(anchos3);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getConservacion())));
+            if (fMFormula.getConservacion() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getConservacion())));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
             tabla.addCell(new Cell().add(new Paragraph("\n")));
 
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getCaducidad())));
+
+            if (fMFormula.getCaducidad() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getCaducidad())));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
+
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            
+
             document.add(tabla);
-            
-             tabla = new Table(anchos1);
+
+            tabla = new Table(anchos1);
             tabla.addCell(new Cell().add(new Paragraph("CONTROLES").setFont(times).setFontSize(11)));
             document.add(tabla);
             tabla = new Table(anchos3);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getControles())));
+            if (fMFormula.getControles() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getControles())));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
+
             tabla.addCell(new Cell().add(new Paragraph("\n")));
 
-              tabla = new Table(anchos1);
+            tabla = new Table(anchos1);
             tabla.addCell(new Cell().add(new Paragraph("OBSERVACIONES").setFont(times).setFontSize(11)));
             document.add(tabla);
             tabla = new Table(anchos3);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(fMFormula.getObservaciones())));
+            if (fMFormula.getObservaciones() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getObservaciones())));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
+
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-         
-                tabla = new Table(anchos1);
+
+            tabla = new Table(anchos1);
             tabla.addCell(new Cell().add(new Paragraph("UNIDADES").setFont(times).setFontSize(11)));
             document.add(tabla);
             tabla = new Table(anchos3);
             tabla.addCell(new Cell().add(new Paragraph("\n")));
-            tabla.addCell(new Cell().add(new Paragraph(Integer.toString( fMFormula.getUnidades_f()))));
-           tabla.addCell(new Cell().add(new Paragraph( fMFormula.getDunidades_f())));
+            if (fMFormula.getUnidades_f() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(Integer.toString(fMFormula.getUnidades_f()))));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
+            if (fMFormula.getDunidades_f() != null) {
+                tabla.addCell(new Cell().add(new Paragraph(fMFormula.getDunidades_f())));
+            } else {
+                tabla.addCell(new Cell().add(new Paragraph("\n")));
+            }
+
             document.add(tabla);
-            
-            
-                     tabla = new Table(anchos1);
+
+            tabla = new Table(anchos1);
             tabla.addCell(new Cell().add(new Paragraph("BIBLIOGRAFIA").setFont(times).setFontSize(11)));
             document.add(tabla);
             tabla = new Table(anchos3);
             for (FMFormulaBibliografia biblio : fMFormula.getLisaBibliografias()) {
                 tabla.addCell(new Cell().add(new Paragraph("\n")));
                 tabla.addCell(new Cell().add(new Paragraph(biblio.getTexto())));
-            }         
-            
+            }
 
-            
             document.close();
 
         } catch (FileNotFoundException e) {
             logger.error("Fichero no encontrado", e);
         } catch (java.io.IOException e) {
-            logger.error(" io e", e);
+            logger.error("IO exception ", e);
         } catch (Exception e) {
-            logger.error("EX", e);
+            logger.error("Exception ", e);
         }
     }
 

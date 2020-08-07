@@ -7,6 +7,9 @@ package es.sacyl.hnss.dao;
 import com.vaadin.flow.component.notification.Notification;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -79,4 +82,30 @@ public class ConexionDAO implements Serializable {
         return null;
     }
 
+public Integer getSiguienteId(String tabla){
+        Connection connection = null;
+        Integer id=  1;
+        try {
+            connection = this.getConexionBBDD();
+             sql = " SELECT max(id) +1  as id FROM  " + tabla; 
+            Statement statement = connection.createStatement();
+            ResultSet resulSet = statement.executeQuery(sql);
+            if (resulSet.next()) {
+               id=resulSet.getInt("id");
+            }
+            statement.close();
+            LOGGER.debug(sql);
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
+        return id;
+
+}
 }

@@ -7,13 +7,23 @@ package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.server.FileResource;
+import com.vaadin.ui.Embedded;
 import es.sacyl.hnss.dao.FMFormaDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.listados.FMFormulaFicha;
+import es.sacyl.hnss.listados.FMFormulasListado;
+import es.sacyl.hnss.ui.EmbeddedPdfDocument;
 import es.sacyl.hnss.ui.PantallaMaster;
+import es.sacyl.hnss.utilidades.Constantes;
+import es.sacyl.hnss.utilidades.Utilidades;
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -50,7 +60,7 @@ public final class PntFMFormas extends PantallaMaster {
 
         getContenedorGrid().add(grid);
 
-textoABuscar.focus();
+        textoABuscar.focus();
         textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
         textoABuscar.addValueChangeListener(event -> {
             doActualizaGrid();
@@ -63,6 +73,7 @@ textoABuscar.focus();
         });
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
+
 
         grid.setColumns("codigo", "nombre");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,

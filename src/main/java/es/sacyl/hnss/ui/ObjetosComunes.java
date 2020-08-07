@@ -11,6 +11,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -37,10 +38,218 @@ import java.util.Locale;
  */
 public class ObjetosComunes {
 
+    /*
+    $tsino[0][0]='S';
+$tsino[1][0]='Si';
+$tsino[0][1]='N';
+$tsino[1][1]='No';
+
+
+
+$tnunidadesp=5;
+$tunidadesp[0][0]='mg';
+$tunidadesp[1][0]='mg' ;
+$tunidadesp[0][1]='MU';
+$tunidadesp[1][1]='MU' ;
+$tunidadesp[0][2]='UI';
+$tunidadesp[1][2]='UI' ;
+$tunidadesp[0][3]='g';
+$tunidadesp[1][3]='g' ;
+$tunidadesp[0][4]='mcg';
+$tunidadesp[1][4]='mcg' ;
+
+$tnunidadessup=1;
+$tunidadessup[0][0]='M2';
+$tunidadessup[1][0]='M2' ;
+
+$tnunidadesT=7;
+$tunidadesT[0][0]='ml';
+$tunidadesT[1][0]='ml';
+$tunidadesT[0][1]='mg';
+$tunidadesT[1][1]='mg' ;
+$tunidadesT[0][2]='MU';
+$tunidadesT[1][2]='MU' ;
+$tunidadesT[0][3]='UI';
+$tunidadesT[1][3]='UI' ;
+$tunidadesT[0][4]='g';
+$tunidadesT[1][4]='g' ;
+$tunidadesT[0][5]='M2';
+$tunidadesT[1][5]='M2' ;
+$tunidadesT[0][6]='mcg';
+$tunidadesT[1][6]='mcg' ;
+
+
+
+$tunidadesti[0]='horas';
+$tunidadesti[1]='dias' ;
+
+
+$tvesicante[]='Vesicante';
+$tvesicante[]='Irritante';
+$tvesicante[]='No irrit. ni vesicante.';
+$tvesicante[]='Vesicantei/irritante.';
+
+$tconservante[]='Si';
+$tconservante[]='No';
+
+$tcsobrante[]='Si';
+$tcsobrante[]='No';
+
+$tconservacion[]='Nevera';
+$tconservacion[]='T.Ambiente';
+$tconservacion[]='T.Ambiente y nevera';
+
+
+$tformafar[]='Ampolla';
+$tformafar[]='Vial';
+
+
+
+
+$tbases[]='Fisiológico';
+$tbases[]='Glucosado';
+$tbases[]='Glucosalino';
+$tbases[]='Agua';
+$tbases[]='Hipertónica';
+$tbases[]='Salino';
+$tbases[]='Salino hipertónico';
+$tbases[]='Otros';
+
+
+$tnaturaleza[]='Vidrio';
+$tnaturaleza[]='PVC';
+$tnaturaleza[]='Viaflo';
+$tnaturaleza[]='Infusor';
+$tnaturaleza[]='Otros';
+
+
+$tvias[]='Infusion';
+$tvias[]='Infusion continua';
+$tvias[]='Intravenosa directa';
+$tvias[]='Intrapleural';
+$tvias[]='Intramuscular';
+$tvias[]='Subcutanea';
+$tvias[]='Intradermica';
+$tvias[]='Irrigación vesical';
+$tvias[]='Intratecal';
+$tvias[]='Conjuntival';
+$tvias[]='Intracutanea';
+
+
+  $torganos[]="ANO";
+  $torganos[]="CEREBRAL";
+  $torganos[]="CERVIX";
+  $torganos[]="COLON";
+  $torganos[]="DE PIEL";
+  $torganos[]="ESOFAGO";
+  $torganos[]="GASTRICO";
+  $torganos[]="GANGLIOS";
+  $torganos[]="HEPATICO";
+  $torganos[]="HUESO";
+  $torganos[]="INTESTINO DELGADO";
+  $torganos[]="LARINGE";
+  $torganos[]="MAMA";
+  $torganos[]="MESOTELIOMA";
+  $torganos[]="NEUROENDOCRINO";
+  $torganos[]="ORIGEN DESCONOCIDO";
+  $torganos[]="OTROS TUMORES";
+  $torganos[]="OTROS TUMORES ORL";
+  $torganos[]="OVARIO";
+  $torganos[]="PANCREAS";
+  $torganos[]="PROSTATA";
+  $torganos[]="PULMSN";
+  $torganos[]="RECTO";
+  $torganos[]="RENAL";
+  $torganos[]="SARCOMA";
+  $torganos[]="TEJIDOS BLANDOS";
+  $torganos[]="TESTICULO";
+  $torganos[]="TIROIDES";
+  $torganos[]="UTERO";
+  $torganos[]="VEJIGA";
+  $torganos[]="VMAS BILIARES";
+
+
+ $thistologia[]="ADENOCARCINOMA";
+ $thistologia[]="ADENOCARCINOMA DE CELULAS EN ANILLO DE SELLO";
+ $thistologia[]="ASTROCITOMA ANAPLASTICO";
+ $thistologia[]="CARCINOMA EMBIONARIO";
+ $thistologia[]="CARCINOMA ANAPLASICO";
+ $thistologia[]="CARCINOMA ENDOMETRIAL";
+ $thistologia[]="CARCINOMA EPIDERMOIDE";
+ $thistologia[]="CARCINOMA DE CELULAS GRANDES";
+ $thistologia[]="CARCINOMA DUCTAL INFILTRANTE";
+ $thistologia[]="CARCINOMA FOLICULAR";
+ $thistologia[]="CARCINOMA INDIFERENCIADO";
+ $thistologia[]="CARCINOMA LOBULILLAR INFILTRANTE ";
+ $thistologia[]="CARCINOMA MICROCITICO";
+ $thistologia[]="CARCINOMA PAPILAR";
+ $thistologia[]="CARCINOMA SEROSO";
+ $thistologia[]="CARCINOMA UROTELIAL";
+ $thistologia[]="COLANGIOCARCINOMA";
+ $thistologia[]="CORIOCARCINOMA";
+ $thistologia[]="FIBROHISTOCITOMA PLEOMSRFICO MALIGNO";
+ $thistologia[]="GASTRINOMA";
+ $thistologia[]="GIST";
+ $thistologia[]="GLIOBLASTOMA MULTIFORME";
+ $thistologia[]="HEPATOCARINOMA";
+ $thistologia[]="HIPERNEFROMA";
+ $thistologia[]="INSULINOMA";
+ $thistologia[]="LINFOMA";
+ $thistologia[]="LIPOSARCOMA";
+ $thistologia[]="MELANOMA";
+ $thistologia[]="MESOTELIOMA";
+ $thistologia[]="OLIGODENDROGLINOMA";
+ $thistologia[]="OTRA HISTOLOGIA";
+ $thistologia[]="OTROS SARCOMAS";
+ $thistologia[]="SARCOMA DE KAPOSI";
+ $thistologia[]="SEMINOMA";
+ $thistologia[]="T. CARCINOIDE";
+ $thistologia[]="T. EMBRIONARIO";
+     */
+
     public static ArrayList<String> SINO = new ArrayList<String>() {
         {
             add("S");
             add("N");
+        }
+    };
+
+    public static ArrayList<String> CITOSBASES = new ArrayList<String>() {
+        {
+            add("Fisiológico");
+            add("Glucosado");
+            add("Glucosalino");
+            add("Agua");
+            add("Hipertónica");
+            add("Salino");
+            add("Salino hipertónico");
+            add("Otros");
+
+        }
+    };
+
+    public static ArrayList<String> CITOSUNIDADESDES = new ArrayList<String>() {
+        {
+            add("ml");
+            add("ml");
+        }
+    };
+
+    public static ArrayList<String> CITOSTIPOVOLUMEN = new ArrayList<String>() {
+        {
+            add("Diluyente");
+            add("Mezcla");
+        }
+    };
+
+    public static ArrayList<String> CITOSTNATURALEZA = new ArrayList<String>() {
+        {
+            add("Vidrio");
+            add("Mezcla");
+            add("PVC");
+            add("Viaflo");
+            add("Infusor");
+            add("Otros");
         }
     };
 
@@ -256,4 +465,11 @@ public class ObjetosComunes {
         return campo;
     }
 
+    public static BigDecimalField getBigDecimalField(String label) {
+        BigDecimalField campo = new BigDecimalField();
+        if (label != null) {
+            campo.setLabel(label);
+        }
+        return campo;
+    }
 }

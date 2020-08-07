@@ -32,4 +32,17 @@ public class Constantes {
 
     public static final String SERVICIO_NOMBRE = "Servicio de Farmacia";
      public static final String SECCION_NOMBRE = "Fórmulas Magistrales";
+     
+     
+     public static final String WWWPDFS = "/reports/";
+     
+         public static final String URLREPORTS = System.getProperty("file.separator") + "webapps"
+            + System.getProperty("file.separator") + "reports" + System.getProperty("file.separator");
+
+    public static final String IMGDIRECTORY = System.getProperty("catalina.home")
+            + System.getProperty("file.separator") + "webapps" + System.getProperty("file.separator");
+
+    public static final String URLPUBLICPDFS = "http://10.36.64.219:8080/coasistencial";
+
+    public static final String ERRORIOEXCEPCION="IOException";
 }

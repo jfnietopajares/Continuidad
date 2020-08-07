@@ -48,60 +48,62 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public class FrmFMFormulas extends FrmMasterLista {
+public final class   FrmFMFormulas extends FrmMasterLista {
+
+    private static final long serialVersionUID = 1L;
 
     private final IntegerField numero = ObjetosComunes.getIntegerField("Número");
 
-    private TextField nombre = ObjetosComunes.getTextField("Nombre", "nombre", 50, "150px");
+    private final TextField nombre = ObjetosComunes.getTextField("Nombre", "nombre", 50, "150px");
 
-    private ComboBox<FMFormulaTipo> comboTipo = ObjetosComunes.getComboTipoForm("Tipo fórmula", null);
+    private final ComboBox<FMFormulaTipo> comboTipo = ObjetosComunes.getComboTipoForm("Tipo fórmula", null);
 
-    private ComboBox<FMViasAdm> comboVias = ObjetosComunes.getComboVias("Vía  administración", null);
+    private  final ComboBox<FMViasAdm> comboVias = ObjetosComunes.getComboVias("Vía  administración", null);
 
-    private ComboBox<String> comboSteril = ObjetosComunes.getComboToString("Estéril", null, ObjetosComunes.SINO, "50px");
+    private final ComboBox<String> comboSteril = ObjetosComunes.getComboToString("Estéril", null, ObjetosComunes.SINO, "50px");
 
-    private ComboBox<FMForma> comboForma = ObjetosComunes.getComboForma("Forma Farmacéutica", null);
+    private final ComboBox<FMForma> comboForma = ObjetosComunes.getComboForma("Forma Farmacéutica", null);
 
-    private IntegerField unidades_f = ObjetosComunes.getIntegerField("Unidades F");
+    private final IntegerField unidades_f = ObjetosComunes.getIntegerField("Unidades F");
 
-    private TextField dunidades_f = ObjetosComunes.getTextField("D.Unidades F", "dunidades_f", 50, "150px");
+    private  final TextField dunidades_f = ObjetosComunes.getTextField("D.Unidades F", "dunidades_f", 50, "150px");
 
-    private TextField caducidad = ObjetosComunes.getTextField("Caducidad", "Caducidad", 15, "150px");
+    private final TextField caducidad = ObjetosComunes.getTextField("Caducidad", "Caducidad", 15, "150px");
 
-    private TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "90px", "90px", "90px");
+    private  final TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "90px", "90px", "90px");
 
-    private TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 15, "150px");
+    private final TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 15, "150px");
 
-    private TextField controles = ObjetosComunes.getTextField("Controles", "controles", 15, "150px");
+    private final TextField controles = ObjetosComunes.getTextField("Controles", "controles", 15, "150px");
 
-    private ComboBox<FMFormulaAutoriza> autorizacion = ObjetosComunes.getComboAutoriza("Autoización", null);
+    private final ComboBox<FMFormulaAutoriza> autorizacion = ObjetosComunes.getComboAutoriza("Autoización", null);
 
-    private TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
+    private  final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
 
-    private TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
+    private final  TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
 
-    private DatePicker fecha_r = ObjetosComunes.getDatePicker("Fecha realización", null, null);
+    private final DatePicker fecha_r = ObjetosComunes.getDatePicker("Fecha realización", null, null);
 
-    private TextField actualizado = ObjetosComunes.getTextField("Actualizado", "actualizado", 15, "150px");
+    private final TextField actualizado = ObjetosComunes.getTextField("Actualizado", "actualizado", 15, "150px");
 
-    private DatePicker fecha_a = ObjetosComunes.getDatePicker("Fecha actualización", null, null);
+    private final DatePicker fecha_a = ObjetosComunes.getDatePicker("Fecha actualización", null, null);
 
-    private TextField etiqueta1 = ObjetosComunes.getTextField("Etiqueta 1", "", 15, "150px");
+    private final TextField etiqueta1 = ObjetosComunes.getTextField("Etiqueta 1", "", 15, "150px");
 
-    private TextField etiqueta2 = ObjetosComunes.getTextField("Etiqueta 2", "", 15, "150px");
+    private  final TextField etiqueta2 = ObjetosComunes.getTextField("Etiqueta 2", "", 15, "150px");
 
-    private ComboBox<String> comboPedirWeb = ObjetosComunes.getComboToString("Pedir Web", null, ObjetosComunes.SINO, "50px");
+    private final ComboBox<String> comboPedirWeb = ObjetosComunes.getComboToString("Pedir Web", null, ObjetosComunes.SINO, "50px");
 
-    private FMFormula fMFormula = new FMFormula();
+    private   FMFormula fMFormula = new FMFormula();
 
-    private Binder<FMFormula> binder = new Binder<>();
+    private final  Binder<FMFormula> binder = new Binder<>();
 
-    private Grid<FMFormula> grid = null;
+    private final Grid<FMFormula> grid = null;
 
-    private Button blibliografia = ObjetosComunes.getBoton("Bibliog", null, VaadinIcon.BOOK.create());
-    private Button composicion = ObjetosComunes.getBoton("Compo", null, VaadinIcon.FLASK.create());
-    private Button elaboración = ObjetosComunes.getBoton("Elabor", null, VaadinIcon.COGS.create());
-    private Button material = ObjetosComunes.getBoton("Material", null, VaadinIcon.WRENCH.create());
+    private final Button blibliografia = ObjetosComunes.getBoton("Bibliog", null, VaadinIcon.BOOK.create());
+    private final Button composicion = ObjetosComunes.getBoton("Compo", null, VaadinIcon.FLASK.create());
+    private final Button elaboración = ObjetosComunes.getBoton("Elabor", null, VaadinIcon.COGS.create());
+    private final Button material;
 
     String nombrePdfAbsoluto = null;
 
@@ -109,11 +111,13 @@ public class FrmFMFormulas extends FrmMasterLista {
 
     public FrmFMFormulas() {
         super("1200px");
+        this.material = ObjetosComunes.getBoton("Material", null, VaadinIcon.WRENCH.create());
         doHazFormulario();
     }
 
     public FrmFMFormulas(FMFormula fMFormula) {
         super("1200px");
+        this.material = ObjetosComunes.getBoton("Material", null, VaadinIcon.WRENCH.create());
         this.fMFormula = fMFormula;
 
         this.fMFormula.setLisaBibliografias(new FMFormulaBiblioDAO().getListaBiblio(fMFormula));

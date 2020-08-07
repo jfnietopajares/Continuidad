@@ -7,9 +7,11 @@ package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import es.sacyl.hnss.dao.FMFormulasDAO;
@@ -17,7 +19,16 @@ import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.listados.FMFormulasLibro;
+import es.sacyl.hnss.listados.FMFormulasListado;
+import es.sacyl.hnss.ui.EmbeddedPdfDocument;
+import es.sacyl.hnss.ui.ObjetosComunes;
 import es.sacyl.hnss.ui.PantallaMaster;
+import es.sacyl.hnss.ui.VentanaPDF;
+import es.sacyl.hnss.utilidades.Constantes;
+import es.sacyl.hnss.utilidades.Utilidades;
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +44,8 @@ public class PntFMFormulas extends PantallaMaster {
     private FrmFMFormulas frmFMFormulas;
 
     ArrayList<FMFormula> listaFormulas = new ArrayList<>();
+    
+      protected Button botonLibro = ObjetosComunes.getBoton("Libro", null, VaadinIcon.BOOK.create());
 
     public PntFMFormulas() {
         super();
@@ -41,9 +54,11 @@ public class PntFMFormulas extends PantallaMaster {
 
     public void doHazPantalla() {
         titulo.setText(FMFormula.getLabelFrom());
-
+        
+        contenedorFiltro.add(botonLibro);
+                
         getContenedorGrid().add(grid);
-textoABuscar.focus();
+        textoABuscar.focus();
         textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
         textoABuscar.addValueChangeListener(event -> {
             doActualizaGrid();
@@ -51,11 +66,17 @@ textoABuscar.focus();
                 doVentanaModal(new FrmFMFormulas(listaFormulas.get(0)));
             }
         });
+
+       
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
+        
+         botonListar.addClickListener(e ->doVerPdf());
+         
+           botonLibro.addClickListener(e ->doVerLibro());
 
         grid.setColumns("numero", "nombre");
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
@@ -80,6 +101,20 @@ textoABuscar.focus();
         doActualizaGrid();
     }
 
+    public void doVerPdf(){
+            String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "listadoformulas" + ".pdf";
+            String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "listadoformulas" + ".pdf";
+            InputStream is = new FMFormulasListado().getStream();
+            File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
+            new VentanaPDF("Listado de fórmulas",nombrePdfRelativo);
+    }
+     public void doVerLibro(){
+            String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "libroformulas" + ".pdf";
+            String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "libroformulas" + ".pdf";
+            InputStream is = new FMFormulasLibro().getStream();
+            File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
+            new VentanaPDF("Libro de fórmulas",nombrePdfRelativo);
+    }
     public void doVentanaModal(Dialog frm) {
         frm.open();
         frm.addDialogCloseActionListener(e -> {

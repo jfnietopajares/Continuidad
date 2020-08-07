@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
  */
 public class FrmFMFormas extends FrmMaster {
 
-    private TextField codigo = ObjetosComunes.getTextField("Código", "codigo", 15, "50px");
+    private static final long serialVersionUID = 1L;
+
+    private final TextField codigo = ObjetosComunes.getTextField("Código", "codigo", 15, "50px");
 
     private TextField nombre = ObjetosComunes.getTextField("Nombre", "descripción", 50, "150px");
 

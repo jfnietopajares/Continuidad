@@ -20,9 +20,9 @@ import com.vaadin.flow.data.value.ValueChangeMode;
  */
 public abstract class PantallaMaster extends VerticalLayout {
 
-    private VerticalLayout contenedorGrid = new VerticalLayout();
+    protected VerticalLayout contenedorGrid = new VerticalLayout();
 
-    private HorizontalLayout contenedorFiltro = new HorizontalLayout();
+    protected HorizontalLayout contenedorFiltro = new HorizontalLayout();
 
     protected H3 titulo = new H3();
 

@@ -40,11 +40,11 @@ public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
     private final TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
 
-    private  FMFormula fMFormula;
+    private final  FMFormula fMFormula;
 
     private FMFormulaBibliografia fMFormulaBibliografia = new FMFormulaBibliografia();
 
-    private Binder<FMFormulaBibliografia> binder = new Binder();
+    private final  Binder<FMFormulaBibliografia> binder = new Binder();
 
     private Grid<FMFormulaBibliografia> grid = new Grid<>();
 
@@ -60,7 +60,7 @@ public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
     public FrmFMFormulasBiblio(FMFormula fMFormula) {
         super("1000px");
-
+        this.grid=new Grid<>();
         this.fMFormula = fMFormula;
 
         doHazFormulario();
@@ -68,7 +68,8 @@ public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
     public void doHazFormulario() {
         this.setWidth("900px");
-
+  this.grid=new Grid<>();
+  
         titulo.setText(FMFormulaBibliografia.getLabelFrom());
 
         contenedorDerecha.add(grid);

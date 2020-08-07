@@ -19,9 +19,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import es.sacyl.hnss.dao.FMFormulaFrabicarDAO;
-import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaBibliografia;
 import es.sacyl.hnss.entidades.FMFormulaFrabicar;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
@@ -189,6 +187,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
         doControlBotones(null);
     }
 
+    @Override
     public void doActualizaGrid() {
         grid.setItems(new FMFormulaFrabicarDAO().getListaFMFormulaFrabicar(comboFormula.getValue()));
     }
@@ -231,6 +230,7 @@ public class FrmFMFormulaFabricar extends FrmMasterLista {
         doActualizaGrid();
     }
      */
+    @Override
     public void doGrabar() {
         if (binder.writeBeanIfValid(fMFormulaFrabicar)) {
 
