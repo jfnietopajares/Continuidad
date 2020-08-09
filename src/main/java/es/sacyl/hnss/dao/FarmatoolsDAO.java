@@ -6,6 +6,8 @@
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.entidades.Medicamento;
+import es.sacyl.hnss.entidades.PrActivo;
 import es.sacyl.hnss.entidades.Usuario;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -70,4 +72,69 @@ public class FarmatoolsDAO extends ConexionDAO implements Serializable {
         return listaFramaceuticos;
     }
 
+     public ArrayList<PrActivo> getListaPrActivos() {
+        Connection connection = null;
+        ArrayList<PrActivo> listaPrActivos = new ArrayList<>();
+        try {
+            connection = super.getConexionBBDD();
+            sql = " SELECT articulos.pr_activo, practivo.nombre as nombre , practivo.nombre as codigo , count(*) as num "+
+						" FROM articulos  JOIN practivo ON articulos.pr_activo = practivo.num_interno  " +
+						" WHERE   (articulos.fgrupa LIKE 'L01%' OR articulos.fgrupa LIKE 'J02%' OR fgrupa IN ('J05AB','V03AF','L04AA','L03AB','L03AC','V03AF')) " +
+					     " AND articulos.fec_baja is null " +
+					"	GROUP BY  pr_activo,nombre  order by nombre";
+
+           
+            Statement statement = connection.createStatement();
+            ResultSet resulSet = statement.executeQuery(sql);
+            while (resulSet.next()) {
+                PrActivo prActivo = new PrActivo();
+                prActivo.setCodigo(resulSet.getString("pr_activo"));
+                prActivo.setNombre(resulSet.getString("nombre"));
+                listaPrActivos.add(prActivo);
+            }
+            statement.close();
+            LOGGER.debug(sql);
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
+        return listaPrActivos;
+    }
+     
+        public ArrayList<Medicamento> getListaMediPr(String pr) {
+        Connection connection = null;
+        ArrayList<Medicamento> listaMedicamentos = new ArrayList<>();
+        try {
+            connection = super.getConexionBBDD();
+             sql =" SELECT codigo,des_farma AS nombre  FROM articulos " +
+      			"	WHERE  pr_activo in (SELECT  num_interno FROM  practivo WHERE  nombre ='"+pr+"')  ORDER by des_farma ";
+            Statement statement = connection.createStatement();
+            ResultSet resulSet = statement.executeQuery(sql);
+            while (resulSet.next()) {
+                Medicamento medicamento = new Medicamento();
+                medicamento.setCodigo(resulSet.getString("codigo"));
+                medicamento.setNombre(resulSet.getString("nombre"));
+                listaMedicamentos.add(medicamento);
+            }
+            statement.close();
+            LOGGER.debug(sql);
+        } catch (SQLException e) {
+            LOGGER.error(sql, e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        }
+        return listaMedicamentos;
+    }
+     
 }

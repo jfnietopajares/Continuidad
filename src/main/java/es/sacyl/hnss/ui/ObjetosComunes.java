@@ -20,6 +20,7 @@ import es.sacyl.hnss.dao.FMFormulasDAO;
 import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
+import es.sacyl.hnss.dao.FarmatoolsDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
@@ -27,6 +28,8 @@ import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMInstrumento;
 import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.entidades.Medicamento;
+import es.sacyl.hnss.entidades.PrActivo;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,37 +49,12 @@ $tsino[1][1]='No';
 
 
 
-$tnunidadesp=5;
-$tunidadesp[0][0]='mg';
-$tunidadesp[1][0]='mg' ;
-$tunidadesp[0][1]='MU';
-$tunidadesp[1][1]='MU' ;
-$tunidadesp[0][2]='UI';
-$tunidadesp[1][2]='UI' ;
-$tunidadesp[0][3]='g';
-$tunidadesp[1][3]='g' ;
-$tunidadesp[0][4]='mcg';
-$tunidadesp[1][4]='mcg' ;
 
 $tnunidadessup=1;
 $tunidadessup[0][0]='M2';
 $tunidadessup[1][0]='M2' ;
 
-$tnunidadesT=7;
-$tunidadesT[0][0]='ml';
-$tunidadesT[1][0]='ml';
-$tunidadesT[0][1]='mg';
-$tunidadesT[1][1]='mg' ;
-$tunidadesT[0][2]='MU';
-$tunidadesT[1][2]='MU' ;
-$tunidadesT[0][3]='UI';
-$tunidadesT[1][3]='UI' ;
-$tunidadesT[0][4]='g';
-$tunidadesT[1][4]='g' ;
-$tunidadesT[0][5]='M2';
-$tunidadesT[1][5]='M2' ;
-$tunidadesT[0][6]='mcg';
-$tunidadesT[1][6]='mcg' ;
+
 
 
 
@@ -84,10 +62,6 @@ $tunidadesti[0]='horas';
 $tunidadesti[1]='dias' ;
 
 
-$tvesicante[]='Vesicante';
-$tvesicante[]='Irritante';
-$tvesicante[]='No irrit. ni vesicante.';
-$tvesicante[]='Vesicantei/irritante.';
 
 $tconservante[]='Si';
 $tconservante[]='No';
@@ -206,7 +180,6 @@ $tvias[]='Intracutanea';
  $thistologia[]="T. CARCINOIDE";
  $thistologia[]="T. EMBRIONARIO";
      */
-
     public static ArrayList<String> SINO = new ArrayList<String>() {
         {
             add("S");
@@ -228,7 +201,7 @@ $tvias[]='Intracutanea';
         }
     };
 
-    public static ArrayList<String> CITOSUNIDADESDES = new ArrayList<String>() {
+    public static ArrayList<String> CITOSUNIDADESV = new ArrayList<String>() {
         {
             add("ml");
             add("ml");
@@ -252,6 +225,36 @@ $tvias[]='Intracutanea';
             add("Otros");
         }
     };
+
+    public static ArrayList<String> CITOSTUNIDADESP = new ArrayList<String>() {
+        {
+            add("mg");
+            add("MU");
+            add("UI");
+            add("g");
+            add("mcp");
+        }
+    };
+    public static ArrayList<String> CITOSTUNIDADES = new ArrayList<String>() {
+        {
+            add("ml");
+            add("mg");
+            add("MU");
+            add("UI");
+            add("g");
+            add("M2");
+            add("mcg");
+        }
+    };
+    public static ArrayList<String> CITOSVESICANTE = new ArrayList<String>() {
+        {
+            add("Vesicante");
+            add("Irritante");
+            add("No irrit. ni vesicante.");
+            add("Vesicantei/irritante.");
+        }
+    };
+
 
     public ObjetosComunes() {
 
@@ -349,6 +352,36 @@ $tvias[]='Intracutanea';
         combo.setItems(new FMInstrumentosDAO().getListaInstrumentos(null));
 
         combo.setItemLabelGenerator(FMInstrumento::getNombre);
+
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<PrActivo> getComboPrActivo(String label, PrActivo valor) {
+        ComboBox<PrActivo> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FarmatoolsDAO().getListaPrActivos());
+
+        combo.setItemLabelGenerator(PrActivo::getNombre);
+
+        if (valor != null) {
+            combo.setValue(valor);
+        }
+        return combo;
+    }
+
+    public static ComboBox<Medicamento> getCombMedicamentos(String label, Medicamento valor, PrActivo prAvtivo) {
+        ComboBox<Medicamento> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FarmatoolsDAO().getListaMediPr(prAvtivo.getCodigo()));
+
+        combo.setItemLabelGenerator(Medicamento::getNombre);
 
         if (valor != null) {
             combo.setValue(valor);

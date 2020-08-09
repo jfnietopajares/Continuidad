@@ -191,11 +191,10 @@ public CitosDiluciones getPorBase(String  base) {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            citosDiluciones.setId(super.getSiguienteId("citos_diluciones"));
             
-            sql = " UPDATE   citos_diluciones  set"
+            sql = " UPDATE   citos_diluciones  SET "
                     + "base=?,concentracion=?,volumen=?,volumenu=?,tipovolumen=?,presentacion=?,observaciones=? "
-                    + " WHERE id=?) "; 
+                    + " WHERE id=? "; 
 
             PreparedStatement statement = connection.prepareStatement(sql);
 

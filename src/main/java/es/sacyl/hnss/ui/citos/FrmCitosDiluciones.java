@@ -15,19 +15,26 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.theme.lumo.Lumo;
 import es.sacyl.hnss.dao.CitosDilucionesDAO;
+import es.sacyl.hnss.dao.FMFormaDAO;
 import es.sacyl.hnss.entidades.CitosDiluciones;
+import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormula;
+import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.FrmMaster;
 import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.ObjetosComunes;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author JuanNieto
  */
-public final class FrmCitosDiluciones extends FrmMasterLista {
+public final class FrmCitosDiluciones extends FrmMaster {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +46,7 @@ public final class FrmCitosDiluciones extends FrmMasterLista {
 
     private final IntegerField volumen = ObjetosComunes.getIntegerField("Volumen");
 
-    private final ComboBox<String> volumenu = ObjetosComunes.getComboToString("Vol", null, ObjetosComunes.CITOSBASES, "50px");
+    private final ComboBox<String> volumenu = ObjetosComunes.getComboToString("Unidades", null, ObjetosComunes.CITOSUNIDADESV, "50px");
 
     private final ComboBox<String> tipovolumen = ObjetosComunes.getComboToString("Tipo", null, ObjetosComunes.CITOSTIPOVOLUMEN, "50px");
 
@@ -54,14 +61,14 @@ public final class FrmCitosDiluciones extends FrmMasterLista {
     private final  Grid<CitosDiluciones> grid;
     
     public FrmCitosDiluciones() {
-        super("900px");
+        super("500px");
         this.grid = new Grid<>();
         this.binder = new Binder<>();
         doHazFormulario();
     }
 
     public FrmCitosDiluciones(CitosDiluciones citoDiluciones) {
-        super("1200px");
+       super("500px");
         this.grid = new Grid<>();
         this.binder = new Binder<>();
         this.citoDiluciones = citoDiluciones;
@@ -69,28 +76,27 @@ public final class FrmCitosDiluciones extends FrmMasterLista {
     }
 
     public void doHazFormulario() {
-        titulo.setText(FMFormula.getLabelFrom());
+        titulo.setText(CitosDiluciones.getLabelFrom());
         
         contenedorFormulario.addClassName(Lumo.LIGHT);
         contenedorFormulario.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("50", 1),
-                new FormLayout.ResponsiveStep("150px", 2),
-                new FormLayout.ResponsiveStep("100px", 3));
+                new FormLayout.ResponsiveStep("150px", 1),
+                new FormLayout.ResponsiveStep("50px", 2));
         
-        contenedorFormulario.add(id, base);
-        contenedorFormulario.setColspan(base, 2);
-        contenedorFormulario.add(concentracion, volumen, volumenu);
+        contenedorFormulario.add(id);
+       contenedorFormulario.setColspan(id, 2);
+       contenedorFormulario.add(base, concentracion);
+        contenedorFormulario.add( volumen, volumenu);
 
         contenedorFormulario.add(tipovolumen);
-        contenedorFormulario.setColspan(tipovolumen, 3);
+        contenedorFormulario.setColspan(tipovolumen, 2);
 
         contenedorFormulario.add(presentacion);
-        contenedorFormulario.setColspan(presentacion, 3);
+        contenedorFormulario.setColspan(presentacion, 2);
 
         contenedorFormulario.add(observaciones);
-        contenedorFormulario.setColspan(observaciones, 3);
+        contenedorFormulario.setColspan(observaciones, 2);
 
-         contenedorDerecha.add(grid);
          
         if (citoDiluciones == null || citoDiluciones.getId() == null) {
             id.setEnabled(true);
@@ -141,48 +147,63 @@ public final class FrmCitosDiluciones extends FrmMasterLista {
                 .asRequired()
                 .bind(CitosDiluciones::getObservaciones, CitosDiluciones::setObservaciones);
           
-                  grid.addColumn(CitosDiluciones::getId).setHeader("Id");
-        grid.addColumn(CitosDiluciones::getBase).setHeader("Base").setWidth("300px");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
-        grid.addItemClickListener(event
-                -> {
-            citoDiluciones = event.getItem();
-            doControlEventos(citoDiluciones);
-        }
-        );
-        grid.setItems(
-                new CitosDilucionesDAO().getListaDiluciones(null));
-
-        doActualizaGrid();
+           doControlBotones(citoDiluciones);
     }
-
-     public void doControlEventos(CitosDiluciones citoDiluciones) {
-         if (citoDiluciones==null) {
+ @Override
+     public void doControlBotones(Object citoDilucionesParam) {
+         if (citoDilucionesParam==null) {
         citoDiluciones = new CitosDiluciones();
         binder.readBean(citoDiluciones);
         id.setEnabled(true);
         id.focus();
         botonBorrar.setEnabled(false);
          } else {
+             citoDiluciones=  (CitosDiluciones) citoDilucionesParam;
               binder.readBean(citoDiluciones);
         id.setEnabled(false);
         base.focus();
         botonBorrar.setEnabled(true);
          }
-        doActualizaGrid();
     }
     @Override
     public void doGrabar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         if (binder.writeBeanIfValid(citoDiluciones)) {
+
+            if (new CitosDilucionesDAO().doGrabaDatos(citoDiluciones) == true) {
+
+                (new Notification(FrmMaster.AVISODATOALMACENADO, 1000, Notification.Position.MIDDLE)).open();
+
+                String clase = this.getParent().get().getClass().getName();
+
+            } else {
+                (new Notification(FrmMaster.AVISODATOERRORBBDD, 1000, Notification.Position.MIDDLE)).open();
+            }
+            this.close();
+        } else {
+            BinderValidationStatus<CitosDiluciones> validate = binder.validate();
+            String errorText = validate.getFieldValidationStatuses()
+                    .stream().filter(BindingValidationStatus::isError)
+                    .map(BindingValidationStatus::getMessage)
+                    .map(Optional::get).distinct()
+                    .collect(Collectors.joining(", "));
+            Notification.show(FrmMaster.AVISODATOERRORVALIDANO + errorText);
+        }
     }
 
     @Override
     public void doBorrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final ConfirmDialog dialog = new ConfirmDialog(
+                "Conformación de acción",
+                "Seguro que quieres borrar el dato ",
+                "Borrar el dato actual ", () -> {
+            boolean doBorraDatos = new CitosDilucionesDAO().doBorraDatos(citoDiluciones);
+            Notification show = Notification.show(FrmMaster.AVISODATOBORRADO);
+                    this.close();
+                });
+        dialog.open();
+        dialog.addDialogCloseActionListener(e -> {
+            this.close();
+        });
     }
 
     @Override
@@ -190,9 +211,6 @@ public final class FrmCitosDiluciones extends FrmMasterLista {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void doActualizaGrid() {
-        grid.setItems(new CitosDilucionesDAO().getListaDiluciones(null));
-    }
+   
 
 }

@@ -21,12 +21,12 @@ public class CitosDiluciones {
     private String tipovolumen  ;
 
     private String presentacion ;
-    private String 
-	observaciones	;
+    private String 	observaciones	;
 
- public static final String labelFrom = "Citostáticos diluciones  ";
+    public static final String labelFrom = "Citostáticos diluciones  ";
 
     public CitosDiluciones(){
+        this.id=0;
     }
 
     public Integer getId() {
@@ -91,6 +91,10 @@ public class CitosDiluciones {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public static String getLabelFrom() {
+        return labelFrom;
     }
 
 

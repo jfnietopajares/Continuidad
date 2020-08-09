@@ -7,6 +7,7 @@ package es.sacyl.hnss.ui;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -59,7 +60,16 @@ public abstract class PantallaMaster extends VerticalLayout {
                 -> doNuevo()
         );
     }
-
+   public void doVentanaModal(Dialog frm) {
+        frm.open();
+        frm.addDialogCloseActionListener(e -> {
+            doActualizaGrid();
+        }
+        );
+        frm.addDetachListener(e -> {
+            doActualizaGrid();
+        });
+    }
     public VerticalLayout getContenedorGrid() {
         return contenedorGrid;
     }

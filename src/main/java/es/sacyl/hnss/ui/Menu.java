@@ -19,6 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.ui.citos.FrmCitosDiluciones;
+import es.sacyl.hnss.ui.citos.PntCitosDiluciones;
+import es.sacyl.hnss.ui.citos.PntCitosMedicamentos;
 import es.sacyl.hnss.ui.formulas.FrmFMFormulaFabricar;
 import es.sacyl.hnss.ui.formulas.PntFMFormas;
 import es.sacyl.hnss.ui.formulas.PntFMFormulas;
@@ -40,7 +42,7 @@ public class Menu extends MenuBar {
         MenuItem formulas = this.addItem("Fórmulas");
         MenuItem equivalentes = this.addItem("Equivalenes");
         MenuItem citostaticos = this.addItem("Citostáticos");
-        
+
         this.addItem("Salir", e -> {
         });
 
@@ -98,14 +100,15 @@ public class Menu extends MenuBar {
 
         });
 
-        
-            SubMenu citostaticosSubMenu = citostaticos.getSubMenu();
-            
-     citostaticosSubMenu.addItem("Diluciones", (ClickEvent<MenuItem> e) -> {
+        SubMenu citostaticosSubMenu = citostaticos.getSubMenu();
+        citostaticosSubMenu.addItem("Diluciones", (ClickEvent<MenuItem> e) -> {
             contenedor.removeAll();
-            contenedor.add((new FrmCitosDiluciones()));
+            contenedor.add((new PntCitosDiluciones()));
         });
-       
+citostaticosSubMenu.addItem("Medicamentos", (ClickEvent<MenuItem> e) -> {
+            contenedor.removeAll();
+            contenedor.add((new PntCitosMedicamentos()));
+        });
     }
 
 }

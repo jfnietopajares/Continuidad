@@ -90,7 +90,7 @@ public final class PntFMFormas extends PantallaMaster {
 
         doActualizaGrid();
     }
-
+/*
     public void doVentanaModal(FrmFMFormas frmFMFormas) {
         frmFMFormas.open();
         frmFMFormas.addDialogCloseActionListener(e -> {
@@ -101,10 +101,10 @@ public final class PntFMFormas extends PantallaMaster {
             doActualizaGrid();
         });
     }
-
+*/
     @Override
     public void doBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        doActualizaGrid();
     }
 
     @Override
