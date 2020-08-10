@@ -77,18 +77,16 @@ public class FarmatoolsDAO extends ConexionDAO implements Serializable {
         ArrayList<PrActivo> listaPrActivos = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT articulos.pr_activo, practivo.nombre as nombre , practivo.nombre as codigo , count(*) as num "+
-						" FROM articulos  JOIN practivo ON articulos.pr_activo = practivo.num_interno  " +
-						" WHERE   (articulos.fgrupa LIKE 'L01%' OR articulos.fgrupa LIKE 'J02%' OR fgrupa IN ('J05AB','V03AF','L04AA','L03AB','L03AC','V03AF')) " +
-					     " AND articulos.fec_baja is null " +
-					"	GROUP BY  pr_activo,nombre  order by nombre";
+            sql = " SELECT  DISTINCT articulos.pr_activo as nombre ,articulos.pr_activo as codigo FROM citos_articulos  as articulos join citos_practivo On citos_practivo.nombre=articulos.pr_activo "
+                    + "WHERE   (articulos.fgrupa LIKE 'L01%' OR articulos.fgrupa LIKE 'J02%' OR fgrupa IN ('J05AB','V03AF','L04AA','L03AB','L03AC','V03AF')) "
+                    + "AND articulos.fec_baja is null";
 
            
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
                 PrActivo prActivo = new PrActivo();
-                prActivo.setCodigo(resulSet.getString("pr_activo"));
+               prActivo.setCodigo(resulSet.getString("codigo"));
                 prActivo.setNombre(resulSet.getString("nombre"));
                 listaPrActivos.add(prActivo);
             }

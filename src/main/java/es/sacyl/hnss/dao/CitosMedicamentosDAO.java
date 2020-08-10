@@ -35,7 +35,7 @@ public class CitosMedicamentosDAO extends ConexionDAO {
         CitosMedicamentos citosMedicamentos = new CitosMedicamentos();
         try {
             citosMedicamentos.setId(rs.getInt("id"));
-            citosMedicamentos.setPr_activo(new PrActivo(rs.getString("pr_activo")));
+            citosMedicamentos.setPr_activo(new PrActivo(rs.getString("pr_activo"),rs.getString("pr_activo")));
             citosMedicamentos.setComercial(rs.getString("comercial"));
             citosMedicamentos.setConcentraciono(rs.getString("concentraciono"));
             citosMedicamentos.setEstabilidado(rs.getString("estabilidado"));
@@ -224,7 +224,7 @@ public class CitosMedicamentosDAO extends ConexionDAO {
             }
             insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
-
+LOGGER.debug(sql);
         } catch (SQLException e) {
             LOGGER.error(sql, e);
 
@@ -249,13 +249,12 @@ public class CitosMedicamentosDAO extends ConexionDAO {
         }
         try {
             connection = super.getConexionBBDD();
-            citosMedicamentos.setId(super.getSiguienteId("citos_medicamentos"));
 
             sql = " UPDATE    citos_medicamentos SET  "
                     + "pr_activo=?,comercial=?,concentraciono=?,estabilidado=?,estabilidadiv=?"
                     + ",vesicante=?,siglas=?,csobrante=?,reconstitucion=?,observaciones=?,extravasacion=?"
                     + ",derrames=?,exposicion=?,obscsobrante=?,peligroso=? "
-                    + " WERE id=?  ) ";
+                    + " WHERE id=?   ";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -339,11 +338,11 @@ public class CitosMedicamentosDAO extends ConexionDAO {
             if (citosMedicamentos.getId() == null) {
                 statement.setNull(16, Types.INTEGER);
             } else {
-                statement.setLong(16, citosMedicamentos.getId());
+                 statement.setInt(16, citosMedicamentos.getId());
             }
             insertadoBoolean = statement.executeUpdate() > 0;
             statement.close();
-
+LOGGER.debug(sql);
         } catch (SQLException e) {
             LOGGER.error(sql, e);
 
@@ -396,7 +395,7 @@ public class CitosMedicamentosDAO extends ConexionDAO {
             if (texto != null && !texto.isEmpty()) {
                 sql = sql.concat(" AND ( pr_activo like'%" + texto + "%'  OR comercial like '%" + texto + "%')");
             }
-            sql = sql.concat("ORDER BY base");
+            sql = sql.concat("ORDER BY comercial ");
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {

@@ -50,22 +50,23 @@ public class FrmCitosMedicamentos extends FrmMasterLista {
     private final TextArea exposicion = ObjetosComunes.getTextArea("Exposición", "exposición", null, "600px", "90px", "90px", "90px");
     private final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
 
-    private  CitosMedicamentos citosMedicamentos = new CitosMedicamentos();
+    private CitosMedicamentos citosMedicamentos = new CitosMedicamentos();
 
-    private final Binder<CitosMedicamentos> binder = new  Binder<>();
-    
+    private final Binder<CitosMedicamentos> binder = new Binder<>();
+
     public FrmCitosMedicamentos() {
- super("1200px");
+        super("1200px");
         doHazFormulario();
     }
 
     public FrmCitosMedicamentos(CitosMedicamentos citosMedicamentos) {
         super();
         this.citosMedicamentos = citosMedicamentos;
-           doHazFormulario();
+        doHazFormulario();
     }
-public void    doHazFormulario(){
-      titulo.setText(CitosMedicamentos.getLabelFrom());
+
+    public void doHazFormulario() {
+        titulo.setText(CitosMedicamentos.getLabelFrom());
 
         contenedorFormulario.addClassName(Lumo.LIGHT);
         contenedorFormulario.setResponsiveSteps(
@@ -74,77 +75,83 @@ public void    doHazFormulario(){
         contenedorFormulario.setMaxWidth("1000px");
 
         contenedorFormulario.add(id);
-         contenedorFormulario.setColspan(id, 2);
-           contenedorFormulario.add(pr_activo,comercial);
-              contenedorFormulario.add(siglas,estabilidado);
-              contenedorFormulario.add(reconstitucion);
-         contenedorFormulario.setColspan(reconstitucion, 2); 
-             contenedorFormulario.add(concentraciono,csobrante);
- 
-               contenedorFormulario.add(obscsobrante);
-         contenedorFormulario.setColspan(obscsobrante, 2); 
-              contenedorFormulario.add(peligroso);
-         contenedorFormulario.setColspan(peligroso, 2); 
-         contenedorFormulario.add(vesicante);
-         contenedorFormulario.setColspan(vesicante, 2); 
-         
-          contenedorFormulario.add(extravasacion);
-         contenedorFormulario.setColspan(extravasacion, 2); 
-         
-          contenedorFormulario.add(derrames);
-         contenedorFormulario.setColspan(derrames, 2); 
-          contenedorFormulario.add(exposicion);
-         contenedorFormulario.setColspan(exposicion, 2); 
-         contenedorFormulario.add(observaciones);
-         contenedorFormulario.setColspan(observaciones, 2); 
+        contenedorFormulario.setColspan(id, 2);
+        contenedorFormulario.add(pr_activo, comercial);
+        contenedorFormulario.add(siglas, estabilidado);
+        contenedorFormulario.add(reconstitucion);
+        contenedorFormulario.setColspan(reconstitucion, 2);
+        contenedorFormulario.add(concentraciono, csobrante);
 
-          binder.forField(id)
+        contenedorFormulario.add(obscsobrante);
+        contenedorFormulario.setColspan(obscsobrante, 2);
+        contenedorFormulario.add(peligroso);
+        contenedorFormulario.setColspan(peligroso, 2);
+        contenedorFormulario.add(vesicante);
+        contenedorFormulario.setColspan(vesicante, 2);
+
+        contenedorFormulario.add(extravasacion);
+        contenedorFormulario.setColspan(extravasacion, 2);
+
+        contenedorFormulario.add(derrames);
+        contenedorFormulario.setColspan(derrames, 2);
+        
+        contenedorFormulario.add(exposicion);
+        contenedorFormulario.setColspan(exposicion, 2);
+        
+        contenedorFormulario.add(observaciones);
+        contenedorFormulario.setColspan(observaciones, 2);
+
+        binder.forField(id)
                 .bind(CitosMedicamentos::getId, CitosMedicamentos::setId);
 
-            binder.forField(pr_activo)
+        binder.forField(pr_activo)
+                .asRequired()
                 .bind(CitosMedicamentos::getPr_activo, CitosMedicamentos::setPr_activo);
-   
-    binder.forField(comercial)
+
+        binder.forField(comercial)
+                   .asRequired()
                 .bind(CitosMedicamentos::getComercial, CitosMedicamentos::setComercial);
-            
-binder.forField(siglas)
+
+        binder.forField(siglas)
                 .bind(CitosMedicamentos::getSiglas, CitosMedicamentos::setSiglas);
-     
-binder.forField(reconstitucion)
+
+        binder.forField(reconstitucion)
                 .bind(CitosMedicamentos::getReconstitucion, CitosMedicamentos::setReconstitucion);
 
-binder.forField(estabilidado)
+        binder.forField(estabilidado)
                 .bind(CitosMedicamentos::getEstabilidado, CitosMedicamentos::setEstabilidado);
 
-binder.forField(concentraciono)
+        binder.forField(concentraciono)
                 .bind(CitosMedicamentos::getConcentraciono, CitosMedicamentos::setConcentraciono);
 
-binder.forField(csobrante)
+        binder.forField(csobrante)
+                   .asRequired()
                 .bind(CitosMedicamentos::getCsobrante, CitosMedicamentos::setCsobrante);
 
-binder.forField(obscsobrante)
+        binder.forField(obscsobrante)
                 .bind(CitosMedicamentos::getObscsobrante, CitosMedicamentos::setObscsobrante);
 
-binder.forField(peligroso)
+        binder.forField(peligroso)
                 .bind(CitosMedicamentos::getPeligroso, CitosMedicamentos::setPeligroso);
 
-binder.forField(vesicante)
+        binder.forField(vesicante)
+                   .asRequired()
                 .bind(CitosMedicamentos::getVesicante, CitosMedicamentos::setVesicante);
-binder.forField(extravasacion)
+        binder.forField(extravasacion)
                 .bind(CitosMedicamentos::getExtravasacion, CitosMedicamentos::setExtravasacion);
 
-binder.forField(derrames)
+        binder.forField(derrames)
                 .bind(CitosMedicamentos::getDerrames, CitosMedicamentos::setDerrames);
-binder.forField(exposicion)
+        binder.forField(exposicion)
                 .bind(CitosMedicamentos::getExposicion, CitosMedicamentos::setExposicion);
-binder.forField(observaciones)
+        binder.forField(observaciones)
                 .bind(CitosMedicamentos::getObservaciones, CitosMedicamentos::setObservaciones);
 
-binder.readBean(citosMedicamentos);
+        binder.readBean(citosMedicamentos);
 
-}
+    }
 
-     @Override
+    @Override
     public void doGrabar() {
         if (binder.writeBeanIfValid(citosMedicamentos)) {
 
