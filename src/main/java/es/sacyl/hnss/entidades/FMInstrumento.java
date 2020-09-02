@@ -14,7 +14,7 @@ public class FMInstrumento implements Serializable {
 
     private String nombre;
 
-    public static final String labelFrom = "Intrumentos y materiales ";
+    public static final String LABELFORM = "Intrumentos y materiales ";
 
     public FMInstrumento() {
 
@@ -44,7 +44,7 @@ public class FMInstrumento implements Serializable {
     }
 
     public static String getLabelFrom() {
-        return labelFrom;
+        return LABELFORM;
     }
 
     @Override

@@ -26,8 +26,8 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
     private FMInstrumento getRegistroResulset(ResultSet rs) {
         FMInstrumento fMInstrumento = new FMInstrumento();
         try {
-            fMInstrumento.setCodigo(rs.getString("codigo"));
-            fMInstrumento.setNombre(rs.getString("nombre"));
+            fMInstrumento.setCodigo(rs.getString("codigo").trim());
+            fMInstrumento.setNombre(rs.getString("nombre").trim());
 
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -206,7 +206,8 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_instrumentos WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
-                sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+               // sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+                sql = sql.concat(" AND  upper(nombre) like'%" + texto.toUpperCase() + "%'");
             }
             sql = sql.concat("ORDER BY nombre");
             Statement statement = connection.createStatement();

@@ -32,12 +32,12 @@ public class FMFormulaAutoriza implements Serializable {
     };
 
     public FMFormulaAutoriza(String codigo) {
-        this.codigo = codigo;
-        if (codigo.equals("AUX")) {
+        this.codigo = codigo.trim();
+        if (this.codigo.equals("AUX")) {
             descripcion = "AUXILIAR";
-        } else if (codigo.equals("ENF")) {
+        } else if (this.codigo.equals("ENF")) {
             descripcion = "FOR.NORMALIZADA";
-        } else if (codigo.equals("FAR")) {
+        } else if (this.codigo.equals("FAR")) {
             descripcion = "FARMACEUTICO";
         }
     }

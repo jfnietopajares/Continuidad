@@ -71,7 +71,8 @@ public class MainView extends VerticalLayout {
         LOGGER.debug("Inicio debug");
         LOGGER.error("Inicio error");
         LOGGER.fatal("Inicio fatal");
-
+String sSistemaOperativo = System.getProperty("os.name");
+System.out.println(sSistemaOperativo);
         this.setAlignItems(Alignment.CENTER);
         if (new ConexionDAO().getConexionBBDD() == null) {
             (new Notification("Error BBDD", 3000, Notification.Position.MIDDLE)).open();

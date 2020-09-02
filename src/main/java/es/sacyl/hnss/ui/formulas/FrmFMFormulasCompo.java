@@ -81,9 +81,6 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
 
     public void doHazFormulario() {
         this.setWidth("900px");
-        //  this.setMaxWidth("900px");
-//        this.setSizeFull();
-
         titulo.setText(FMFormulaCompo.getLabelFrom());
 
         contenedorDerecha.add(grid);
@@ -91,14 +88,10 @@ public class FrmFMFormulasCompo extends FrmMasterLista {
         contenedorFormulario.add(nombre, comboMprimas, orden, cantidad, unidades);
 
         nombre.setValue(fMFormula.getNombre());
-        grid.addColumn(FMFormulaCompo::getOrden).setHeader("Orden");
-        grid.addColumn(FMFormulaCompo::getMprimaDescripcion).setHeader("M.Prima").setWidth("300px");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
+        grid.addColumn(FMFormulaCompo::getOrden).setHeader("Orden").setAutoWidth(true);
+        grid.addColumn(FMFormulaCompo::getMprimaProducto).setHeader("M.Prima").setWidth("300px");
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
-        //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
             doControlEventosRecpera(event.getItem());

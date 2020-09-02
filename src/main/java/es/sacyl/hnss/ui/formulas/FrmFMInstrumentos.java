@@ -51,7 +51,7 @@ public final class FrmFMInstrumentos extends FrmMaster {
 
     public void doHazFormulario() {
 
-        titulo.setText(FMViasAdm.getLabelFrom());
+        titulo.setText(FMInstrumento.getLabelFrom());
         contenedorFormulario.add(codigo);
         contenedorFormulario.add(nombre);
 

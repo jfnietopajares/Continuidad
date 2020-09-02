@@ -32,8 +32,8 @@ public class FMViasAdmDAO extends ConexionDAO implements Serializable {
     private FMViasAdm getRegistroResulset(ResultSet rs) {
         FMViasAdm fMViasAdm = new FMViasAdm();
         try {
-            fMViasAdm.setCodigo(rs.getString("codigo"));
-            fMViasAdm.setNombre(rs.getString("nombre"));
+            fMViasAdm.setCodigo(rs.getString("codigo").trim());
+            fMViasAdm.setNombre(rs.getString("nombre").trim());
 
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -187,7 +187,8 @@ public class FMViasAdmDAO extends ConexionDAO implements Serializable {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_viaadm WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
-                sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+             //   sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+              sql = sql.concat(" AND UPPER(nombre) like'%" + texto.toUpperCase() + "%'");
             }
             sql = sql.concat("ORDER BY nombre");
             Statement statement = connection.createStatement();
@@ -210,4 +211,5 @@ public class FMViasAdmDAO extends ConexionDAO implements Serializable {
         return listaVias;
     }
 
+    
 }

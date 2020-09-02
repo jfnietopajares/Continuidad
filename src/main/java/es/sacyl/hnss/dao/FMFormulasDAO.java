@@ -35,43 +35,76 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
 
     DateTimeFormatter dateTimeFormatterParser = DateTimeFormatter.ofPattern("yyyyMMdd");
 
+    private String sqlMaster = "SELECT f.* ,t.codigo as formacodigo,t.nombre as formanombre"
+            + " ,v.codigo as viacodigo,v.nombre as vianombre "
+            + " FROM farm_fm_formulas f "
+            + " JOIN farm_fm_tipoforma t ON t.codigo = f.forma "
+            + " JOIN farm_fm_viaadm v ON v.codigo=f.via ";
+
     public FMFormulasDAO() {
         super();
     }
 
-    private FMFormula getRegistroResulset(ResultSet rs) {
+    private FMFormula getRegistroResulset(ResultSet rs, FMForma forma, FMViasAdm via) {
         FMFormula fMFormula = new FMFormula();
         try {
             fMFormula.setNumero(rs.getInt("numero"));
-            fMFormula.setNombre(rs.getString("nombre"));
+            fMFormula.setNombre(rs.getString("nombre").trim());
             if (rs.getString("tipo") != null) {
-                fMFormula.setTipo(new FMFormulaTipo(rs.getString("tipo")));
+                fMFormula.setTipo(new FMFormulaTipo(rs.getString("tipo").trim()));
             }
-            fMFormula.setEsteril(rs.getString("esteril"));
-            fMFormula.setForma(new FMFormaDAO().getPorCodigo(rs.getString("forma")));
-            fMFormula.setVia(new FMViasAdmDAO().getPorCodigo(rs.getString("via")));
+            fMFormula.setEsteril(rs.getString("esteril").trim());
+            if (forma == null) {
+                fMFormula.setForma(new FMFormaDAO().getPorCodigo(rs.getString("forma").trim()));
+            } else {
+                fMFormula.setForma(forma);
+            }
+            if (via == null) {
+                fMFormula.setVia(new FMViasAdmDAO().getPorCodigo(rs.getString("via").trim()));
+            } else {
+                fMFormula.setVia(via);
+            }
             fMFormula.setUnidades_f(rs.getInt("unidades_f"));
-            fMFormula.setIndicacion(rs.getString("indicacion"));
-            fMFormula.setConservacion(rs.getString("conservacion"));
-            fMFormula.setCaducidad(rs.getString("caducidad"));
-            fMFormula.setControles(rs.getString("controles"));
-            fMFormula.setDunidades_f(rs.getString("dunidades_f"));
-            fMFormula.setIndicacion1(rs.getString("indicacion1"));
-            fMFormula.setObservaciones(rs.getString("observaciones"));
-            if (rs.getString("p_autorizado") != null) {
-                fMFormula.setP_autorizado(new FMFormulaAutoriza(rs.getString("p_autorizado")));
+            if (rs.getString("indicacion") != null) {
+                fMFormula.setIndicacion(rs.getString("indicacion".trim()));
+            }
+            if (rs.getString("conservacion") != null) {
+                fMFormula.setConservacion(rs.getString("conservacion").trim());
+            }
+            if (rs.getString("caducidad") != null) {
+                fMFormula.setCaducidad(rs.getString("caducidad").trim());
+            }
+            if (rs.getString("controles") != null) {
+                fMFormula.setControles(rs.getString("controles").trim());
+            }
+            if (rs.getString("dunidades_f") != null) {
+                fMFormula.setDunidades_f(rs.getString("dunidades_f").trim());
             }
 
-            fMFormula.setPedirweb(rs.getString("pedirweb"));
-            fMFormula.setRealizado(rs.getString("realizado"));
+            if (rs.getString("indicacion1") != null) {
+                fMFormula.setIndicacion1(rs.getString("indicacion1").trim());
+            }
+
+            if (rs.getString("observaciones") != null) {
+                fMFormula.setObservaciones(rs.getString("observaciones").trim());
+            }
+            if (rs.getString("ACTUALIZADO") != null && !rs.getString("ACTUALIZADO").isEmpty()) {
+                fMFormula.setActualizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("ACTUALIZADO").trim(), null));
+            }
+
+            fMFormula.setPedirweb(rs.getString("pedirweb").trim());
+
+            if (rs.getString("realizado") != null && !rs.getString("realizado").isEmpty()) {
+                fMFormula.setRealizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("realizado").trim(), null));
+            }
             LocalDate localDate = null;
             if (rs.getInt("fecha_r") != 0) {
                 String ulti = Integer.toString(rs.getInt("fecha_r"));
                 localDate = LocalDate.parse(ulti, dateTimeFormatterParser);
             }
             fMFormula.setFecha_r(localDate);
-            fMFormula.setActualizado(rs.getString("actualizado"));
 
+            //fMFormula.setActualizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("actualizado").trim(),null));
             localDate = null;
             if (rs.getInt("fecha_a") != 0) {
                 String ulti = Integer.toString(rs.getInt("fecha_a"));
@@ -80,15 +113,22 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             fMFormula.setFecha_a(localDate);
             fMFormula.setHoja_paci(rs.getString("hoja_paci"));
             /*
-    private Blob hoja_paci_fichero;
+                private Blob hoja_paci_fichero;
+            
              */
-            fMFormula.setEtiqueta1(rs.getString("etiqueta1"));
-            fMFormula.setEtiqueta2(rs.getString("etiqueta2"));
-            fMFormula.setObservaciones1(rs.getString("observaciones1"));
+            if (rs.getString("etiqueta1") != null) {
+                fMFormula.setEtiqueta1(rs.getString("etiqueta1").trim());
+            }
+            if (rs.getString("etiqueta2") != null) {
+                fMFormula.setEtiqueta2(rs.getString("etiqueta2").trim());
+            }
+            if (rs.getString("observaciones1") != null) {
+                fMFormula.setObservaciones1(rs.getString("observaciones1"));
+            }
         } catch (SQLException e) {
             LOGGER.error(e);
         } catch (Exception e) {
-            LOGGER.error(e);
+            LOGGER.error(fMFormula.getNumero() + ";", e.getStackTrace());
         }
         return fMFormula;
     }
@@ -98,11 +138,11 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         FMFormula fMFormula = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas WHERE   numero=" + numero;
+            sql = sqlMaster + " WHERE   f.numero=" + numero;
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
-                fMFormula = getRegistroResulset(resulSet);
+                fMFormula = getRegistroResulset(resulSet, getFormaDeRs(resulSet), getViaDeRs(resulSet));
             }
             statement.close();
             LOGGER.debug(sql);
@@ -124,11 +164,11 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         FMFormula fMFormula = null;
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas WHERE   nombre like '%" + nombre + "%'";
+            sql = sqlMaster + "   WHERE   f.nombre like '%" + nombre + "%'";
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             if (resulSet.next()) {
-                fMFormula = getRegistroResulset(resulSet);
+                fMFormula = getRegistroResulset(resulSet, getFormaDeRs(resulSet), getViaDeRs(resulSet));
             }
             statement.close();
             LOGGER.debug(sql);
@@ -161,7 +201,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            sql  = "INSERT INTO     farm_fm_formulas "
+            sql = "INSERT INTO     farm_fm_formulas "
                     + "(numero,nombre,tipo,esteril,forma,via,unidades_f,indicacion,conservacion, caducidad,controles "
                     + " ,dunidades_f,indicacion1,observaciones,p_autorizado,pedirweb,realizado,fecha_r,actualizado "
                     + " ,fecha_a,hoja_paci,etiqueta1,etiqueta2,observaciones1 )"
@@ -255,7 +295,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             if (fMFormula.getRealizado() == null) {
                 statement.setNull(17, Types.VARCHAR);
             } else {
-                statement.setString(17, fMFormula.getRealizado());
+                statement.setString(17, fMFormula.getRealizado().getCodigoFarmatools());
             }
             if (fMFormula.getFecha_r() == null) {
                 statement.setNull(18, Types.INTEGER);
@@ -265,7 +305,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             if (fMFormula.getActualizado() == null) {
                 statement.setNull(19, Types.VARCHAR);
             } else {
-                statement.setString(19, fMFormula.getActualizado());
+                statement.setString(19, fMFormula.getActualizado().getCodigoFarmatools());
             }
             //  + " ,dunidades_f,indicacion1,observacines,p_autorizado,pedirweb,realizado,fecha_r,actualizado "
             if (fMFormula.getFecha_a() == null) {
@@ -411,7 +451,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             if (fMFormula.getRealizado() == null) {
                 statement.setNull(16, Types.VARCHAR);
             } else {
-                statement.setString(16, fMFormula.getRealizado());
+                statement.setString(16, fMFormula.getRealizado().getCodigoFarmatools());
             }
             if (fMFormula.getFecha_r() == null) {
                 statement.setNull(17, Types.INTEGER);
@@ -421,7 +461,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             if (fMFormula.getActualizado() == null) {
                 statement.setNull(18, Types.VARCHAR);
             } else {
-                statement.setString(18, fMFormula.getActualizado());
+                statement.setString(18, fMFormula.getActualizado().getCodigoFarmatools());
             }
             //  + " ,dunidades_f,indicacion1,observacines,p_autorizado,pedirweb,realizado,fecha_r,actualizado "
             if (fMFormula.getFecha_a() == null) {
@@ -498,18 +538,19 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         ArrayList<FMFormula> listaFormulas = new ArrayList<>();
         try {
             connection = super.getConexionBBDD();
-            sql = " SELECT * FROM farm_fm_formulas WHERE  1=1 ";
+            sql = sqlMaster.concat(" WHERE  1=1 ");
             if (texto != null && !texto.isEmpty()) {
-                sql = sql.concat(" AND ( nombre like'%" + texto + "%')");
+                sql = sql.concat(" AND ( upper(f.nombre) like'%" + texto.toUpperCase() + "%')");
             }
             sql = sql.concat("ORDER BY nombre");
+            LOGGER.debug(sql);
             Statement statement = connection.createStatement();
             ResultSet resulSet = statement.executeQuery(sql);
             while (resulSet.next()) {
-                listaFormulas.add(getRegistroResulset(resulSet));
+                listaFormulas.add(getRegistroResulset(resulSet, getFormaDeRs(resulSet), getViaDeRs(resulSet)));
             }
             statement.close();
-            LOGGER.debug(sql);
+
         } catch (SQLException e) {
             LOGGER.error(sql, e);
         } catch (Exception e) {
@@ -521,5 +562,29 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
         }
         return listaFormulas;
+    }
+
+    private FMForma getFormaDeRs(ResultSet resulSet) {
+        FMForma forma = null;
+        try {
+            if (resulSet.getString("formacodigo") != null && resulSet.getString("formanombre") != null) {
+                forma = new FMForma(resulSet.getString("formacodigo").trim(), resulSet.getString("formanombre").trim());
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Error sql resulset", e);
+        }
+        return forma;
+    }
+
+    private FMViasAdm getViaDeRs(ResultSet resulSet) {
+        FMViasAdm via = null;
+        try {
+            if (resulSet.getString("viacodigo") != null && resulSet.getString("vianombre") != null) {
+                via = new FMViasAdm(resulSet.getString("viacodigo"), resulSet.getString("vianombre"));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Error sql resulset", e);
+        }
+        return via;
     }
 }

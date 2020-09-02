@@ -37,7 +37,7 @@ public class FMFormulaElaboraDAO extends ConexionDAO implements Serializable {
         try {
             fMFormulaElabora.setFormula(rs.getInt("formula"));
             fMFormulaElabora.setOrden(rs.getInt("orden"));
-            fMFormulaElabora.setTexto(rs.getString("texto"));
+            fMFormulaElabora.setTexto(rs.getString("texto").trim());
 
         } catch (SQLException e) {
             LOGGER.error(e);

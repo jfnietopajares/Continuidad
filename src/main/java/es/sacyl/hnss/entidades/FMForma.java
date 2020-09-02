@@ -15,12 +15,17 @@ public class FMForma implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String codigo;
+    private String codigo ;
     private String nombre;
     public static final String labelFrom = "Formas farmacéuticas ";
 
     public FMForma() {
 
+    }
+
+    public FMForma(String codigoParam, String nombreParam) {
+        this.codigo = codigoParam;
+        this.nombre = nombreParam;
     }
 
     public String getCodigo() {

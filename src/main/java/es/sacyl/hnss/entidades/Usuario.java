@@ -14,6 +14,8 @@ public class Usuario implements Serializable {
     private String nombre;
     private String apellido1;
     private String apellido2;
+    private String codigoFarmatools;
+    private String servicioFarmatols;
 
     public Usuario() {
 
@@ -48,12 +50,36 @@ public class Usuario implements Serializable {
         return apellido2;
     }
 
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+
+    public void setApellido2(String apellido2) {
+        this.apellido2 = apellido2;
+    }
+
+    public String getCodigoFarmatools() {
+        return codigoFarmatools;
+    }
+
+    public void setCodigoFarmatools(String codigoFarmatools) {
+        this.codigoFarmatools = codigoFarmatools;
+    }
+
+    public String getServicioFarmatols() {
+        return servicioFarmatols;
+    }
+
+    public void setServicioFarmatols(String servicioFarmatols) {
+        this.servicioFarmatols = servicioFarmatols;
+    }
+
     public String getNombreCompleto() {
         String nombreCompleto = "";
         if (apellido1 != null) {
             nombreCompleto = nombreCompleto.concat(apellido1 + " ");
         }
-        if (apellido1 != null) {
+        if (apellido2 != null) {
             nombreCompleto = nombreCompleto.concat(apellido2 + " ");
         }
         if (nombre != null) {

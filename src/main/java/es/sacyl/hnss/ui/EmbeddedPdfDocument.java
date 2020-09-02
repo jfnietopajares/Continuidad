@@ -25,6 +25,7 @@ public class EmbeddedPdfDocument extends Component implements HasSize {
     public EmbeddedPdfDocument(String url) {
         this();
         getElement().setAttribute("data", url);
+         getElement().setAttribute("type", "application/pdf");
     }
 
     protected EmbeddedPdfDocument() {

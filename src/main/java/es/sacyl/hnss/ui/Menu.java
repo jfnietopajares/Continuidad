@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package es.sacyl.hnss.ui;
 
 import com.vaadin.flow.component.ClickEvent;
@@ -25,7 +21,7 @@ import es.sacyl.hnss.ui.formulas.FrmFMFormulaFabricar;
 import es.sacyl.hnss.ui.formulas.PntFMFormas;
 import es.sacyl.hnss.ui.formulas.PntFMFormulas;
 import es.sacyl.hnss.ui.formulas.PntFMInstumentos;
-import es.sacyl.hnss.ui.formulas.PntFMprimas;
+import es.sacyl.hnss.ui.formulas.PntFMMprimas;
 import es.sacyl.hnss.ui.formulas.PntFMMprimasEntradas;
 import es.sacyl.hnss.ui.formulas.PntFMMprimasSalidas;
 
@@ -76,7 +72,7 @@ public class Menu extends MenuBar {
 
         formulasSubMenu.addItem("Materias primas ", e -> {
             contenedor.removeAll();
-            contenedor.add((new PntFMprimas()));
+            contenedor.add((new PntFMMprimas()));
         });
 
         /*

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author JuanNieto
  */
-public final class PntFMprimas extends PantallaMaster {
+public final class PntFMMprimas extends PantallaMaster {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,11 +30,11 @@ public final class PntFMprimas extends PantallaMaster {
 
     private ArrayList<FMMPrimas> listaMprimas = new ArrayList<>();
 
-    private final Grid<FMMPrimas> grid = new Grid<>(FMMPrimas.class);
+    private final Grid<FMMPrimas> grid = new Grid<>();
 
     private FrmFMMprimas frmFarmaFMMPrimas;
 
-    public PntFMprimas() {
+    public PntFMMprimas() {
         super();
         this.setWidth("1000px");
         doHazPantalla();
@@ -58,12 +58,10 @@ public final class PntFMprimas extends PantallaMaster {
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
-        grid.setColumns("cod_inte", "producto", "existencias", "laboratorio");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
+        grid.addColumn(FMMPrimas::getCod_inte).setHeader("Código").setAutoWidth(true);
+         grid.addColumn(FMMPrimas::getProducto).setHeader("Nombre").setAutoWidth(true);
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemDoubleClickListener(event -> {
             frmFarmaFMMPrimas = new FrmFMMprimas(event.getItem());
             doVentanaModal(frmFarmaFMMPrimas);

@@ -30,6 +30,7 @@ import es.sacyl.hnss.entidades.FMMPrimas;
 import es.sacyl.hnss.entidades.FMViasAdm;
 import es.sacyl.hnss.entidades.Medicamento;
 import es.sacyl.hnss.entidades.PrActivo;
+import es.sacyl.hnss.entidades.Usuario;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -294,7 +295,7 @@ $tvias[]='Intracutanea';
             combo.setLabel(label);
         }
         combo.setItems(FMFormulaAutoriza.LISTAAUTORIZA);
-        combo.setItemLabelGenerator(FMFormulaAutoriza::getDescripcion);
+        combo.setItemLabelGenerator(FMFormulaAutoriza::getCodigo);
         if (valor != null) {
             combo.setValue(valor);
         }
@@ -389,6 +390,21 @@ $tvias[]='Intracutanea';
         return combo;
     }
 
+      public static ComboBox<Usuario> getComboFarmacéuticos(String label, Usuario usuario) {
+        ComboBox<Usuario> combo = new ComboBox<>();
+        if (label != null) {
+            combo.setLabel(label);
+        }
+        combo.setItems(new FarmatoolsDAO().getListaFarmaceuticos());
+
+        combo.setItemLabelGenerator(Usuario::getNombreCompleto);
+
+        if (usuario != null) {
+            combo.setValue(usuario);
+        }
+        return combo;
+    }
+    
     public static Button getBoton(String text, ButtonVariant buttonVariant, Icon icon) {
         Button boton = new Button();
         if (text != null) {

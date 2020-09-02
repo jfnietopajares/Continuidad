@@ -19,7 +19,7 @@ public class FMFormulaBibliografia implements Serializable {
     private Integer orden;
     private String texto;
 
-    public static final String labelFrom = "Blibliografía asocidada a la fórmula ";
+    public static final String LABELFORM = "Blibliografía asociada a la fórmula ";
 
     public FMFormulaBibliografia() {
 
@@ -50,7 +50,7 @@ public class FMFormulaBibliografia implements Serializable {
     }
 
     public static String getLabelFrom() {
-        return labelFrom;
+        return LABELFORM;
     }
 
 }

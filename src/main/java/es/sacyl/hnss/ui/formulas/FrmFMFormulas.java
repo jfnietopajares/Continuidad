@@ -31,6 +31,7 @@ import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.entidades.Usuario;
 import es.sacyl.hnss.listados.FMFormulaFicha;
 import es.sacyl.hnss.ui.ConfirmDialog;
 import es.sacyl.hnss.ui.EmbeddedPdfDocument;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
  *
  * @author JuanNieto
  */
-public final class   FrmFMFormulas extends FrmMasterLista {
+public final class FrmFMFormulas extends FrmMasterLista {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +59,7 @@ public final class   FrmFMFormulas extends FrmMasterLista {
 
     private final ComboBox<FMFormulaTipo> comboTipo = ObjetosComunes.getComboTipoForm("Tipo fórmula", null);
 
-    private  final ComboBox<FMViasAdm> comboVias = ObjetosComunes.getComboVias("Vía  administración", null);
+    private final ComboBox<FMViasAdm> comboVias = ObjetosComunes.getComboVias("Vía  administración", null);
 
     private final ComboBox<String> comboSteril = ObjetosComunes.getComboToString("Estéril", null, ObjetosComunes.SINO, "50px");
 
@@ -66,11 +67,11 @@ public final class   FrmFMFormulas extends FrmMasterLista {
 
     private final IntegerField unidades_f = ObjetosComunes.getIntegerField("Unidades F");
 
-    private  final TextField dunidades_f = ObjetosComunes.getTextField("D.Unidades F", "dunidades_f", 50, "150px");
+    private final TextField dunidades_f = ObjetosComunes.getTextField("D.Unidades F", "dunidades_f", 50, "150px");
 
     private final TextField caducidad = ObjetosComunes.getTextField("Caducidad", "Caducidad", 15, "150px");
 
-    private  final TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "90px", "90px", "90px");
+    private final TextArea indicacion = ObjetosComunes.getTextArea("Indicacion", "indicación", null, "600px", "90px", "90px", "90px");
 
     private final TextField conservacion = ObjetosComunes.getTextField("Conservación", "conservación", 15, "150px");
 
@@ -78,25 +79,26 @@ public final class   FrmFMFormulas extends FrmMasterLista {
 
     private final ComboBox<FMFormulaAutoriza> autorizacion = ObjetosComunes.getComboAutoriza("Autoización", null);
 
-    private  final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
+    private final TextArea observaciones = ObjetosComunes.getTextArea("Observaciones", "observaciones", null, "600px", "90px", "90px", "90px");
 
-    private final  TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
+    // private final  TextField realizado = ObjetosComunes.getTextField("Realizado", "Realizado", 15, "150px");
+    private final ComboBox<Usuario> realizado = ObjetosComunes.getComboFarmacéuticos("Realizado", null);
 
     private final DatePicker fecha_r = ObjetosComunes.getDatePicker("Fecha realización", null, null);
 
-    private final TextField actualizado = ObjetosComunes.getTextField("Actualizado", "actualizado", 15, "150px");
+    // private final TextField actualizado = ObjetosComunes.getTextField("Actualizado", "actualizado", 15, "150px");
+    private final ComboBox<Usuario> actualizado = ObjetosComunes.getComboFarmacéuticos("Actualizado", null);
 
     private final DatePicker fecha_a = ObjetosComunes.getDatePicker("Fecha actualización", null, null);
 
     private final TextField etiqueta1 = ObjetosComunes.getTextField("Etiqueta 1", "", 15, "150px");
 
-    private  final TextField etiqueta2 = ObjetosComunes.getTextField("Etiqueta 2", "", 15, "150px");
+    private final TextField etiqueta2 = ObjetosComunes.getTextField("Etiqueta 2", "", 15, "150px");
 
-    private final ComboBox<String> comboPedirWeb = ObjetosComunes.getComboToString("Pedir Web", null, ObjetosComunes.SINO, "50px");
+    //   private final ComboBox<String> comboPedirWeb = ObjetosComunes.getComboToString("Pedir Web", null, ObjetosComunes.SINO, "50px");
+    private FMFormula fMFormula = new FMFormula();
 
-    private   FMFormula fMFormula = new FMFormula();
-
-    private final  Binder<FMFormula> binder = new Binder<>();
+    private final Binder<FMFormula> binder = new Binder<>();
 
     private final Grid<FMFormula> grid = null;
 
@@ -108,6 +110,8 @@ public final class   FrmFMFormulas extends FrmMasterLista {
     String nombrePdfAbsoluto = null;
 
     String nombrePdfRelativo = null;
+
+    String urlDelPdf = null;
 
     public FrmFMFormulas() {
         super("1200px");
@@ -124,9 +128,14 @@ public final class   FrmFMFormulas extends FrmMasterLista {
         this.fMFormula.setLisaComposiciones(new FMFormulaCompoDAO().getListaCompos(fMFormula));
         this.fMFormula.setLisaElaboraciones(new FMFormulaElaboraDAO().getListaElabora(fMFormula));
         this.fMFormula.setLisaMaterial(new FMFormulaMaterialDAO().getListaMateriales(fMFormula));
-        nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf";
-        nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf";
+        //nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf";
+        nombrePdfAbsoluto = new Constantes().getPathAbsoluto() + Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf";
+        //nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf";
+        nombrePdfRelativo = System.getProperty("file.separator") + "webapps"
+                + System.getProperty("file.separator") + Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf";
         //  nombrePdf = "./" + fMFormula.getNombre().replace(" ", "") + ".pdf";
+        urlDelPdf = "http://localhost:8080/webapps/reports/" + fMFormula.getNumero() + ".pdf";
+
         InputStream is = new FMFormulaFicha(fMFormula).getStream();
         File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
         doHazFormulario();
@@ -134,8 +143,9 @@ public final class   FrmFMFormulas extends FrmMasterLista {
 
     public void doHazFormulario() {
         contenedorBotones.removeAll();
-        contenedorBotones.add(botonGrabar,botonBorrar, blibliografia, composicion, elaboración, material,botonAyuda,botonCancelar);
+        contenedorBotones.add(botonGrabar, botonBorrar, blibliografia, composicion, elaboración, material, botonAyuda, botonCancelar);
 
+        contenedorDerecha.setWidth("700px");
         if (fMFormula.getNumero() == null) {
             blibliografia.setEnabled(false);
             composicion.setEnabled(false);
@@ -168,37 +178,42 @@ public final class   FrmFMFormulas extends FrmMasterLista {
 
         contenedorFormulario.addClassName(Lumo.LIGHT);
         contenedorFormulario.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("150px", 1),
-                new FormLayout.ResponsiveStep("100px", 2),
-                new FormLayout.ResponsiveStep("50px", 3),
-                new FormLayout.ResponsiveStep("100px", 4));
+                new FormLayout.ResponsiveStep("100px", 1),
+                new FormLayout.ResponsiveStep("50px", 2),
+                new FormLayout.ResponsiveStep("100px", 3),
+                new FormLayout.ResponsiveStep("50px", 4),
+                new FormLayout.ResponsiveStep("100px", 5));
 
         contenedorFormulario.setMaxWidth("1000px");
 
-        contenedorFormulario.add(numero, nombre, comboPedirWeb);
-        contenedorFormulario.setColspan(nombre, 2);
+        contenedorFormulario.add(numero, nombre);
+        contenedorFormulario.setColspan(nombre, 4);
 
         contenedorFormulario.add(comboTipo, comboVias, comboSteril);
-        contenedorFormulario.setColspan(comboVias, 2);
+        contenedorFormulario.setColspan(comboTipo, 3);
 
         contenedorFormulario.add(comboForma, unidades_f, dunidades_f, caducidad);
+        contenedorFormulario.setColspan(comboForma, 2);
 
         contenedorFormulario.add(indicacion);
-        contenedorFormulario.setColspan(indicacion, 4);
+        contenedorFormulario.setColspan(indicacion, 5);
 
         contenedorFormulario.add(conservacion);
-        contenedorFormulario.setColspan(conservacion, 4);
+        contenedorFormulario.setColspan(conservacion, 5);
 
         contenedorFormulario.add(controles, autorizacion);
-        contenedorFormulario.setColspan(controles, 3);
+        contenedorFormulario.setColspan(controles, 4);
 
         contenedorFormulario.add(observaciones);
-        contenedorFormulario.setColspan(observaciones, 4);
+        contenedorFormulario.setColspan(observaciones, 5);
 
-        contenedorFormulario.add(realizado, fecha_r, actualizado, fecha_a);
+        contenedorFormulario.add(realizado, fecha_r);
+        contenedorFormulario.setColspan(realizado, 4);
+        contenedorFormulario.add(actualizado, fecha_a);
+        contenedorFormulario.setColspan(actualizado, 4);
 
         contenedorFormulario.add(etiqueta1, etiqueta2);
-        contenedorFormulario.setColspan(etiqueta1, 2);
+        contenedorFormulario.setColspan(etiqueta1, 3);
         contenedorFormulario.setColspan(etiqueta2, 2);
 
         if (fMFormula == null || fMFormula.getNumero() == null) {
@@ -225,10 +240,11 @@ public final class   FrmFMFormulas extends FrmMasterLista {
                         FrmMaster.AVISODATOABLIGATORIO, 1, 50))
                 .bind(FMFormula::getNombre, FMFormula::setNombre);
 
+        /*
         binder.forField(comboPedirWeb)
                 .asRequired()
                 .bind(FMFormula::getPedirweb, FMFormula::setPedirweb);
-
+         */
         binder.forField(comboTipo)
                 .asRequired()
                 .bind(FMFormula::getTipo, FMFormula::setTipo);
@@ -300,8 +316,13 @@ public final class   FrmFMFormulas extends FrmMasterLista {
     }
 
     public void doVerPdf() {
+        /*
         if (nombrePdfRelativo != null) {
             contenedorDerecha.add(new EmbeddedPdfDocument(nombrePdfRelativo));
+        }
+         */
+        if (urlDelPdf != null) {
+            contenedorDerecha.add(new EmbeddedPdfDocument(urlDelPdf));
         }
         /*
         File fichero = new File("pdf.pdf");

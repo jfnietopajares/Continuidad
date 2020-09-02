@@ -38,19 +38,17 @@ public final class PntFMFormas extends PantallaMaster {
 
     private ArrayList<FMForma> listaFormas = new ArrayList<>();
 
-    private final Grid<FMForma> grid;
+    private final Grid<FMForma> grid=new Grid<>();
 
     private FrmFMFormas frmFMFormas;
 
     public PntFMFormas() {
         super();
-        this.grid = new Grid<>(FMForma.class);
         doHazPantalla();
     }
 
     public PntFMFormas(FMForma fMForma) {
         super();
-        this.grid = new Grid<>(FMForma.class);
         this.fMForma = fMForma;
         doHazPantalla();
     }
@@ -74,13 +72,10 @@ public final class PntFMFormas extends PantallaMaster {
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
-
-        grid.setColumns("codigo", "nombre");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
+        grid.addColumn(FMForma::getCodigo).setHeader("Código").setAutoWidth(true);
+        grid.addColumn(FMForma::getNombre).setHeader("Nombre").setAutoWidth(true);
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
             frmFMFormas = new FrmFMFormas(event.getItem());
             doVentanaModal(frmFMFormas);
@@ -90,18 +85,8 @@ public final class PntFMFormas extends PantallaMaster {
 
         doActualizaGrid();
     }
-/*
-    public void doVentanaModal(FrmFMFormas frmFMFormas) {
-        frmFMFormas.open();
-        frmFMFormas.addDialogCloseActionListener(e -> {
-            doActualizaGrid();
-        }
-        );
-        frmFMFormas.addDetachListener(e -> {
-            doActualizaGrid();
-        });
-    }
-*/
+
+   
     @Override
     public void doBuscar() {
         doActualizaGrid();

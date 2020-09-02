@@ -35,13 +35,13 @@ public class CitosDilucionesDAO extends ConexionDAO {
         CitosDiluciones citosDiluciones = new CitosDiluciones();
         try {
             citosDiluciones.setId(rs.getInt("id"));
-            citosDiluciones.setBase(rs.getString("base"));
-            citosDiluciones.setConcentracion(rs.getString("concentracion"));
+            citosDiluciones.setBase(rs.getString("base").trim());
+            citosDiluciones.setConcentracion(rs.getString("concentracion").trim());
             citosDiluciones.setVolumen(rs.getInt("volumen"));
-            citosDiluciones.setVolumenu(rs.getString("volumenu"));
-            citosDiluciones.setTipovolumen(rs.getString("tipovolumen"));
-            citosDiluciones.setPresentacion(rs.getString("presentacion"));
-            citosDiluciones.setObservaciones(rs.getString("observaciones"));
+            citosDiluciones.setVolumenu(rs.getString("volumenu").trim());
+            citosDiluciones.setTipovolumen(rs.getString("tipovolumen").trim());
+            citosDiluciones.setPresentacion(rs.getString("presentacion").trim());
+            citosDiluciones.setObservaciones(rs.getString("observaciones").trim());
         } catch (SQLException e) {
             LOGGER.error(e);
         }

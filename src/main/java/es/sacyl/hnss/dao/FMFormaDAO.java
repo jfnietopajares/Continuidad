@@ -31,8 +31,8 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
     private FMForma getRegistroResulset(ResultSet rs) {
         FMForma fMForma = new FMForma();
         try {
-            fMForma.setCodigo(rs.getString("codigo"));
-            fMForma.setNombre(rs.getString("nombre"));
+            fMForma.setCodigo(rs.getString("codigo").trim());
+            fMForma.setNombre(rs.getString("nombre").trim());
 
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -185,7 +185,7 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_tipoforma WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
-                sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+                  sql = sql.concat(" AND  UPPER(nombre) like'%" + texto.toUpperCase() + "%'");
             }
             sql = sql.concat("ORDER BY nombre");
             Statement statement = connection.createStatement();

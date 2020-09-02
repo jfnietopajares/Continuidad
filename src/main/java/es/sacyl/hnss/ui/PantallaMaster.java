@@ -62,12 +62,15 @@ public abstract class PantallaMaster extends VerticalLayout {
     }
    public void doVentanaModal(Dialog frm) {
         frm.open();
+        this.setEnabled(false);
         frm.addDialogCloseActionListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         }
         );
         frm.addDetachListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         });
     }
     public VerticalLayout getContenedorGrid() {

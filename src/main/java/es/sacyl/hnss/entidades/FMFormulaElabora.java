@@ -5,7 +5,6 @@
  */
 package es.sacyl.hnss.entidades;
 
-import static es.sacyl.hnss.entidades.FMFormulaBibliografia.labelFrom;
 import java.io.Serializable;
 
 /**
@@ -20,7 +19,7 @@ public class FMFormulaElabora implements Serializable {
     private Integer orden;
     private String texto;
 
-    public static final String labelFrom = "Elaboración de la fórmula ";
+    public static final String LABELFROM = "Elaboración de la fórmula ";
 
     public FMFormulaElabora() {
 
@@ -51,7 +50,7 @@ public class FMFormulaElabora implements Serializable {
     }
 
     public static String getLabelFrom() {
-        return labelFrom;
+        return LABELFROM;
     }
 
 }

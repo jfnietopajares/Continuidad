@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.sacyl.hnss.ui.formulas;
 
 import com.vaadin.flow.component.Key;
@@ -13,6 +8,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.ui.FrmMasterLista;
 import es.sacyl.hnss.ui.PantallaMaster;
 import java.util.ArrayList;
 
@@ -26,7 +22,7 @@ public final class PntFMViasAdm extends PantallaMaster {
 
     private FMViasAdm fMViasAdm = new FMViasAdm();
 
-    private final Grid<FMViasAdm> grid = new Grid<>(FMViasAdm.class);
+    private final Grid<FMViasAdm> grid = new Grid<>();
 
     private FrmFMViasAdm frmFMViasAdministracion;
 
@@ -47,7 +43,7 @@ public final class PntFMViasAdm extends PantallaMaster {
         titulo.setText(FMViasAdm.getLabelFrom());
 
         getContenedorGrid().add(grid);
-      textoABuscar.focus();
+        textoABuscar.focus();
         textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
         textoABuscar.addValueChangeListener(event -> {
             doActualizaGrid();
@@ -61,10 +57,9 @@ public final class PntFMViasAdm extends PantallaMaster {
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
-        grid.setColumns("codigo", "nombre");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
+        grid.addColumn(FMViasAdm::getCodigo).setHeader("Código").setAutoWidth(true);
+        grid.addColumn(FMViasAdm::getNombre).setHeader("NOmbre").setAutoWidth(true);
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(SelectionMode.NONE);
         grid.addItemClickListener(event -> {
@@ -79,12 +74,15 @@ public final class PntFMViasAdm extends PantallaMaster {
 
     public void doVentanaModal(FrmFMViasAdm frmFarmaFMViasAdm) {
         frmFarmaFMViasAdm.open();
+        this.setEnabled(false);
         frmFarmaFMViasAdm.addDialogCloseActionListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         }
         );
         frmFarmaFMViasAdm.addDetachListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         });
     }
 

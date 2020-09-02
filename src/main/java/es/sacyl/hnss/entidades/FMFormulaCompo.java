@@ -22,7 +22,7 @@ public class FMFormulaCompo implements Serializable {
     private String unidades;
     private FMMPrimas mprima;
 
-    public static final String labelFrom = "Composición de la fórmula ";
+    public static final String LABELFORM = "Composición de la fórmula ";
 
     public FMFormulaCompo() {
 
@@ -68,16 +68,16 @@ public class FMFormulaCompo implements Serializable {
         this.mprima = mprima;
     }
 
-    public String getMprimaDescripcion() {
-        if (mprima != null) {
-            return mprima.getDescripcion();
+    public String getMprimaProducto() {
+        if (mprima != null && mprima.getProducto()!=null) {
+            return mprima.getProducto();
         } else {
             return "";
         }
     }
 
     public static String getLabelFrom() {
-        return labelFrom;
+        return LABELFORM;
     }
 
 }

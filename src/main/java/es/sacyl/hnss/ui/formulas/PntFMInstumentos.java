@@ -28,11 +28,9 @@ public final class PntFMInstumentos extends PantallaMaster {
 
     private ArrayList<FMInstrumento> listaInstrumentos = new ArrayList<>();
 
-    private Grid<FMInstrumento> grid = new Grid<>(FMInstrumento.class);
+    private Grid<FMInstrumento> grid = new Grid<>();
 
     private FrmFMInstrumentos frmFMInstrumentos;
-
- //   ArrayList<FMInstrumento> listaFarmaFMInstrumento = new ArrayList<>();
 
     public PntFMInstumentos() {
         super();
@@ -40,9 +38,7 @@ public final class PntFMInstumentos extends PantallaMaster {
     }
 
     public PntFMInstumentos(FMInstrumento fMInstrumento) {
-
         super();
-
         this.fMInstrumento = fMInstrumento;
         doHazPantalla();
     }
@@ -52,7 +48,7 @@ public final class PntFMInstumentos extends PantallaMaster {
         titulo.setText(fMInstrumento.getLabelFrom());
 
         getContenedorGrid().add(grid);
-textoABuscar.focus();
+        textoABuscar.focus();
         textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
         textoABuscar.addValueChangeListener(event -> {
             doActualizaGrid();
@@ -66,11 +62,10 @@ textoABuscar.focus();
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
-        grid.setColumns("codigo", "nombre");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+        grid.addColumn(FMInstrumento::getCodigo).setHeader("Código").setAutoWidth(true);
+        grid.addColumn(FMInstrumento::getNombre).setHeader("Nombre").setAutoWidth(true);
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
             frmFMInstrumentos = new FrmFMInstrumentos(event.getItem());
             doVentanaModal(frmFMInstrumentos);
@@ -81,12 +76,15 @@ textoABuscar.focus();
 
     public void doVentanaModal(FrmFMInstrumentos frmFMInstrumentos) {
         frmFMInstrumentos.open();
+        this.setEnabled(false);
         frmFMInstrumentos.addDialogCloseActionListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         }
         );
         frmFMInstrumentos.addDetachListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         });
     }
 

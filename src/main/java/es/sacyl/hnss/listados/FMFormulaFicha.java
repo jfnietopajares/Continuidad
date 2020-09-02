@@ -78,7 +78,8 @@ public class FMFormulaFicha implements Serializable {
     }
 
     public File getFilePdf() {
-        return Utilidades.iStoFile(this.getStream(), Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf");
+//        return Utilidades.iStoFile(this.getStream(), Constantes.DIRECTORIOREPORTABSOLUTEPATH + fMFormula.getNumero() + ".pdf");
+        return Utilidades.iStoFile(this.getStream(), new Constantes().getPathAbsoluto()+Constantes.DIRECTORIOREPORTSRELATIVEPATH + fMFormula.getNumero() + ".pdf");
     }
 
     public void createPdf() {
@@ -142,8 +143,16 @@ public class FMFormulaFicha implements Serializable {
             tabla = new Table(anchos3);
             for (FMFormulaCompo compo : fMFormula.getLisaComposiciones()) {
                 tabla.addCell(new Cell().add(new Paragraph("\n")));
-                tabla.addCell(new Cell().add(new Paragraph(compo.getMprimaDescripcion())));
-                tabla.addCell(new Cell().add(new Paragraph(compo.getUnidades())));
+                if (  compo.getMprima()!= null && compo.getMprima().getDescripcion()!=null ) {
+                    tabla.addCell(new Cell().add(new Paragraph(compo.getMprima().getDescripcion())));
+                } else {
+                    tabla.addCell(new Cell().add(new Paragraph("\n")));
+                }
+                if (compo.getUnidades() != null) {
+                    tabla.addCell(new Cell().add(new Paragraph(compo.getUnidades())));
+                } else {
+                    tabla.addCell(new Cell().add(new Paragraph("\n")));
+                }
             }
             document.add(tabla);
 
@@ -153,8 +162,16 @@ public class FMFormulaFicha implements Serializable {
             tabla = new Table(anchos3);
             for (FMFormulaMaterial material : fMFormula.getLisaMaterial()) {
                 tabla.addCell(new Cell().add(new Paragraph("\n")));
-                tabla.addCell(new Cell().add(new Paragraph(material.getInstrumentoNombre())));
-                tabla.addCell(new Cell().add(new Paragraph(Integer.toString(material.getUnidades()))));
+                if (material.getInstrumentoNombre() != null) {
+                    tabla.addCell(new Cell().add(new Paragraph(material.getInstrumentoNombre())));
+                } else {
+                    tabla.addCell(new Cell().add(new Paragraph("\n")));
+                }
+                if (material.getUnidades() != null) {
+                    tabla.addCell(new Cell().add(new Paragraph(Integer.toString(material.getUnidades()))));
+                } else {
+                    tabla.addCell(new Cell().add(new Paragraph("\n")));
+                }
             }
             document.add(tabla);
 
@@ -164,7 +181,11 @@ public class FMFormulaFicha implements Serializable {
             tabla = new Table(anchos3);
             for (FMFormulaElabora elabora : fMFormula.getLisaElaboraciones()) {
                 tabla.addCell(new Cell().add(new Paragraph("\n")));
-                tabla.addCell(new Cell().add(new Paragraph(elabora.getTexto())));
+                if (elabora.getTexto() != null) {
+                    tabla.addCell(new Cell().add(new Paragraph(elabora.getTexto())));
+                } else {
+                    tabla.addCell(new Cell().add(new Paragraph("\n")));
+                }
             }
 
             tabla = new Table(anchos1);

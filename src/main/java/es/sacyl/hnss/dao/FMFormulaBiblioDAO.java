@@ -36,7 +36,7 @@ public class FMFormulaBiblioDAO extends ConexionDAO implements Serializable {
         try {
             fMFormulaBibliografia.setFormula(rs.getInt("formula"));
             fMFormulaBibliografia.setOrden(rs.getInt("orden"));
-            fMFormulaBibliografia.setTexto(rs.getString("texto"));
+            fMFormulaBibliografia.setTexto(rs.getString("texto").trim());
 
         } catch (SQLException e) {
             LOGGER.error(e);

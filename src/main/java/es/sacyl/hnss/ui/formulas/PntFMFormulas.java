@@ -39,13 +39,13 @@ public class PntFMFormulas extends PantallaMaster {
 
     private FMFormula farmaFMFormulas = new FMFormula();
 
-    private Grid<FMFormula> grid = new Grid<>(FMFormula.class);
+    private Grid<FMFormula> grid = new Grid<>();
 
     private FrmFMFormulas frmFMFormulas;
 
     ArrayList<FMFormula> listaFormulas = new ArrayList<>();
-    
-      protected Button botonLibro = ObjetosComunes.getBoton("Libro", null, VaadinIcon.BOOK.create());
+
+    protected Button botonLibro = ObjetosComunes.getBoton("Libro", null, VaadinIcon.BOOK.create());
 
     public PntFMFormulas() {
         super();
@@ -54,9 +54,9 @@ public class PntFMFormulas extends PantallaMaster {
 
     public void doHazPantalla() {
         titulo.setText(FMFormula.getLabelFrom());
-        
+
         contenedorFiltro.add(botonLibro);
-                
+
         getContenedorGrid().add(grid);
         textoABuscar.focus();
         textoABuscar.setValueChangeMode(ValueChangeMode.EAGER);
@@ -67,21 +67,19 @@ public class PntFMFormulas extends PantallaMaster {
             }
         });
 
-       
         botonBuscar.addClickListener(e -> {
             doActualizaGrid();
         });
 
         botonAnadir.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
-        
-         botonListar.addClickListener(e ->doVerPdf());
-         
-           botonLibro.addClickListener(e ->doVerLibro());
 
-        grid.setColumns("numero", "nombre");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+        botonListar.addClickListener(e -> doVerListadoPdf());
 
+        botonLibro.addClickListener(e -> doVerLibro());
+
+        grid.addColumn(FMFormula::getNumero).setHeader("Nª").setAutoWidth(true);
+        grid.addColumn(FMFormula::getNombre).setHeader("Nombre").setWidth("300px");
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event -> {
@@ -92,37 +90,42 @@ public class PntFMFormulas extends PantallaMaster {
         grid.addColumn(new NativeButtonRenderer<>("Fabricar",
                 clickedItem -> {
                     FrmFMFormulaFabricar frmFMFormulaFabricar = new FrmFMFormulaFabricar(clickedItem);
-
                     doVentanaModal(new FrmFMFormulaFabricar(clickedItem));
-                    //  Notification.show("Sin dato seleccionado" + grid.getSelectedItems().size());
                 }
-        ));
+        )).setHeader("Acción").setAutoWidth(true);
 
         doActualizaGrid();
     }
 
-    public void doVerPdf(){
-            String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "listadoformulas" + ".pdf";
-            String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "listadoformulas" + ".pdf";
-            InputStream is = new FMFormulasListado().getStream();
-            File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
-            new VentanaPDF("Listado de fórmulas",nombrePdfRelativo);
+    public void doVerListadoPdf() {
+        //  String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "listadoformulas" + ".pdf";
+        String nombrePdfAbsoluto = new Constantes().getPathAbsoluto() + Constantes.DIRECTORIOREPORTSRELATIVEPATH + "listadoformulas" + ".pdf";
+        String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "listadoformulas" + ".pdf";
+        InputStream is = new FMFormulasListado().getStream();
+        File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
+        new VentanaPDF("Listado de fórmulas", nombrePdfRelativo);
     }
-     public void doVerLibro(){
-            String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "libroformulas" + ".pdf";
-            String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "libroformulas" + ".pdf";
-            InputStream is = new FMFormulasLibro().getStream();
-            File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
-            new VentanaPDF("Libro de fórmulas",nombrePdfRelativo);
+
+    public void doVerLibro() {
+        //String nombrePdfAbsoluto = Constantes.DIRECTORIOREPORTABSOLUTEPATH + "libroformulas" + ".pdf";
+        String nombrePdfAbsoluto = new Constantes().getPathAbsoluto() + Constantes.DIRECTORIOREPORTSRELATIVEPATH + Constantes.DIRECTORIOREPORTSRELATIVEPATH + "libroformulas" + ".pdf";
+        String nombrePdfRelativo = Constantes.DIRECTORIOREPORTSRELATIVEPATH + "libroformulas" + ".pdf";
+        InputStream is = new FMFormulasLibro().getStream();
+        File infPdf = Utilidades.iStoFile(is, nombrePdfAbsoluto);
+        new VentanaPDF("Libro de fórmulas", nombrePdfRelativo);
     }
+
     public void doVentanaModal(Dialog frm) {
+        this.setEnabled(false);
         frm.open();
         frm.addDialogCloseActionListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         }
         );
         frm.addDetachListener(e -> {
             doActualizaGrid();
+            this.setEnabled(true);
         });
     }
 

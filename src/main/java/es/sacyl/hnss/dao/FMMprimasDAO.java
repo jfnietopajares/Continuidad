@@ -55,22 +55,22 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
                 localDate = LocalDate.parse(ulti, dateTimeFormatterParser);
             }
             fMMPrimas.setCod_inte(rs.getInt("cod_inte"));
-            fMMPrimas.setProducto(rs.getString("producto"));
-            fMMPrimas.setCod_labo(rs.getString("cod_labo"));
-            fMMPrimas.setLaboratorio(rs.getString("laboratorio"));
+            fMMPrimas.setProducto(rs.getString("producto").trim());
+            fMMPrimas.setCod_labo(rs.getString("cod_labo").trim());
+            fMMPrimas.setLaboratorio(rs.getString("laboratorio").trim());
             fMMPrimas.setHomologado(rs.getBoolean("homologado"));
             fMMPrimas.setN_labo(rs.getInt("n_labo"));
             fMMPrimas.setStock_min(rs.getInt("stock_min"));
-            fMMPrimas.setObservaciones(rs.getString("observaciones"));
-            fMMPrimas.setEspecifica(rs.getString("especifica"));
+            fMMPrimas.setObservaciones(rs.getString("observaciones").trim());
+            fMMPrimas.setEspecifica(rs.getString("especifica").trim());
             fMMPrimas.setUlti_revi(localDate);
-            fMMPrimas.setFarmacetuico(rs.getString("farmaceutico"));
+            fMMPrimas.setFarmacetuico(rs.getString("farmaceutico").trim());
             fMMPrimas.setExistencias(rs.getInt("existencias"));
-            fMMPrimas.setNlaboratorio(rs.getString("nlaboratorio"));
-            fMMPrimas.setPresentacion(rs.getString("presentacion"));
-            fMMPrimas.setDescripcion(rs.getString("descripcion"));
-            fMMPrimas.setRequisitos(rs.getString("requisitos"));
-            fMMPrimas.setConservacion(rs.getString("conservacion"));
+            fMMPrimas.setNlaboratorio(rs.getString("nlaboratorio").trim());
+            fMMPrimas.setPresentacion(rs.getString("presentacion").trim());
+            fMMPrimas.setDescripcion(rs.getString("descripcion").trim());
+            fMMPrimas.setRequisitos(rs.getString("requisitos").trim());
+            fMMPrimas.setConservacion(rs.getString("conservacion").trim());
         } catch (SQLException e) {
             LOGGER.error(e);
         } catch (Exception e) {

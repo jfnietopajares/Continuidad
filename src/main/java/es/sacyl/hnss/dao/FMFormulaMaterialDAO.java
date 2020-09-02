@@ -38,7 +38,7 @@ public class FMFormulaMaterialDAO extends ConexionDAO implements Serializable {
             fMFormulaMeterial.setFormula(rs.getInt("formula"));
             fMFormulaMeterial.setLinea(rs.getInt("linea"));
             fMFormulaMeterial.setUnidades(rs.getInt("unidades"));
-            fMFormulaMeterial.setComentario(rs.getString("comentario"));
+            fMFormulaMeterial.setComentario(rs.getString("comentario").trim());
             if (fMInstrumento == null) {
                 fMFormulaMeterial.setInstrumento(new FMInstrumentosDAO().getPorCodigo(rs.getString("codigo")));
             } else {

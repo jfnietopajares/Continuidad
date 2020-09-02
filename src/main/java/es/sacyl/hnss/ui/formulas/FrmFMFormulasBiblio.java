@@ -9,6 +9,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
@@ -36,7 +37,10 @@ public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
     private final IntegerField orden = ObjetosComunes.getIntegerField("Código");
 
-    private final TextField texto = ObjetosComunes.getTextField("Texto", "", 50, "100px");
+   // private final TextField texto = ObjetosComunes.getTextField("Texto", "", 50, "100px");
+    
+       private  final TextArea texto = ObjetosComunes.getTextArea("Texto", "Texto", null, "100px", "90px", "90px", "90px");
+
 
     private final TextField nombre = ObjetosComunes.getTextField(null, null, 50, "100px");
 
@@ -78,14 +82,10 @@ public class  FrmFMFormulasBiblio extends FrmMasterLista {
 
         nombre.setValue(fMFormula.getNombre());
 
-        grid.addColumn(FMFormulaBibliografia::getOrden).setHeader("Orden");
+        grid.addColumn(FMFormulaBibliografia::getOrden).setHeader("Orden").setAutoWidth(true);
         grid.addColumn(FMFormulaBibliografia::getTexto).setHeader("Texto").setWidth("300px");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
-
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
-        //   grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.addItemClickListener(event
                 -> {
             fMFormulaBibliografia = event.getItem();

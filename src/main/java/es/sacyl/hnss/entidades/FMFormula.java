@@ -34,9 +34,9 @@ public class FMFormula implements Serializable {
     private String observaciones;
     private FMFormulaAutoriza p_autorizado;
     private String pedirweb;
-    private String realizado;
+    private Usuario realizado;
     private LocalDate fecha_r;
-    private String actualizado;
+    private Usuario actualizado;
     private LocalDate fecha_a;
     private String hoja_paci;
     private Blob hoja_paci_fichero;
@@ -179,13 +179,23 @@ public class FMFormula implements Serializable {
         this.pedirweb = pedirweb;
     }
 
-    public String getRealizado() {
+    public Usuario getActualizado() {
+        return actualizado;
+    }
+
+    public void setActualizado(Usuario actualizado) {
+        this.actualizado = actualizado;
+    }
+
+    public Usuario getRealizado() {
         return realizado;
     }
 
-    public void setRealizado(String realizado) {
+    public void setRealizado(Usuario realizado) {
         this.realizado = realizado;
     }
+
+ 
 
     public LocalDate getFecha_r() {
         return fecha_r;
@@ -194,14 +204,7 @@ public class FMFormula implements Serializable {
     public void setFecha_r(LocalDate fecha_r) {
         this.fecha_r = fecha_r;
     }
-
-    public String getActualizado() {
-        return actualizado;
-    }
-
-    public void setActualizado(String actualizado) {
-        this.actualizado = actualizado;
-    }
+ 
 
     public LocalDate getFecha_a() {
         return fecha_a;
