@@ -57,11 +57,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMForma;
     }
@@ -83,11 +86,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMForma;
     }
@@ -119,11 +125,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -144,11 +153,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -169,11 +181,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -185,7 +200,7 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_tipoforma WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
-                  sql = sql.concat(" AND  UPPER(nombre) like'%" + texto.toUpperCase() + "%'");
+                sql = sql.concat(" AND  UPPER(nombre) like'%" + texto.toUpperCase() + "%'");
             }
             sql = sql.concat("ORDER BY nombre");
             Statement statement = connection.createStatement();
@@ -199,11 +214,14 @@ public class FMFormaDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaFormas;
     }

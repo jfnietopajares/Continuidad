@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package es.sacyl.hnss.dao;
 
 import es.sacyl.hnss.entidades.FMViasAdm;
@@ -31,89 +27,7 @@ public class FarmatoolsDAO extends ConexionDAO implements Serializable {
         super();
     }
 
-    private Usuario getRegistroResulsetUsuario(ResultSet rs) {
-        Usuario usuario = new Usuario();
-        try {
-            usuario.setCodigoFarmatools(rs.getString("codigo"));
-            usuario.setDni(rs.getString("nifdni"));
-            usuario.setNombre(rs.getString("nombre"));
-            usuario.setApellido1(rs.getString("apellid1"));
-            usuario.setApellido2(rs.getString("apellid2"));
-            usuario.setServicioFarmatols(rs.getString("servicio"));
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        }
-
-        return usuario;
-    }
-
-    public ArrayList<Usuario> getListaFarmaceuticos() {
-        Connection connection = null;
-        ArrayList<Usuario> listaFramaceuticos = new ArrayList<>();
-        try {
-            connection = super.getConexionBBDD();
-            sql = " SELECT  f.* FROM  farm_facultad f "
-                    + "  JOIN farm_ltusu u ON u.cod_medico=f.codigo "
-                    + " WHERE SERVICIO='FAR' AND NOT u.usu_desactivado IS NULL";
-
-            sql = sql.concat("  ORDER BY apellid1,apellid2,nombre ");
-            LOGGER.debug(sql);
-            Statement statement = connection.createStatement();
-            ResultSet resulSet = statement.executeQuery(sql);
-            while (resulSet.next()) {
-                listaFramaceuticos.add(getRegistroResulsetUsuario(resulSet));
-            }
-            statement.close();
-        } catch (SQLException e) {
-            LOGGER.error(sql, e);
-        } catch (Exception e) {
-            LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
-        }
-        return listaFramaceuticos;
-    }
-
-    public Usuario getFarmaceutico(String codigo, String dni) {
-        Connection connection = null;
-        Usuario farmaceutico = null;
-        if ((codigo == null && dni.isEmpty()) || (codigo == null && dni.isEmpty())) {
-            try {
-                connection = super.getConexionBBDD();
-                sql = " SELECT  f.* FROM farm_facultad f "
-                        + "  JOIN farm_ltusu u ON u.cod_medico=f.codigo "
-                        + " WHERE SERVICIO='FAR' AND NOT u.usu_desactivado IS NULL";
-                if (codigo != null && !codigo.isEmpty()) {
-                    sql = sql.concat(" AND f.codigo=" + codigo);
-                }
-                if (dni != null && !dni.isEmpty()) {
-                    sql = sql.concat(" AND f.dninif='" + dni + "'");
-                }
-                //    sql = sql.concat("ORDER BY apellid1,apellid2,nombre ");
-                Statement statement = connection.createStatement();
-                ResultSet resulSet = statement.executeQuery(sql);
-                if (resulSet.next()) {
-                    farmaceutico = getRegistroResulsetUsuario(resulSet);
-                }
-                statement.close();
-                LOGGER.debug(sql);
-            } catch (SQLException e) {
-                LOGGER.error(sql, e);
-            } catch (Exception e) {
-                LOGGER.error(e);
-            }
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
-            }
-        }
-        return farmaceutico;
-    }
-
+    
     public ArrayList<PrActivo> getListaPrActivos() {
         Connection connection = null;
         ArrayList<PrActivo> listaPrActivos = new ArrayList<>();
@@ -137,11 +51,14 @@ public class FarmatoolsDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaPrActivos;
     }
@@ -167,11 +84,14 @@ public class FarmatoolsDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaMedicamentos;
     }

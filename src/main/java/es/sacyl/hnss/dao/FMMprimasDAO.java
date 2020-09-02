@@ -96,11 +96,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMMPrimas;
     }
@@ -122,11 +125,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
     }
 
@@ -145,15 +151,7 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            /*
-          String  sqlLog = "INSERT INTO  farm_fm_mprimas (producto,cod_labo,laboratorio,homologado,stock_min,observaciones,"
-                    + " ulti_revi,farmaceutico,existencias,nlaboratorio,presentacion,descripcion,requisitos,conservacion) "
-                    + "values('" + fMMPrimas.getProducto().toString() + "','" + fMMPrimas.getCod_labo().toString() + "','" + fMMPrimas.getLaboratorio() + "','" + fMMPrimas.getHomologado() + "'," + fMMPrimas.getStock_min() + ",'" + fMMPrimas.getObservaciones() + "', "
-                    + fMMPrimas.getUlti_revi().format(DateTimeFormatter.ofPattern("yyyMMdd")) + ",'" + fMMPrimas.getFarmacetuico() + "'," + fMMPrimas.getEspecifica() + ",'" + fMMPrimas.getNlaboratorio() + "','" + fMMPrimas.getPresentacion() + "','" + fMMPrimas.getDescripcion() + "', "
-                    + "'" + fMMPrimas.getRequisitcos() + "','" + fMMPrimas.getConservacion() + "')";
 
-          LOGGER.debug(sqlLog);
-             */
             sql = "INSERT INTO  farm_fm_mprimas (cod_inte,producto,cod_labo,laboratorio,homologado,stock_min,observaciones,"
                     + " ulti_revi,farmaceutico,existencias,nlaboratorio,presentacion,descripcion,requisitos,conservacion) "
                     + "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -233,11 +231,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -247,15 +248,7 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
         Boolean insertadoBoolean = false;
         try {
             connection = super.getConexionBBDD();
-            /*
-            sql = sql = "UPDATE   farm_fm_mprimas  SET producto='" + fMMPrimas.getProducto() + "',cod_labo='" + fMMPrimas.getCod_labo() + "'"
-                    + ",laboratorio='" + fMMPrimas.getLaboratorio() + "',homologado='" + fMMPrimas.getHomologado() + "',stock_min='" + fMMPrimas.getStock_min() + "'"
-                    + ",observaciones='" + fMMPrimas.getObservaciones() + "', ulti_revi='" + fMMPrimas.getUlti_revi()
-                    + "',farmaceutico='" + fMMPrimas.getFarmacetuico() + "  '"
-                    + ",existencias=" + fMMPrimas.getExistencias() + ",nlaboratorio='" + fMMPrimas.getNlaboratorio() + "',presentacion='" + fMMPrimas.getPresentacion() + "'"
-                    + ",descripcion='" + fMMPrimas.getDescripcion() + "',requisitos='" + fMMPrimas.getRequisitos() + "',conservacion='" + fMMPrimas.getConservacion() + "'"
-                    + "WHERE cod_inte=" + fMMPrimas.getCod_inte();
-             */
+
             sql = sql = "UPDATE   farm_fm_mprimas  SET producto=?,cod_labo=? ,laboratorio=? ,homologado=?,stock_min=?"
                     + " ,observaciones=? , ulti_revi=?,farmaceutico=?,existencias=?,nlaboratorio=?,presentacion=?"
                     + ",descripcion=?,requisitos=?,conservacion=?"
@@ -338,11 +331,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -375,11 +371,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -400,11 +399,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -430,11 +432,14 @@ public class FMMprimasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaMprimas;
     }

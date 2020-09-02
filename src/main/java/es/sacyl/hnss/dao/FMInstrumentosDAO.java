@@ -53,11 +53,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMInstrumento;
     }
@@ -79,11 +82,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMInstrumento;
     }
@@ -104,11 +110,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -140,11 +149,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -165,11 +177,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -190,11 +205,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -206,7 +224,7 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
             connection = super.getConexionBBDD();
             sql = " SELECT * FROM farm_fm_instrumentos WHERE  1=1 ";
             if (texto != null && !texto.isEmpty()) {
-               // sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
+                // sql = sql.concat(" AND (codigo like'%" + texto + "%'  OR nombre like'%" + texto + "%')");
                 sql = sql.concat(" AND  upper(nombre) like'%" + texto.toUpperCase() + "%'");
             }
             sql = sql.concat("ORDER BY nombre");
@@ -221,11 +239,14 @@ public class FMInstrumentosDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaInstrumentos;
     }

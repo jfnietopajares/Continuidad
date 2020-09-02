@@ -151,7 +151,6 @@ public final class FrmFMFormulas extends FrmMasterLista {
             composicion.setEnabled(false);
             elaboración.setEnabled(false);
             material.setEnabled(false);
-            // contenedorBotones1.setVisible(false);
         }
         blibliografia.addClickListener(e -> {
             FrmFMFormulasBiblio frmFarmaFMFormulasBiblio = new FrmFMFormulasBiblio(fMFormula);
@@ -208,9 +207,12 @@ public final class FrmFMFormulas extends FrmMasterLista {
         contenedorFormulario.setColspan(observaciones, 5);
 
         contenedorFormulario.add(realizado, fecha_r);
-        contenedorFormulario.setColspan(realizado, 4);
+        contenedorFormulario.setColspan(realizado, 3);
+         contenedorFormulario.setColspan(fecha_r, 2);
+         
         contenedorFormulario.add(actualizado, fecha_a);
-        contenedorFormulario.setColspan(actualizado, 4);
+        contenedorFormulario.setColspan(actualizado, 3);
+        contenedorFormulario.setColspan(fecha_a, 2);
 
         contenedorFormulario.add(etiqueta1, etiqueta2);
         contenedorFormulario.setColspan(etiqueta1, 3);

@@ -21,6 +21,7 @@ import es.sacyl.hnss.dao.FMInstrumentosDAO;
 import es.sacyl.hnss.dao.FMMprimasDAO;
 import es.sacyl.hnss.dao.FMViasAdmDAO;
 import es.sacyl.hnss.dao.FarmatoolsDAO;
+import es.sacyl.hnss.dao.UsuarioDAO;
 import es.sacyl.hnss.entidades.FMForma;
 import es.sacyl.hnss.entidades.FMFormula;
 import es.sacyl.hnss.entidades.FMFormulaAutoriza;
@@ -395,7 +396,7 @@ $tvias[]='Intracutanea';
         if (label != null) {
             combo.setLabel(label);
         }
-        combo.setItems(new FarmatoolsDAO().getListaFarmaceuticos());
+        combo.setItems(new UsuarioDAO().getListaFarmaceuticos());
 
         combo.setItemLabelGenerator(Usuario::getNombreCompleto);
 

@@ -11,6 +11,7 @@ import es.sacyl.hnss.entidades.FMFormulaAutoriza;
 import es.sacyl.hnss.entidades.FMFormulaTipo;
 import es.sacyl.hnss.entidades.FMMPrimasEntrada;
 import es.sacyl.hnss.entidades.FMViasAdm;
+import es.sacyl.hnss.entidades.Usuario;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -49,6 +50,9 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
         FMFormula fMFormula = new FMFormula();
         try {
             fMFormula.setNumero(rs.getInt("numero"));
+            if (fMFormula.getNumero() == 181) {
+                LOGGER.debug("mmmmm");
+            }
             fMFormula.setNombre(rs.getString("nombre").trim());
             if (rs.getString("tipo") != null) {
                 fMFormula.setTipo(new FMFormulaTipo(rs.getString("tipo").trim()));
@@ -88,14 +92,20 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             if (rs.getString("observaciones") != null) {
                 fMFormula.setObservaciones(rs.getString("observaciones").trim());
             }
-            if (rs.getString("ACTUALIZADO") != null && !rs.getString("ACTUALIZADO").isEmpty()) {
-                fMFormula.setActualizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("ACTUALIZADO").trim(), null));
+            if (rs.getString("actualizado") != null && !rs.getString("actualizado").trim().isEmpty()) {
+                Usuario usuario = new UsuarioDAO().getFarmaceutico(rs.getString("actualizado").trim(), null);
+                if (usuario != null) {
+                    fMFormula.setActualizado(usuario);
+                }
             }
 
             fMFormula.setPedirweb(rs.getString("pedirweb").trim());
 
-            if (rs.getString("realizado") != null && !rs.getString("realizado").isEmpty()) {
-                fMFormula.setRealizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("realizado").trim(), null));
+            if (rs.getString("realizado") != null && !rs.getString("realizado").trim().isEmpty()) {
+                Usuario usuario = new UsuarioDAO().getFarmaceutico(rs.getString("realizado").trim(), null);
+                if (usuario != null) {
+                    fMFormula.setRealizado(usuario);
+                }
             }
             LocalDate localDate = null;
             if (rs.getInt("fecha_r") != 0) {
@@ -104,7 +114,6 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             }
             fMFormula.setFecha_r(localDate);
 
-            //fMFormula.setActualizado(new FarmatoolsDAO().getFarmaceutico(rs.getString("actualizado").trim(),null));
             localDate = null;
             if (rs.getInt("fecha_a") != 0) {
                 String ulti = Integer.toString(rs.getInt("fecha_a"));
@@ -129,6 +138,7 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(e);
         } catch (Exception e) {
             LOGGER.error(fMFormula.getNumero() + ";", e.getStackTrace());
+
         }
         return fMFormula;
     }
@@ -150,11 +160,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMFormula;
     }
@@ -176,11 +189,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return fMFormula;
     }
@@ -343,11 +359,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -499,11 +518,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -524,11 +546,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
 
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return insertadoBoolean;
     }
@@ -555,11 +580,14 @@ public class FMFormulasDAO extends ConexionDAO implements Serializable {
             LOGGER.error(sql, e);
         } catch (Exception e) {
             LOGGER.error(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.error(ConexionDAO.ERROR_CLOSE_BBDD_SQL, e);
+            }
         }
         return listaFormulas;
     }
