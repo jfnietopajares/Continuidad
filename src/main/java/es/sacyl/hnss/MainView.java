@@ -18,6 +18,8 @@ import es.sacyl.hnss.ui.Menu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+
 /**
  * The main view contains a button and a click listener.
  */
