@@ -4,7 +4,7 @@ package es.sacyl.hnss.utilidades;
  
 
 import com.vaadin.flow.component.notification.Notification;
-import es.sacyl.hnss.entidades.Usuario;
+import es.sacyl.hnss.entity.Usuario;
 import es.sacyl.hnss.excepciones.LoginException;
 import java.util.Hashtable;
 
@@ -146,9 +146,9 @@ public class Ldap {
 
                 if (attUid != null) {
 
-                    usuario.setDni(String.valueOf(attUid.get()));
+                    usuario.setUserid(String.valueOf(attUid.get()));
 
-                    usuario.setDni(user);
+                  //  usuario.setDni(user);
 
                 }
 

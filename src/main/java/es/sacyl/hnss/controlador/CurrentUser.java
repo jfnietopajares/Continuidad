@@ -2,7 +2,7 @@ package es.sacyl.hnss.controlador;
 
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinService;
-import es.sacyl.hnss.entidades.Usuario;
+import es.sacyl.hnss.entity.Usuario;
 
 /**
  * Class for retrieving and setting the name of the current user of the current

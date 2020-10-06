@@ -27,7 +27,7 @@ public class Menu extends MenuBar {
 
         formulasSubMenu.addItem("Fórmulas", e -> {
             contenedor.removeAll();
-            contenedor.add((new FrmPrueba()));
+          //  contenedor.add((new FrmPrueba()));
         });
 
        

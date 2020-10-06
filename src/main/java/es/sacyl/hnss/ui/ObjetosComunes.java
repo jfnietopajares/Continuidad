@@ -14,17 +14,7 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import es.sacyl.hnss.dao.UsuarioDAO;
-import es.sacyl.hnss.entidades.FMForma;
-import es.sacyl.hnss.entidades.FMFormula;
-import es.sacyl.hnss.entidades.FMFormulaAutoriza;
-import es.sacyl.hnss.entidades.FMFormulaTipo;
-import es.sacyl.hnss.entidades.FMInstrumento;
-import es.sacyl.hnss.entidades.FMMPrimas;
-import es.sacyl.hnss.entidades.FMViasAdm;
-import es.sacyl.hnss.entidades.Medicamento;
-import es.sacyl.hnss.entidades.PrActivo;
-import es.sacyl.hnss.entidades.Usuario;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -66,22 +56,7 @@ public class ObjetosComunes {
   
 
 
- 
 
-      public static ComboBox<Usuario> getComboFarmacéuticos(String label, Usuario usuario) {
-        ComboBox<Usuario> combo = new ComboBox<>();
-        if (label != null) {
-            combo.setLabel(label);
-        }
-        combo.setItems(new UsuarioDAO().getListaFarmaceuticos());
-
-        combo.setItemLabelGenerator(Usuario::getNombreCompleto);
-
-        if (usuario != null) {
-            combo.setValue(usuario);
-        }
-        return combo;
-    }
     
     public static Button getBoton(String text, ButtonVariant buttonVariant, Icon icon) {
         Button boton = new Button();
